@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Retailer listing UI Component
+ * Retailer Offer listing UI Component
  *
  * DISCLAIMER
  *
@@ -9,7 +9,7 @@
  * versions in the future.
  *
  * @category  Smile
- * @package   Smile\Retailer
+ * @package   Smile\RetailerOffer
  * @author    Romain RUAUD <romain.ruaud@smile.fr>
  * @copyright 2016 Smile
  * @license   Apache License Version 2.0

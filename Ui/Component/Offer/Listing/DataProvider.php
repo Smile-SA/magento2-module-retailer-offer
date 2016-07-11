@@ -5,7 +5,7 @@
  * versions in the future.
  *
  * @category  Smile
- * @package   Smile\Seller
+ * @package   Smile\RetailerOffer
  * @author    Romain Ruaud <romain.ruaud@smile.fr>
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
@@ -15,10 +15,10 @@ namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Data Provider for UI components based on Sellers
+ * Data Provider for UI Retailer Offer
  *
  * @category Smile
- * @package  Smile\Seller
+ * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class DataProvider extends AbstractDataProvider
@@ -53,8 +53,7 @@ class DataProvider extends AbstractDataProvider
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = [],
-        $sellerType = null
+        array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
@@ -77,8 +76,9 @@ class DataProvider extends AbstractDataProvider
         if (isset($this->addFieldStrategies[$field])) {
             $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias);
 
-            return ;
+            return;
         }
+
         parent::addField($field, $alias);
     }
 
@@ -97,6 +97,7 @@ class DataProvider extends AbstractDataProvider
 
             return;
         }
+
         parent::addFilter($filter);
     }
 }

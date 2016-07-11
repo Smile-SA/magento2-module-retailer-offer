@@ -6,8 +6,8 @@
  * versions in the future.
  *
  * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @package   Smile\RetailerOffer
+ * @author    Aurelien Foucret <aurelien.foucret@smile.fr>
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
@@ -17,11 +17,11 @@ namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
- * Retailer Adminhtml Index controller.
+ * Abstract Controller for retailer offer management.
  *
  * @category Smile
  * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @author   Aurelien Foucret <aurelien.foucret@smile.fr>
  */
 class Index extends AbstractOffer
 {

@@ -1,8 +1,23 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Smile_RetailerOffer adminhtml menu configuration.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\RetailerOffer
+ * @author    Aurelien Foucret <aurelien.foucret@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-
-        <!-- Manage Retailers -->
+        <!-- Manage Retailer Offers -->
         <add id="Smile_Retailer::retailer_offers"
              title="Retailer Offers"
              module="Smile_RetailerOffer"

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
+ * Smile_RetailerOffer module configuration.
+ *
  * DISCLAIMER
  *
  * Do not edit or add to this file if you wish to upgrade this module to newer
@@ -8,11 +10,11 @@
  *
  * @category  Smile
  * @package   Smile\RetailerOffer
- * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
+ * @author    Aurelien Foucret <aurelien.foucret@smile.fr>
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
--->
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Smile_RetailerOffer" setup_version="1.0.0">
         <sequence>
