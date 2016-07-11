@@ -24,21 +24,14 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 class DataProvider extends AbstractDataProvider
 {
     /**
-     * Seller collection
-     *
-     * @var \Smile\Offer\Model\ResourceModel\Offer\Collection
-     */
-    protected $collection;
-
-    /**
      * @var \Magento\Ui\DataProvider\AddFieldToCollectionInterface[]
      */
-    protected $addFieldStrategies;
+    private $addFieldStrategies;
 
     /**
      * @var \Magento\Ui\DataProvider\AddFilterToCollectionInterface[]
      */
-    protected $addFilterStrategies;
+    private $addFilterStrategies;
 
     /**
      * Construct
@@ -60,7 +53,8 @@ class DataProvider extends AbstractDataProvider
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
         array $meta = [],
-        array $data = []
+        array $data = [],
+        $sellerType = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
