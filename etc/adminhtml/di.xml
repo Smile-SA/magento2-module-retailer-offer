@@ -40,4 +40,17 @@
         </arguments>
     </type>
 
+    <type name="Smile\RetailerOffer\Ui\Component\Offer\Listing\DataProvider">
+        <arguments>
+            <argument name="addFieldStrategies" xsi:type="array">
+                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductSkuFieldToCollection</item>
+                <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductNameFieldToCollection</item>
+                <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerNameFieldToCollection</item>
+            </argument>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductSkuFilterToCollection</item>
+                <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerNameFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
