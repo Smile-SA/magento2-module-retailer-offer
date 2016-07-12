@@ -130,6 +130,16 @@ class Product implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
+        /** @var \Smile\Offer\Api\Data\OfferInterface $offer */
+        $offer = $this->locator->getOffer();
+        $offerId = $offer->getId();
+
+        // Do not append custom meta if being editing an offer
+        // @TODO : Rework this to have product being displayed as readonly when editing
+        if ($offerId) {
+            return $meta;
+        }
+
         $meta = array_replace_recursive(
             $meta,
             [
@@ -205,8 +215,9 @@ class Product implements ModifierInterface
 
         $data[$offerId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $offerId;
         $data[$offerId][self::DATA_SOURCE_DEFAULT]['current_store_id']   = $this->locator->getStore()->getId();
+         */
 
-        return $data; */
+        return $data;
     }
 
     /**

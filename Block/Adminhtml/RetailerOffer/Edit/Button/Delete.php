@@ -46,6 +46,6 @@ class Delete extends AbstractButton
      */
     private function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', ['id' => $this->getRetailerOffer()->getId()]);
+        return $this->getUrl('*/*/delete', ['offer_id' => $this->getRetailerOffer()->getId()]);
     }
 }

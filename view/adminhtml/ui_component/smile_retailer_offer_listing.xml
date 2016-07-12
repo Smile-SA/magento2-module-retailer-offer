@@ -149,7 +149,7 @@
                     <item name="indexField" xsi:type="string">offer_id</item>
                     <item name="editUrlPath" xsi:type="string">smile_retailer/offer/edit</item>
                     <item name="deleteUrlPath" xsi:type="string">smile_retailer/offer/delete</item>
-                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                    <item name="urlEntityParamName" xsi:type="string">offer_id</item>
                 </item>
             </argument>
         </actionsColumn>

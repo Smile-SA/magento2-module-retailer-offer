@@ -27,7 +27,6 @@
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="string">Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Edit\Button\Back</item>
-            <item name="save" xsi:type="string">Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Edit\Button\Save</item>
             <item name="save_and_continue" xsi:type="string">Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button\SaveAndContinue</item>
         </item>
         <item name="config" xsi:type="array">

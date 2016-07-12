@@ -73,7 +73,7 @@ class DataProvider extends AbstractDataProvider
      */
     public function getData()
     {
-        /*if (isset($this->loadedData)) {
+        if (isset($this->loadedData)) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
@@ -88,14 +88,17 @@ class DataProvider extends AbstractDataProvider
             $model->setData($data);
             $this->loadedData[$model->getId()] = $model->getData();
             $this->dataPersistor->clear('current_offer');
-        }*/
-
-        /** @var ModifierInterface $modifier */
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $this->data = $modifier->modifyData($this->data);
         }
 
-        return $this->data;
+        if (null === $this->loadedData) {
+            $this->loadedData = [];
+        }
+
+        foreach ($this->pool->getModifiersInstances() as $modifier) {
+            $this->loadedData = $modifier->modifyData($this->loadedData);
+        }
+
+        return $this->loadedData;
     }
 
     /**
@@ -105,7 +108,6 @@ class DataProvider extends AbstractDataProvider
     {
         $meta = parent::getMeta();
 
-        /** @var ModifierInterface $modifier */
         foreach ($this->pool->getModifiersInstances() as $modifier) {
             $meta = $modifier->modifyMeta($meta);
         }

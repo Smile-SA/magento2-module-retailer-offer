@@ -28,12 +28,12 @@ class Create extends AbstractOffer
      */
     public function execute()
     {
+        $this->coreRegistry->register("current_offer", $this->offerFactory->create([]));
+
         $resultPage = $this->createPage();
 
         $resultPage->setActiveMenu('Smile_Seller::retailer_offers');
         $resultPage->getConfig()->getTitle()->prepend(__('New Retailer Offer'));
-
-        $this->coreRegistry->register("current_offer", $this->offerFactory->create([]));
 
         /** @TODO Delete This : Testing purpose */
         $om = \Magento\Framework\App\ObjectManager::getInstance();

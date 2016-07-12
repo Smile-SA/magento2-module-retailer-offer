@@ -20,7 +20,7 @@
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="smile_retailer_offer_edit"/>
+            <uiComponent name="smile_retailer_offer_edit_form"/>
         </referenceContainer>
     </body>
 </page>
