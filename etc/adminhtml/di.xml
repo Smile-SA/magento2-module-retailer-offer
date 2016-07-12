@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Smile_RetailerOffer Adminhtml dependency injection configuration.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="related" xsi:type="array">
+                    <item name="class" xsi:type="string">Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Product</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Pool</argument>
+        </arguments>
+    </type>
+
+    <type name="Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Product">
+        <arguments>
+            <argument name="scopeName" xsi:type="string">smile_retailer_offer_create_form.smile_retailer_offer_create_form</argument>
+        </arguments>
+    </type>
+
+</config>

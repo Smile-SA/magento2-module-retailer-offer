@@ -18,12 +18,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <!-- Manage Retailer Offers -->
-        <add id="Smile_Retailer::retailer_offers"
+        <add id="Smile_RetailerOffer::retailer_offers"
              title="Retailer Offers"
              module="Smile_RetailerOffer"
              sortOrder="20"
              parent="Smile_Seller::sellers_menu"
              action="smile_retailer/offer"
-             resource="Smile_Retailer::retailer_offers"/>
+             resource="Smile_RetailerOffer::retailer_offers"/>
     </menu>
 </config>
