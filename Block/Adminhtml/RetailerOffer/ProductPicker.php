@@ -64,7 +64,12 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
 
         $productPickerFieldset = $form->addFieldset(
             'offer_product_picker',
-            ['name' => 'offer_product_picker', 'label' => __('Product Picker'), 'container_id' => 'offer_product_picker']
+            [
+                'name' => 'offer_product_picker',
+                'label' => __('Product Picker'),
+                'container_id' => 'offer_product_picker',
+                'class' => 'admin__fieldset offer_product_picker__fieldset',
+            ]
         );
 
         $data = [
