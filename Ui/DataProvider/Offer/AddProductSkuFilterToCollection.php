@@ -24,12 +24,11 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
  */
 class AddProductSkuFilterToCollection implements AddFilterToCollectionInterface
 {
-
     /**
      * {@inheritdoc}
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
-        // TODO: Implement addFilter() method.
+        $collection->setSkuFilter($condition);
     }
 }

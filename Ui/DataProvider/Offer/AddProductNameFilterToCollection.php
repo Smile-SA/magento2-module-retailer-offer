@@ -12,23 +12,24 @@
  */
 namespace Smile\RetailerOffer\Ui\DataProvider\Offer;
 
-use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 use Magento\Framework\Data\Collection;
 
 /**
- * Add field strategy for Product SKU Field
+ * Filter strategy for product name
  *
  * @category Smile
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class AddRetailerNameFieldToCollection implements AddFieldToCollectionInterface
+class AddProductNameFilterToCollection implements AddFilterToCollectionInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addFilter(Collection $collection, $field, $condition = null)
     {
-        $collection->addEntityAttributeToSelect(\Smile\Seller\Api\Data\SellerInterface::ENTITY, "name", $field);
+        $collection->addEntityAttributeToSelect(\Magento\Catalog\Model\Product::ENTITY, "name", $field);
+        $collection->addEntityAttributeFilter(\Magento\Catalog\Model\Product::ENTITY, $field, $condition);
     }
 }

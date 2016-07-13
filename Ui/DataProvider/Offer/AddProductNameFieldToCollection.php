@@ -29,6 +29,6 @@ class AddProductNameFieldToCollection implements AddFieldToCollectionInterface
      */
     public function addField(Collection $collection, $field, $alias = null)
     {
-        $collection->addEntityAttributeToSelect(\Magento\Catalog\Model\Product::ENTITY, "name", "product_name");
+        $collection->addEntityAttributeToSelect(\Magento\Catalog\Model\Product::ENTITY, "name", $field);
     }
 }

@@ -14,6 +14,7 @@ namespace Smile\RetailerOffer\Ui\DataProvider\Offer;
 
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 use Magento\Framework\Data\Collection;
+use Smile\Seller\Api\Data\SellerInterface;
 
 /**
  * Add filter strategy for Product SKU Field
@@ -29,6 +30,7 @@ class AddRetailerNameFilterToCollection implements AddFilterToCollectionInterfac
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
-        // TODO: Implement addFilter() method.
+        $collection->addEntityAttributeToSelect(\Smile\Seller\Api\Data\SellerInterface::ENTITY, "name", $field);
+        $collection->addEntityAttributeFilter(SellerInterface::ENTITY, $field, $condition);
     }
 }
