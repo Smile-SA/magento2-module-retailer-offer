@@ -93,17 +93,6 @@
             </argument>
         </field>
 
-        <!--<field name="product_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="label" xsi:type="string" translate="true">Product Id</item>
-                </item>
-            </argument>
-        </field>-->
-
         <container name="product_picker_container">
             <htmlContent name="offer_product_picker">
                 <argument name="block" xsi:type="object">Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\ProductPicker</argument>
