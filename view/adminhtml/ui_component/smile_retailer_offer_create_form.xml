@@ -62,16 +62,7 @@
                 <item name="collapsible" xsi:type="boolean">false</item>
             </item>
         </argument>
-        <field name="product_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="label" xsi:type="string" translate="true">Product Id</item>
-                </item>
-            </argument>
-        </field>
+
         <field name="seller_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer\Options</item>
@@ -101,5 +92,33 @@
                 </item>
             </argument>
         </field>
+
+        <!--<field name="product_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Product Id</item>
+                </item>
+            </argument>
+        </field>-->
+
+        <container name="product_picker_container">
+            <htmlContent name="offer_product_picker">
+                <argument name="block" xsi:type="object">Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\ProductPicker</argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">30</item>
+                        <item name="component" xsi:type="string">Smile_RetailerOffer/js/component/offer/product</item>
+                        <item name="dataScope" xsi:type="string">product_id</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </htmlContent>
+        </container>
+
     </fieldset>
 </form>
