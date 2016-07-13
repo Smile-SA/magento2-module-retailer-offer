@@ -14,6 +14,7 @@
 
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
@@ -36,9 +37,6 @@ class Save extends AbstractOffer
         $data         = $this->getRequest()->getPostValue();
         $redirectBack = $this->getRequest()->getParam('back', false);
 
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/rorua.log');
-        $logger = new \Zend\Log\Logger();
-
         if ($data) {
             $identifier = $this->getRequest()->getParam('offer_id');
             $model = $this->offerFactory->create();
@@ -52,12 +50,9 @@ class Save extends AbstractOffer
                 }
             }
 
-            $logger->addWriter($writer);
-            $logger->info(print_r($data, true));
-
-            $model->setData($data);
-
             try {
+                $model->loadPost($data);
+                $this->_getSession()->setPageData($data);
                 $this->offerRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the offer %1.', $model->getId()));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
@@ -70,11 +65,7 @@ class Save extends AbstractOffer
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
-
-                $returnParams = [
-                    'id'   => $this->getRequest()->getParam('offer_id'),
-                    'type' => $this->getRequest()->getParam('type'),
-                ];
+                $returnParams = ['offer_id' => $this->getRequest()->getParam('offer_id')];
 
                 return $resultRedirect->setPath('*/*/edit', $returnParams);
             }
