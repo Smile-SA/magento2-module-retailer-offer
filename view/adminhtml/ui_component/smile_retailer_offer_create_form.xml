@@ -79,9 +79,9 @@
                     <item name="multiple" xsi:type="boolean">false</item>
                     <item name="levelsVisibility" xsi:type="number">1</item>
                     <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="required" xsi:type="boolean">true</item>
                     <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
+                        <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="imports" xsi:type="array">
                         <item name="visible" xsi:type="string">true</item>
