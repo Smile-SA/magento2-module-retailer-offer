@@ -34,11 +34,6 @@ class DataProvider extends AbstractDataProvider
     private $loadedData;
 
     /**
-     * @var \Magento\Ui\DataProvider\Modifier\PoolInterface
-     */
-    private $pool;
-
-    /**
      * DataProvider constructor.
      *
      * @param string                 $name              The name
@@ -55,13 +50,11 @@ class DataProvider extends AbstractDataProvider
         $requestFieldName,
         $collectionFactory,
         DataPersistorInterface $dataPersistor,
-        PoolInterface $pool,
         array $meta = [],
         array $data = []
     ) {
         $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        $this->pool = $pool;
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
@@ -94,24 +87,6 @@ class DataProvider extends AbstractDataProvider
             $this->loadedData = [];
         }
 
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $this->loadedData = $modifier->modifyData($this->loadedData);
-        }
-
         return $this->loadedData;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMeta()
-    {
-        $meta = parent::getMeta();
-
-        foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $meta = $modifier->modifyMeta($meta);
-        }
-
-        return $meta;
     }
 }

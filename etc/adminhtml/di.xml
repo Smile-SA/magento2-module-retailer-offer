@@ -17,40 +17,17 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <virtualType name="Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
-        <arguments>
-            <argument name="modifiers" xsi:type="array">
-                <item name="related" xsi:type="array">
-                    <item name="class" xsi:type="string">Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Product</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider">
-        <arguments>
-            <argument name="pool" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Pool</argument>
-        </arguments>
-    </type>
-
-    <type name="Smile\RetailerOffer\Ui\DataProvider\Offer\Form\Modifier\Product">
-        <arguments>
-            <argument name="scopeName" xsi:type="string">smile_retailer_offer_create_form.smile_retailer_offer_create_form</argument>
-        </arguments>
-    </type>
-
     <type name="Smile\RetailerOffer\Ui\Component\Offer\Listing\DataProvider">
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
-                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductSkuFieldToCollection</item>
-                <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductNameFieldToCollection</item>
-                <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerNameFieldToCollection</item>
+                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductSkuFieldToCollection</item>
+                <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductNameFieldToCollection</item>
+                <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddRetailerNameFieldToCollection</item>
             </argument>
             <argument name="addFilterStrategies" xsi:type="array">
-                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductSkuFilterToCollection</item>
-                <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductNameFilterToCollection</item>
-                <item name="retailer" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerFilterToCollection</item>
+                <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductSkuFilterToCollection</item>
+                <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductNameFilterToCollection</item>
+                <item name="retailer" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddRetailerFilterToCollection</item>
             </argument>
         </arguments>
     </type>

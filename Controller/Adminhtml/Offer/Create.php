@@ -35,12 +35,6 @@ class Create extends AbstractOffer
         $resultPage->setActiveMenu('Smile_Seller::retailer_offers');
         $resultPage->getConfig()->getTitle()->prepend(__('New Retailer Offer'));
 
-        /** @TODO Delete This : Testing purpose */
-        $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $manager = $om->get('Magento\Store\Model\StoreManagerInterface');
-        $this->coreRegistry->register("current_store", $manager->getStore(0));
-        /** END @TODO DELETE */
-
         return $resultPage;
     }
 }

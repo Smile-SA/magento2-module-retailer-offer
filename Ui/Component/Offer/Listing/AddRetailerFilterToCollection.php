@@ -10,25 +10,26 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\RetailerOffer\Ui\DataProvider\Offer;
+namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
-use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 use Magento\Framework\Data\Collection;
+use Smile\Offer\Api\Data\OfferInterface;
 
 /**
- * Add field strategy for Product SKU Field
+ * Add filter strategy for Retailer
  *
  * @category Smile
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class AddRetailerNameFieldToCollection implements AddFieldToCollectionInterface
+class AddRetailerFilterToCollection implements AddFilterToCollectionInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addFilter(Collection $collection, $field, $condition = null)
     {
-        $collection->addEntityAttributeToSelect(\Smile\Seller\Api\Data\SellerInterface::ENTITY, "name", $field);
+        $collection->addFieldToFilter(OfferInterface::SELLER_ID, $condition);
     }
 }

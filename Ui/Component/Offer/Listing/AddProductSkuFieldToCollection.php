@@ -10,7 +10,7 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\RetailerOffer\Ui\DataProvider\Offer;
+namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 use Magento\Framework\Data\Collection;
