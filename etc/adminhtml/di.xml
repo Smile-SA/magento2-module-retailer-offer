@@ -50,7 +50,7 @@
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductSkuFilterToCollection</item>
                 <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddProductNameFilterToCollection</item>
-                <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerNameFilterToCollection</item>
+                <item name="retailer" xsi:type="object">Smile\RetailerOffer\Ui\DataProvider\Offer\AddRetailerFilterToCollection</item>
             </argument>
         </arguments>
     </type>
