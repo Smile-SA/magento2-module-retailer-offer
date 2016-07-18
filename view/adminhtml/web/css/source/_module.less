@@ -27,3 +27,57 @@ fieldset#offer_product_picker {
     }
 }
 
+.retailer-offer-summary {
+
+    display: flex;
+
+    .retailer-offer-summary-retailer {
+
+        float: right;
+        padding: 20px;
+        margin-left: 20px;
+        border : 1px solid @color-gray84;
+
+        .retailer-code {
+            margin-left: 5px;
+            font-style: italic;
+        }
+
+        .info {
+            margin-top: 10px;
+            float:left;
+        }
+    }
+
+    .retailer-offer-summary-product {
+
+        float:left;
+        padding: 20px;
+        border : 1px solid @color-gray84;
+
+        .product-image {
+
+            float:left;
+
+            img {
+                max-width: 150px;
+                max-height: 150px;
+            }
+        }
+
+        .info {
+            margin-left: 20px;
+            margin-top: 10px;
+            float:left;
+            .price {
+                font-weight: bold;
+            }
+        }
+
+        .product-sku {
+            margin-left: 5px;
+            font-style: italic;
+        }
+    }
+
+}

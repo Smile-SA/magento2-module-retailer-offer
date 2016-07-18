@@ -1,0 +1,60 @@
+<?php
+/**
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\RetailerOffer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ *
+ * Summary panel for offer edition.
+ */
+?>
+
+<?php
+/** @var \Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary $block */
+?>
+
+<div class="retailer-offer-summary">
+
+    <?php if ($block->getProduct()) : ?>
+
+        <div class="retailer-offer-summary-product">
+            <h3><span><?php echo __("Product :");?></span></h3>
+
+            <div class="product-image"><img src="<?php echo $block->getProductImage(); ?>" /></div>
+
+            <div class="info">
+                <h3><span class="product-name"><?php echo $block->getProduct()->getName();?></span></h3>
+                <p class="sku"><?php echo __("SKU : %1", $block->getProduct()->getSku()); ?></p>
+                <?php if ($block->getProduct()->getSpecialPrice()) : ?>
+                    <p class="price regular-price"><del><?php echo $block->getProductPrice(); ?><del></p>
+                    <p class="price special-price"><?php echo $block->getProductSpecialPrice(); ?></p>
+                <?php else : ?>
+                    <p class="price"><?php echo $block->getProductPrice(); ?></p>
+                <?php endif;?>
+                <p class="stock"><?php echo __("Availability : %1", $block->getProductStockLabel()); ?></p>
+                <p class="status"><?php echo __("Status : %1", $block->getProductStatusLabel()); ?></p>
+            </div>
+
+        </div>
+    <?php endif ; ?>
+
+    <?php if ($block->getRetailer()) : ?>
+
+        <div class="retailer-offer-summary-retailer">
+            <h3><span><?php echo __("Retailer :");?></span></h3>
+            <div class="info">
+                <h3><span class="retailer-name"><?php echo $block->getRetailer()->getName();?></span></h3>
+                <p class="sku"><?php echo __("Code : %1", $block->getRetailer()->getSellerCode()); ?></p>
+                <p class="status"><?php echo __("Status : %1", $block->getRetailerStatusLabel()); ?></p>
+            </div>
+        </div>
+
+        <div class="clear abs-clearer"></div>
+    <?php endif; ?>
+</div>
