@@ -1,0 +1,48 @@
+Back,Retour
+Delete,Supprimer
+"Are you sure you want to do this?","Êtes-vous sûr de vouloir faire cela ?"
+Save,Sauvegarder
+"Save and Continue Edit","Sauvegarder et continuer l'édition"
+"Product Picker","Choix d'un produit"
+Product,Produit
+"The product you wish to create an offer for","Le produit pour lequel vous souhaitez créer une offre"
+"Select Product ...","Choisir un produit ..."
+"In stock","En stock"
+"Out of stock","Indisponible"
+Inactive,Inactif
+Active,Actif
+Sellers,Vendeurs
+Retailers,Magasins
+Offers,Offres
+"New Retailer Offer","Nouvelle Offre Magasin"
+"This offer no longer exists.","Cette offre n'existe plus."
+"You deleted the offer %1.","Vous avez supprimé l'offre %1."
+"Edit Offer %1 ","Éditer l'offre %1 "
+Offer,Offre
+"Something went wrong while editing the offer.","Une erreur s'est produite durant l'édition de l'offre."
+"Retailer Offers List","Liste des offres magasin."
+"You saved the offer %1.","Vous avez saucegardé l'offre %1."
+Edit,Éditer
+"Product :","Produit :"
+"SKU : %1","SKU : %1"
+"Availability : %1","Disponibilité : %1"
+"Status : %1","Statut : %1"
+"Retailer :","Magasin :"
+"Code : %1","Code : %1"
+"Retailer Offer Information","Informations de l'offre magasin"
+"General Offer Parameters","Paramètres généraux de l'offre"
+Retailer,Magasin
+"Retailer Offer Edition Information","Retailer Offer Edition Information"
+"Offer Summary","Rappel de l'offre"
+"Offer Conditions","Conditions de l'offre"
+"Offer is available","L'offre est disponible"
+Price,Prix
+"Special Price","Prix Spécial"
+"Start Date","Date de début"
+"End Date","Date de fin"
+"Add Offer","Ajouter une offre"
+Select...,Choisir...
+ID,ID
+"Retailer Name","Nom du magasin"
+"Product Name","Nom du produit"
+"Product SKU","Réf. produit"

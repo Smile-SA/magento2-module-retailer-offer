@@ -1,0 +1,48 @@
+Back,Back
+Delete,Delete
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Save,Save
+"Save and Continue Edit","Save and Continue Edit"
+"Product Picker","Product Picker"
+Product,Product
+"The product you wish to create an offer for","The product you wish to create an offer for"
+"Select Product ...","Select Product ..."
+"In stock","In stock"
+"Out of stock","Out of stock"
+Inactive,Inactive
+Active,Active
+Sellers,Sellers
+Retailers,Retailers
+Offers,Offers
+"New Retailer Offer","New Retailer Offer"
+"This offer no longer exists.","This offer no longer exists."
+"You deleted the offer %1.","You deleted the offer %1."
+"Edit Offer %1 ","Edit Offer %1 "
+Offer,Offer
+"Something went wrong while editing the offer.","Something went wrong while editing the offer."
+"Retailer Offers List","Retailer Offers List"
+"You saved the offer %1.","You saved the offer %1."
+Edit,Edit
+"Product :","Product :"
+"SKU : %1","SKU : %1"
+"Availability : %1","Availability : %1"
+"Status : %1","Status : %1"
+"Retailer :","Retailer :"
+"Code : %1","Code : %1"
+"Retailer Offer Information","Retailer Offer Information"
+"General Offer Parameters","General Offer Parameters"
+Retailer,Retailer
+"Retailer Offer Edition Information","Retailer Offer Edition Information"
+"Offer Summary","Offer Summary"
+"Offer Conditions","Offer Conditions"
+"Offer is available","Offer is available"
+Price,Price
+"Special Price","Special Price"
+"Start Date","Start Date"
+"End Date","End Date"
+"Add Offer","Add Offer"
+Select...,Select...
+ID,ID
+"Retailer Name","Retailer Name"
+"Product Name","Product Name"
+"Product SKU","Product SKU"
