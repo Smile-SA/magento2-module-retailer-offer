@@ -43,7 +43,7 @@
             <argument name="name" xsi:type="string">smile_retailer_offer_edit_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">offer_id</argument>
             <argument name="requestFieldName" xsi:type="string">offer_id</argument>
-            <argument name="collectionFactory" xsi:type="object">Smile\Offer\Model\ResourceModel\Offer\CollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="smile_retailer/offer/save"/>
