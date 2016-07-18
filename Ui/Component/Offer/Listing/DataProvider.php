@@ -87,12 +87,6 @@ class DataProvider extends AbstractDataProvider
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/rorua.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info('ADDING FILTER');
-        $logger->info(print_r($filter->getField(), true));
-
         if (isset($this->addFilterStrategies[$filter->getField()])) {
             $this->addFilterStrategies[$filter->getField()]
                 ->addFilter(
