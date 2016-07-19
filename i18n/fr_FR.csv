@@ -21,7 +21,7 @@ Offers,Offres
 Offer,Offre
 "Something went wrong while editing the offer.","Une erreur s'est produite durant l'édition de l'offre."
 "Retailer Offers List","Liste des offres magasin."
-"You saved the offer %1.","Vous avez saucegardé l'offre %1."
+"You saved the offer %1.","Vous avez sauvegardé l'offre %1."
 Edit,Éditer
 "Product :","Produit :"
 "SKU : %1","SKU : %1"
@@ -46,3 +46,5 @@ ID,ID
 "Retailer Name","Nom du magasin"
 "Product Name","Nom du produit"
 "Product SKU","Réf. produit"
+"Retailer Offers","Offres Magasin"
+"Not Selected", "Non Sélectionné"
