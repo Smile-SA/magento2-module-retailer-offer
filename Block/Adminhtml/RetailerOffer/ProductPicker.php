@@ -73,7 +73,7 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
         );
 
         $data = [
-            'name'  => 'offer_product_picker[product_id]',
+            'name'  => 'product_id',
             'label' => __("Product"),
             'required' => true,
             'class' => 'widget-option',

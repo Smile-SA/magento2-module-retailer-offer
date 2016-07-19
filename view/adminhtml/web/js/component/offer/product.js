@@ -44,8 +44,7 @@ define([
         initObservable: function ()
         {
             this._super();
-            this.productObject = {};
-            this.observe('productObject value');
+            this.observe('value');
 
             return this;
         },
@@ -75,40 +74,12 @@ define([
          */
         updateProduct: function ()
         {
-            var productObject = {};
-            var hashValues = [];
+            var fieldName = this.dataScope.split(".").pop();
+            var field     = $(this.rootNode).find("[name=" + fieldName + "]");
 
-            $(this.rootNode).find("[name*=" + this.index + "]").each(function () {
-                hashValues.push(this.name + this.value.toString());
-                var currentProductObject = productObject;
-
-                var path = this.name.match(/\[([^[\[\]]+)\]/g)
-                    .map(function (pathItem) { return pathItem.substr(1, pathItem.length-2); });
-
-                while (path.length > 1) {
-                    var currentKey = path.shift();
-
-                    if (currentProductObject[currentKey] === undefined) {
-                        currentProductObject[currentKey] = {};
-                    }
-
-                    currentProductObject = currentProductObject[currentKey];
-                }
-
-                currentKey = path.shift();
-                currentProductObject[currentKey] = $(this).val();
-            });
-
-            var newHashValue = hashValues.sort().join('');
-
-            if (newHashValue !== this.currentHashValue) {
-                if (this.currentHashValue !== undefined) {
-                    this.bubble('update', true);
-                }
-                this.currentHashValue = newHashValue;
-                this.productObject(productObject);
-
-                this.value(productObject);
+            if (field) {
+                var productId = field.val();
+                this.value(productId);
             }
         }
     })
