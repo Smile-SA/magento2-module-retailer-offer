@@ -23,11 +23,13 @@
                 <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductSkuFieldToCollection</item>
                 <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductNameFieldToCollection</item>
                 <item name="retailer_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddRetailerNameFieldToCollection</item>
+                <item name="has_overlap" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddHasOverlapFieldToCollection</item>
             </argument>
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="sku" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductSkuFilterToCollection</item>
                 <item name="product_name" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddProductNameFilterToCollection</item>
                 <item name="retailer" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddRetailerFilterToCollection</item>
+                <item name="has_overlap" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Listing\AddHasOverlapFilterToCollection</item>
             </argument>
         </arguments>
     </type>
