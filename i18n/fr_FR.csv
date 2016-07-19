@@ -48,3 +48,8 @@ ID,ID
 "Product SKU","Réf. produit"
 "Retailer Offers","Offres Magasin"
 "Not Selected", "Non Sélectionné"
+"This offer currently has no overlaps with other offers.","Cette offre n'en chevauche pour l'instant aucune autre."
+"Overlapping offers :","Offres en conflit :"
+"Overlapping offers between %1 and %2 :","Autres offres du %1 au %2 :"
+"This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them.","Cette offre est en conflit avec d'autres offres pour le même couple produit-magasin sur la même période. Veuillez vérifier l'encart de rappel de l'offre pour voir lesquelles."
+"Offers listed here are for the same retailer and product","Les offres listées ici sont celles pour le même magasin et produit."

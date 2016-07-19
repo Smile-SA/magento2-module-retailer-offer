@@ -48,3 +48,8 @@ ID,ID
 "Product SKU","Product SKU"
 "Retailer Offers","Retailer Offers"
 "Not Selected", "Not Selected"
+"This offer currently has no overlaps with other offers.","This offer currently has no overlaps with other offers."
+"Overlapping offers :","Overlapping offers :"
+"Overlapping offers between %1 and %2 :","Overlapping offers between %1 and %2 :"
+"This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them.","This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them."
+"Offers listed here are for the same retailer and product","Offers listed here are for the same retailer and product"

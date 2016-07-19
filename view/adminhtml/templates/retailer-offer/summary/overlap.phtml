@@ -1,0 +1,60 @@
+<?php
+/**
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\RetailerOffer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ *
+ * Summary panel for offer edition : Overlap.
+ */
+?>
+
+<?php
+/** @var \Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary\Overlap $block */
+?>
+<?php if ($block->getRetailerOffer()) : ?>
+    <div class="retailer-offer-summary-overlap">
+        <?php if ($block->getRetailerOffer()->getStartDate() && $block->getRetailerOffer()->getEndDate()) : ?>
+            <h3><span><?php echo __("Overlapping offers between %1 and %2 :", $block->formatDate($block->getRetailerOffer()->getStartDate()), $block->formatDate($block->getRetailerOffer()->getEndDate()));?></span></h3>
+        <?php else : ?>
+            <h3><span><?php echo __("Overlapping offers :");?></span></h3>
+        <?php endif; ?>
+        <?php if (count($block->getOverlapOffers())) : ?>
+            <table class="overlap-offers">
+                <thead>
+                    <tr>
+                        <th><?php echo __("Id");?></th>
+                        <th><?php echo __("Start Date");?></th>
+                        <th><?php echo __("End Date");?></th>
+                        <th><?php echo __("Price");?></th>
+                        <th><?php echo __("Special Price");?></th>
+                        <th><?php echo __("Action");?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($block->getOverlapOffers() as $overlapOffer) : ?>
+                        <tr>
+                            <td><?php echo $overlapOffer->getId(); ?></td>
+                            <td><?php echo $block->formatDate($overlapOffer->getStartDate()); ?></td>
+                            <td><?php echo $block->formatDate($overlapOffer->getEndDate()); ?></td>
+                            <td><?php echo $block->formatPrice($overlapOffer->getPrice()); ?></td>
+                            <td><?php echo $block->formatPrice($overlapOffer->getSpecialPrice()); ?></td>
+                            <td><a href="<?php echo $block->getEditUrl($overlapOffer) ;?>" target="_blank"><?php echo __("Edit"); ?></a></td>
+                        </tr>
+                    <?php endforeach ;?>
+                </tbody>
+            </table>
+            <p class="notice"><?php echo __("Offers listed here are for the same retailer and product");?></p>
+        <?php else : ?>
+            <div class="message message-success success">
+                <div data-ui-id="messages-message-success"><?php echo __("This offer currently has no overlaps with other offers.");?></div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif;?>

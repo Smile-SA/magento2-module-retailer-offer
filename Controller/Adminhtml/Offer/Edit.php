@@ -42,6 +42,12 @@ class Edit extends AbstractOffer
                 $offer = $this->offerRepository->getById($offerId);
                 $this->coreRegistry->register('current_offer', $offer);
 
+                if (count($offer->getOverlapOffers())) {
+                    $this->messageManager->addWarningMessage(
+                        __("This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them.")
+                    );
+                }
+
                 $resultPage = $this->createPage();
                 $resultPage->getConfig()->getTitle()->prepend(
                     __('Edit Offer %1 ', $offer->getId())

@@ -57,7 +57,7 @@ class Save extends AbstractOffer
                 $this->messageManager->addSuccessMessage(__('You saved the offer %1.', $model->getId()));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
-                if ($redirectBack) {
+                if ($redirectBack || count($model->getOverlapOffers())) {
                     return $resultRedirect->setPath('*/*/edit', ['offer_id' => $model->getId()]);
                 }
 
