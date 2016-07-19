@@ -26,26 +26,26 @@
             <h3><span><?php echo __("Overlapping offers :");?></span></h3>
         <?php endif; ?>
         <?php if (count($block->getOverlapOffers())) : ?>
-            <table class="overlap-offers">
+            <table class="overlap-offers responsive-table">
                 <thead>
                     <tr>
-                        <th><?php echo __("Id");?></th>
-                        <th><?php echo __("Start Date");?></th>
-                        <th><?php echo __("End Date");?></th>
-                        <th><?php echo __("Price");?></th>
-                        <th><?php echo __("Special Price");?></th>
-                        <th><?php echo __("Action");?></th>
+                        <th scope="col"><?php echo __("Id");?></th>
+                        <th scope="col"><?php echo __("Start Date");?></th>
+                        <th scope="col"><?php echo __("End Date");?></th>
+                        <th scope="col"><?php echo __("Price");?></th>
+                        <th scope="col"><?php echo __("Special Price");?></th>
+                        <th scope="col"><?php echo __("Action");?></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($block->getOverlapOffers() as $overlapOffer) : ?>
                         <tr>
-                            <td><?php echo $overlapOffer->getId(); ?></td>
-                            <td><?php echo $block->formatDate($overlapOffer->getStartDate()); ?></td>
-                            <td><?php echo $block->formatDate($overlapOffer->getEndDate()); ?></td>
-                            <td><?php echo $block->formatPrice($overlapOffer->getPrice()); ?></td>
-                            <td><?php echo $block->formatPrice($overlapOffer->getSpecialPrice()); ?></td>
-                            <td><a href="<?php echo $block->getEditUrl($overlapOffer) ;?>" target="_blank"><?php echo __("Edit"); ?></a></td>
+                            <th scope="row"><?php echo $overlapOffer->getId(); ?></th>
+                            <td data-title="<?php echo __("Start Date");?>"><?php echo $block->formatDate($overlapOffer->getStartDate()); ?></td>
+                            <td data-title="<?php echo __("End Date");?>"><?php echo $block->formatDate($overlapOffer->getEndDate()); ?></td>
+                            <td data-title="<?php echo __("Price");?>"><?php echo $block->formatPrice($overlapOffer->getPrice()); ?></td>
+                            <td data-title="<?php echo __("Special Price");?>"><?php echo $block->formatPrice($overlapOffer->getSpecialPrice()); ?></td>
+                            <td data-title="<?php echo __("Action");?>"><a href="<?php echo $block->getEditUrl($overlapOffer) ;?>" target="_blank"><?php echo __("Edit"); ?></a></td>
                         </tr>
                     <?php endforeach ;?>
                 </tbody>

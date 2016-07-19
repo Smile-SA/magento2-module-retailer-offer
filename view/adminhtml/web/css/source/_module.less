@@ -29,13 +29,8 @@ fieldset#offer_product_picker {
 
 .retailer-offer-summary {
 
-    display: flex;
-
     .retailer-offer-summary-retailer {
-
-        float: right;
         padding: 20px;
-        margin-left: 20px;
         border : 1px solid @color-gray84;
         min-width: 220px;
 
@@ -51,10 +46,8 @@ fieldset#offer_product_picker {
     }
 
     .retailer-offer-summary-product {
-
-        float:left;
-        padding: 20px;
         border : 1px solid @color-gray84;
+        padding: 20px;
 
         .product-image {
 
@@ -73,6 +66,9 @@ fieldset#offer_product_picker {
             .price {
                 font-weight: bold;
             }
+            h3 {
+                font-size: 1em;
+            }
         }
 
         .product-sku {
@@ -82,9 +78,6 @@ fieldset#offer_product_picker {
     }
 
     .retailer-offer-summary-overlap {
-
-        margin-left: 20px;
-        float:left;
         padding: 20px;
         border : 1px solid @color-gray84;
 
@@ -101,6 +94,221 @@ fieldset#offer_product_picker {
             margin-top: 10px;
             float: right;
             font-style: italic;
+        }
+
+
+        .responsive-table {
+            width: 100%;
+            margin-bottom: 1.5em;
+
+            @media (min-width: @screen__xs) {
+                font-size: .9em;
+            }
+
+            @media (min-width: @screen__s) {
+                font-size: 1em;
+            }
+
+            thead {
+                // Accessibly hide <thead> on narrow viewports
+                position: absolute;
+                clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+                clip: rect(1px, 1px, 1px, 1px);
+                padding: 0;
+                border: 0;
+                height: 1px;
+                width: 1px;
+                overflow: hidden;
+
+                @media (min-width: @screen__xs) {
+                    position: relative;
+                    clip: auto;
+                    height: auto;
+                    width: auto;
+                    overflow: auto;
+                }
+
+                th {
+                    background-color: @color-gray98;
+                    border: 1px solid @color-gray84;
+                    font-weight: normal;
+                    text-align: center;
+
+                    &:first-of-type {
+                        text-align: left;
+                    }
+                }
+            }
+
+            // Set these items to display: block for narrow viewports
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+                padding: 0;
+                text-align: left;
+                white-space: normal;
+            }
+
+            tr {
+                @media (min-width: @screen__xs) {
+                    // Undo display: block
+                    display: table-row;
+                }
+            }
+
+            th,
+            td {
+                padding: .5em;
+                vertical-align: middle;
+
+                @media (min-width: @screen__xxs) {
+                    padding: .75em .5em;
+                }
+
+                @media (min-width: @screen__xs) {
+                    // Undo display: block
+                    display: table-cell;
+                    padding: .5em;
+                }
+
+                @media (min-width: @screen__s) {
+                    padding: .75em .5em;
+                }
+
+                @media (min-width: @screen__m) {
+                    padding: .75em;
+                }
+            }
+
+            caption {
+                margin-bottom: 1em;
+                font-size: 1em;
+                font-weight: bold;
+                text-align: center;
+
+                @media (min-width: @screen__xs) {
+                    font-size: 1.5em;
+                }
+            }
+
+            tfoot {
+                font-size: .8em;
+                font-style: italic;
+
+                @media (min-width: @screen__s) {
+                    font-size: .9em;
+                }
+            }
+
+            tbody {
+                @media (min-width: @screen__xs) {
+                    // Undo display: block
+                    display: table-row-group;
+                }
+
+                tr {
+                    margin-bottom: 1em;
+                    border: 1px solid @color-gray84;
+
+                    @media (min-width: @screen__xs) {
+                        // Undo display: block
+                        display: table-row;
+                        border-width: 1px;
+                    }
+
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
+                }
+
+                th[scope="row"] {
+
+                    @media (min-width: @screen__xs) {
+                        background-color: transparent;
+                        text-align: left;
+                    }
+                }
+
+                td {
+                    text-align: right;
+
+                    @media (min-width: @screen__xs) {
+                        text-align: center;
+                    }
+                }
+
+                td[data-title]:before {
+                    content: attr(data-title);
+                    float: left;
+                    font-size: .8em;
+
+                    @media (min-width: @screen__xxs) {
+                        font-size: .9em;
+                    }
+
+                    @media (min-width: @screen__xs) {
+                        // Don’t show data-title labels
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Small Screen
+//  _____________________________________________
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .retailer-offer-summary {
+        .retailer-offer-summary-product {
+            display: inline-block;
+            clear: both;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid @color-gray84;
+        }
+        .retailer-offer-summary-retailer {
+            display: inline-block;
+            clear: both;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid @color-gray84;
+        }
+        .retailer-offer-summary-overlap {
+            display: block;
+            clear: both;
+            border: none;
+        }
+    }
+}
+
+//
+//  Large Screen
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .retailer-offer-summary {
+        display: flex;
+        .retailer-offer-summary-product {
+            float: left;
+            span.product-name {
+                overflow: hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                width:210px;
+                display:inline-block;
+            }
+        }
+        .retailer-offer-summary-retailer {
+            float: left;
+            margin-left: 20px;
+        }
+        .retailer-offer-summary-overlap {
+            float: left;
+            margin-left: 20px;
         }
     }
 }
