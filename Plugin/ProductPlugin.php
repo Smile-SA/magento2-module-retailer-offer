@@ -115,7 +115,7 @@ class ProductPlugin
      */
     private function getPickupDate()
     {
-        return $this->retailerData->getSectionData()['pickup_date'];
+        return $this->retailerData->getPickupDate();
     }
 
     /**
@@ -125,7 +125,7 @@ class ProductPlugin
      */
     private function getRetailerId()
     {
-        return $this->retailerData->getSectionData()['retailer_id'];
+        return $this->retailerData->getRetailerId();
     }
 
     /**

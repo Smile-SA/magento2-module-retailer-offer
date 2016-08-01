@@ -21,4 +21,8 @@
         <plugin name="filterAvailableOffer" type="Smile\RetailerOffer\Plugin\LayerPlugin"/>
     </type>
 
+    <type name="Smile\Retailer\CustomerData\RetailerData">
+        <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\RetailerDataPlugin"/>
+    </type>
+
 </config>

@@ -50,13 +50,10 @@ class LayerPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        $retailerData = $this->retailerData->getSectionData();
+        $retailerId = $this->retailerData->getRetailerId();
+        $pickupDate = $this->retailerData->getPickupDate();
 
-
-        if (isset($retailerData['retailer_id']) && $retailerData['retailer_id'] !== null) {
-            $retailerId = $retailerData['retailer_id'];
-            $pickupDate = $retailerData['pickup_date'];
-
+        if ($retailerId !== null && $pickupDate !== null) {
             $offerStartDateFilter = $this->queryFactory->create(QueryInterface::TYPE_BOOL,
                 [
                     'should' => [
@@ -80,7 +77,7 @@ class LayerPlugin
                 [
                     'must' => [
                         $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.seller_id', 'value' => $retailerId]),
-                        $status = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]),
+                        $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]),
                         $offerStartDateFilter,
                         $offerEndDateFilter
                     ]
