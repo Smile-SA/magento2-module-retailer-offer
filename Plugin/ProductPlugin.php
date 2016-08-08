@@ -41,12 +41,27 @@ class ProductPlugin
      */
     private $offersCache = [];
 
+    /**
+     * ProductPlugin constructor.
+     *
+     * @param \Smile\Offer\Api\OfferManagementInterface $offerManagement The offer Management
+     * @param \Smile\Retailer\CustomerData\RetailerData $retailerData    The Retailer Data object
+     */
     public function __construct(OfferManagementInterface $offerManagement, RetailerData $retailerData)
     {
         $this->offerManagement = $offerManagement;
         $this->retailerData    = $retailerData;
     }
 
+    /**
+     * Return offer availability (if any) instead of the product one.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need to call the parent method.
+     *
+     * @param \Magento\Catalog\Model\Product $product The product
+     * @param \Closure                       $proceed The overridden isAvailable() method
+     *
+     * @return bool
+     */
     public function aroundIsAvailable(Product $product, \Closure $proceed)
     {
         $isAvailable = false;
@@ -59,6 +74,14 @@ class ProductPlugin
         return $isAvailable;
     }
 
+    /**
+     * Return offer price (if any) instead of the product one.
+     *
+     * @param \Magento\Catalog\Model\Product $product The product
+     * @param \Closure                       $proceed The overridden getPrice() method
+     *
+     * @return bool
+     */
     public function aroundGetPrice(Product $product, \Closure $proceed)
     {
         $offer = $this->getCurrentOffer($product);
@@ -73,6 +96,14 @@ class ProductPlugin
         return $price;
     }
 
+    /**
+     * Return offer special price (if any) instead of the product one.
+     *
+     * @param \Magento\Catalog\Model\Product $product The product
+     * @param \Closure                       $proceed The overridden getSpecialPrice() method
+     *
+     * @return bool
+     */
     public function aroundGetSpecialPrice(Product $product, \Closure $proceed)
     {
         $offer = $this->getCurrentOffer($product);
@@ -85,7 +116,15 @@ class ProductPlugin
         return $price;
     }
 
-    public function aroundGetFinalPrice(Product $product, \Closure $proceed, $qty = null)
+    /**
+     * Return offer final price (if any) instead of the product one.
+     *
+     * @param \Magento\Catalog\Model\Product $product The product
+     * @param \Closure                       $proceed The overridden getFinalPrice() method
+     *
+     * @return bool
+     */
+    public function aroundGetFinalPrice(Product $product, \Closure $proceed)
     {
         $price = $proceed();
         $offer = $this->getCurrentOffer($product);
@@ -103,6 +142,14 @@ class ProductPlugin
         return $price;
     }
 
+    /**
+     * Return offer minimal price (if any) instead of the product one.
+     *
+     * @param \Magento\Catalog\Model\Product $product The product
+     * @param \Closure                       $proceed The overridden getFinalPrice() method
+     *
+     * @return bool
+     */
     public function aroundGetMinimalPrice(Product $product, \Closure $proceed)
     {
         return $this->aroundGetFinalPrice($product, $proceed);
@@ -129,8 +176,9 @@ class ProductPlugin
     }
 
     /**
+     * Retrieve Current Offer for the product.
      *
-     * @param Product $product
+     * @param Product $product The product
      *
      * @return OfferInterface
      */

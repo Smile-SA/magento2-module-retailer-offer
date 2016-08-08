@@ -37,6 +37,12 @@ class LayerPlugin
      */
     private $queryFactory;
 
+    /**
+     * LayerPlugin constructor.
+     *
+     * @param \Smile\Retailer\CustomerData\RetailerData                 $retailerData The retailer Data object
+     * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory The Query factory
+     */
     public function __construct(RetailerData $retailerData, QueryFactory $queryFactory)
     {
         $this->retailerData = $retailerData;

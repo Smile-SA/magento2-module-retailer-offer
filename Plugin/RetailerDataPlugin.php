@@ -15,7 +15,7 @@ namespace Smile\RetailerOffer\Plugin;
 use Smile\Retailer\CustomerData\RetailerData;
 
 /**
- * Replace is in stock native filter on layer.
+ * Plugin to proceed Quote update when changing current Retailer or Pickup Date.
  *
  * @category  Smile
  * @package   Smile\ElasticsuiteCatalog
@@ -28,11 +28,26 @@ class RetailerDataPlugin
      */
     private $checkoutSession;
 
+    /**
+     * RetailerDataPlugin constructor.
+     *
+     * @param \Magento\Checkout\Model\Session $checkoutSession The Checkout Session
+     */
     public function __construct(\Magento\Checkout\Model\Session $checkoutSession)
     {
         $this->checkoutSession = $checkoutSession;
     }
 
+    /**
+     * Proceed current Quote update when changing current Retailer or Pickup Date.
+     *
+     * @param \Smile\Retailer\CustomerData\RetailerData $retailerData The Retailer Data object
+     * @param \Closure                                  $proceed      The setParams method of retailer data object
+     * @param integer                                   $retailerId   The Retailer Id
+     * @param string                                    $pickupDate   The Pickup Date
+     *
+     * @return \Smile\Retailer\CustomerData\RetailerData
+     */
     public function aroundSetParams(RetailerData $retailerData, \Closure $proceed, $retailerId, $pickupDate)
     {
         $hasChanges = $retailerData->getRetailerId() !== $retailerId || $retailerData->getPickupDate() !== $pickupDate;
