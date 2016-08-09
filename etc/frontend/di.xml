@@ -25,4 +25,7 @@
         <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\RetailerDataPlugin"/>
     </type>
 
+    <type name="Magento\Framework\Pricing\Render\PriceBox">
+        <plugin name="appendOfferToCacheKey" type="Smile\RetailerOffer\Plugin\PriceBoxPlugin"/>
+    </type>
 </config>
