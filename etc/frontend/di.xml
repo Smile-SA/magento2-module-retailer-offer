@@ -28,4 +28,8 @@
     <type name="Magento\Framework\Pricing\Render\PriceBox">
         <plugin name="appendOfferToCacheKey" type="Smile\RetailerOffer\Plugin\PriceBoxPlugin"/>
     </type>
+
+    <type name="Magento\Catalog\Model\Category">
+        <plugin name="filterProductCount" type="Smile\RetailerOffer\Plugin\CategoryPlugin"/>
+    </type>
 </config>
