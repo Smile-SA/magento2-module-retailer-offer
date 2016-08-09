@@ -14,8 +14,8 @@ namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Smile\Offer\Api\Data\OfferInterface;
-use Smile\Offer\Api\OfferManagementInterface;
 use Smile\Retailer\CustomerData\RetailerData;
+use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 
 /**
  * Replace is in stock native filter on layer.
@@ -27,30 +27,25 @@ use Smile\Retailer\CustomerData\RetailerData;
 class ProductPlugin
 {
     /**
-     * @var OfferManagementInterface
+     * @var OfferHelper
      */
-    private $offerManagement;
+    private $helper;
 
     /**
-     * @var RetailerData
+     * @var \Smile\Retailer\CustomerData\RetailerData
      */
     private $retailerData;
 
     /**
-     * @var OfferInterface[]
-     */
-    private $offersCache = [];
-
-    /**
      * ProductPlugin constructor.
      *
-     * @param \Smile\Offer\Api\OfferManagementInterface $offerManagement The offer Management
-     * @param \Smile\Retailer\CustomerData\RetailerData $retailerData    The Retailer Data object
+     * @param OfferHelper  $offerHelper  The offer Helper
+     * @param RetailerData $retailerData The Retailer Data Object
      */
-    public function __construct(OfferManagementInterface $offerManagement, RetailerData $retailerData)
+    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData)
     {
-        $this->offerManagement = $offerManagement;
-        $this->retailerData    = $retailerData;
+        $this->retailerData = $retailerData;
+        $this->helper       = $offerHelper;
     }
 
     /**
@@ -189,14 +184,7 @@ class ProductPlugin
         $pickupDate = $this->getPickupDate();
 
         if ($retailerId && $pickupDate) {
-            $cacheKey = implode('_', [$product->getId(), $retailerId, $pickupDate]);
-
-            if (false === isset($this->offersCache[$cacheKey])) {
-                $offer = $this->offerManagement->getOffer($product->getId(), $retailerId, $pickupDate);
-                $this->offersCache[$cacheKey] = $offer;
-            }
-
-            $offer = $this->offersCache[$cacheKey];
+            $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
         }
 
         return $offer;
