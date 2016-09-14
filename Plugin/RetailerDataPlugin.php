@@ -50,7 +50,11 @@ class RetailerDataPlugin
      */
     public function aroundSetParams(RetailerData $retailerData, \Closure $proceed, $retailerId, $pickupDate)
     {
-        $hasChanges = $retailerData->getRetailerId() !== $retailerId || $retailerData->getPickupDate() !== $pickupDate;
+        $quote      = $this->checkoutSession->getQuote();
+        $hasChanges = (
+            ($retailerData->getRetailerId() !== $retailerId || $retailerData->getPickupDate() !== $pickupDate)
+            || ($quote->getSellerId() !== $retailerId || $quote->getPickupDate() !== $pickupDate)
+        );
 
         $proceed($retailerId, $pickupDate);
 
