@@ -36,4 +36,8 @@
     <type name="Magento\Quote\Model\Quote\Item">
         <plugin name="checkItemPriceChanges" type="Smile\RetailerOffer\Plugin\QuoteItemPlugin"/>
     </type>
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin"/>
+    </type>
 </config>

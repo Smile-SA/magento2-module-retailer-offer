@@ -41,8 +41,4 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin"/>
-    </type>
-
 </config>
