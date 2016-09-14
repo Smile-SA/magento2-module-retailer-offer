@@ -32,4 +32,8 @@
     <type name="Magento\Catalog\Model\Category">
         <plugin name="filterProductCount" type="Smile\RetailerOffer\Plugin\CategoryPlugin"/>
     </type>
+
+    <type name="Magento\Quote\Model\Quote\Item">
+        <plugin name="checkItemPriceChanges" type="Smile\RetailerOffer\Plugin\QuoteItemPlugin"/>
+    </type>
 </config>
