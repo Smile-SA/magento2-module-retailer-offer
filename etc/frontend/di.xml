@@ -37,10 +37,6 @@
         <plugin name="checkItemPriceChanges" type="Smile\RetailerOffer\Plugin\QuoteItemPlugin"/>
     </type>
 
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin"/>
-    </type>
-
     <type name="Magento\Checkout\Model\Session">
         <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\CheckoutSessionPlugin"/>
     </type>

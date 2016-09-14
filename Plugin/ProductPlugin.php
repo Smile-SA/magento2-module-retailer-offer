@@ -13,6 +13,7 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\State;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
@@ -41,11 +42,13 @@ class ProductPlugin
      *
      * @param OfferHelper  $offerHelper  The offer Helper
      * @param RetailerData $retailerData The Retailer Data Object
+     * @param State        $state        The Application State
      */
-    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData)
+    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData, State $state)
     {
         $this->retailerData = $retailerData;
         $this->helper       = $offerHelper;
+        $this->state        = $state;
     }
 
     /**
@@ -59,6 +62,11 @@ class ProductPlugin
      */
     public function aroundIsAvailable(Product $product, \Closure $proceed)
     {
+        // Exit if admin : do not display product as unavailable by default.
+        if ($this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
+            return $proceed();
+        }
+
         $isAvailable = false;
         $offer       = $this->getCurrentOffer($product);
 
