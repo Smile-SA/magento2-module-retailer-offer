@@ -13,12 +13,14 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\CatalogInventory\Model\Plugin\Layer;
+use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
+use Smile\RetailerOffer\Helper\Settings;
 
 /**
- * Replace is in stock native filter on layer.
+ * Add filtering for the current offer to the catalog.
  *
  * @category  Smile
  * @package   Smile\ElasticsuiteCatalog
@@ -38,15 +40,22 @@ class LayerPlugin
     private $queryFactory;
 
     /**
+     * @var \Smile\RetailerOffer\Helper\Settings
+     */
+    private $settingsHelper;
+
+    /**
      * LayerPlugin constructor.
      *
-     * @param \Smile\Retailer\CustomerData\RetailerData                 $retailerData The retailer Data object
-     * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory The Query factory
+     * @param \Smile\Retailer\CustomerData\RetailerData                 $retailerData   The retailer Data object
+     * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory   The Query factory
+     * @param \Smile\RetailerOffer\Helper\Settings                      $settingsHelper Settings Helper
      */
-    public function __construct(RetailerData $retailerData, QueryFactory $queryFactory)
+    public function __construct(RetailerData $retailerData, QueryFactory $queryFactory, Settings $settingsHelper)
     {
-        $this->retailerData = $retailerData;
-        $this->queryFactory = $queryFactory;
+        $this->retailerData   = $retailerData;
+        $this->queryFactory   = $queryFactory;
+        $this->settingsHelper = $settingsHelper;
     }
 
     /**
@@ -56,41 +65,41 @@ class LayerPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
+        if (!$this->settingsHelper->isNavigationFilterApplied()) {
+            return;
+        }
+
         $retailerId = $this->retailerData->getRetailerId();
         $pickupDate = $this->retailerData->getPickupDate();
 
         if ($retailerId !== null && $pickupDate !== null) {
-            $offerStartDateFilter = $this->queryFactory->create(QueryInterface::TYPE_BOOL,
+            $sellerIdFilter       = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.seller_id', 'value' => $retailerId]);
+            $isAvailableFilter    = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]);
+
+            $offerStartDateFilter = $this->queryFactory->create(
+                QueryInterface::TYPE_BOOL,
                 [
                     'should' => [
                         $this->queryFactory->create(QueryInterface::TYPE_RANGE, ['field' => 'offer.start_date', 'bounds' => ['lte' => $pickupDate]]),
                         $this->queryFactory->create(QueryInterface::TYPE_MISSING, ['field' => 'offer.start_date']),
-                    ]
+                    ],
                 ]
             );
 
-            $offerEndDateFilter = $this->queryFactory->create(QueryInterface::TYPE_BOOL,
+            $offerEndDateFilter = $this->queryFactory->create(
+                QueryInterface::TYPE_BOOL,
                 [
                     'should' => [
                         $this->queryFactory->create(QueryInterface::TYPE_RANGE, ['field' => 'offer.end_date', 'bounds' => ['gte' => $pickupDate]]),
                         $this->queryFactory->create(QueryInterface::TYPE_MISSING, ['field' => 'offer.end_date']),
-                    ]
+                    ],
                 ]
             );
 
-            $boolFilter     = $this->queryFactory->create(
-                QueryInterface::TYPE_BOOL,
-                [
-                    'must' => [
-                        $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.seller_id', 'value' => $retailerId]),
-                        $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]),
-                        $offerStartDateFilter,
-                        $offerEndDateFilter
-                    ]
-                ]
-            );
+            $mustClause   = ['must' => [$sellerIdFilter, $isAvailableFilter, $offerStartDateFilter, $offerEndDateFilter]];
+            $boolFilter   = $this->queryFactory->create(QueryInterface::TYPE_BOOL, $mustClause);
+            $nestedFilter = $this->queryFactory->create(QueryInterface::TYPE_NESTED, ['path' => 'offer', 'query' => $boolFilter]);
 
-            $nestedFilter   = $this->queryFactory->create(QueryInterface::TYPE_NESTED, ['path' => 'offer', 'query' => $boolFilter]);
             $collection->addQueryFilter($nestedFilter);
         }
     }
