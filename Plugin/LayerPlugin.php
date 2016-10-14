@@ -13,7 +13,6 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\CatalogInventory\Model\Plugin\Layer;
-use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;

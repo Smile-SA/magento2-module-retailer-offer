@@ -17,6 +17,7 @@ use Magento\Framework\App\State;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
+use Smile\RetailerOffer\Helper\Settings;
 
 /**
  * Replace is in stock native filter on layer.
@@ -38,17 +39,24 @@ class ProductPlugin
     private $retailerData;
 
     /**
+     * @var \Smile\RetailerOffer\Helper\Settings
+     */
+    private $settingsHelper;
+
+    /**
      * ProductPlugin constructor.
      *
-     * @param OfferHelper  $offerHelper  The offer Helper
-     * @param RetailerData $retailerData The Retailer Data Object
-     * @param State        $state        The Application State
+     * @param OfferHelper  $offerHelper    The offer Helper
+     * @param RetailerData $retailerData   The Retailer Data Object
+     * @param State        $state          The Application State
+     * @param Settings      $settingsHelper Settings Helper
      */
-    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData, State $state)
+    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData, State $state, Settings $settingsHelper)
     {
-        $this->retailerData = $retailerData;
-        $this->helper       = $offerHelper;
-        $this->state        = $state;
+        $this->retailerData   = $retailerData;
+        $this->helper         = $offerHelper;
+        $this->state          = $state;
+        $this->settingsHelper = $settingsHelper;
     }
 
     /**
@@ -62,16 +70,15 @@ class ProductPlugin
      */
     public function aroundIsAvailable(Product $product, \Closure $proceed)
     {
-        // Exit if admin : do not display product as unavailable by default.
-        if ($this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
-            return $proceed();
-        }
+        $isAvailable = $proceed();
 
-        $isAvailable = false;
-        $offer       = $this->getCurrentOffer($product);
+        if ($this->useStoreOffers()) {
+            $isAvailable = false;
+            $offer       = $this->getCurrentOffer($product);
 
-        if ($offer !== null && $offer->isAvailable()) {
-            $isAvailable = (bool) $offer->isAvailable();
+            if ($offer !== null && $offer->isAvailable()) {
+                $isAvailable = (bool) $offer->isAvailable();
+            }
         }
 
         return $isAvailable;
@@ -87,13 +94,16 @@ class ProductPlugin
      */
     public function aroundGetPrice(Product $product, \Closure $proceed)
     {
-        $offer = $this->getCurrentOffer($product);
         $price = $proceed();
 
-        if ($offer && $offer->getPrice()) {
-            $price = $offer->getPrice();
-        } elseif ($offer && $offer->getSpecialPrice()) {
-            $price = $offer->getSpecialPrice();
+        if ($this->useStoreOffers()) {
+            $offer = $this->getCurrentOffer($product);
+
+            if ($offer && $offer->getPrice()) {
+                $price = $offer->getPrice();
+            } elseif ($offer && $offer->getSpecialPrice()) {
+                $price = $offer->getSpecialPrice();
+            }
         }
 
         return $price;
@@ -109,11 +119,14 @@ class ProductPlugin
      */
     public function aroundGetSpecialPrice(Product $product, \Closure $proceed)
     {
-        $offer = $this->getCurrentOffer($product);
         $price = $proceed();
 
-        if ($offer && $offer->getSpecialPrice()) {
-            $price = $offer->getSpecialPrice();
+        if ($this->useStoreOffers()) {
+            $offer = $this->getCurrentOffer($product);
+
+            if ($offer && $offer->getSpecialPrice()) {
+                $price = $offer->getSpecialPrice();
+            }
         }
 
         return $price;
@@ -130,15 +143,18 @@ class ProductPlugin
     public function aroundGetFinalPrice(Product $product, \Closure $proceed)
     {
         $price = $proceed();
-        $offer = $this->getCurrentOffer($product);
 
-        if ($offer) {
-            if ($offer->getPrice() && $offer->getSpecialPrice()) {
-                $price = min($offer->getPrice(), $offer->getSpecialPrice());
-            } elseif ($offer->getPrice()) {
-                $price = $offer->getPrice();
-            } elseif ($offer->getSpecialPrice()) {
-                $price = $offer->getSpecialPrice();
+        if ($this->useStoreOffers()) {
+            $offer = $this->getCurrentOffer($product);
+
+            if ($offer) {
+                if ($offer->getPrice() && $offer->getSpecialPrice()) {
+                    $price = min($offer->getPrice(), $offer->getSpecialPrice());
+                } elseif ($offer->getPrice()) {
+                    $price = $offer->getPrice();
+                } elseif ($offer->getSpecialPrice()) {
+                    $price = $offer->getSpecialPrice();
+                }
             }
         }
 
@@ -191,10 +207,20 @@ class ProductPlugin
         $retailerId = $this->getRetailerId();
         $pickupDate = $this->getPickupDate();
 
-        if ($retailerId && $pickupDate) {
+        if ($retailerId) {
             $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
         }
 
         return $offer;
+    }
+
+    private function useStoreOffers()
+    {
+        return !($this->isAdmin() || !$this->settingsHelper->isNavigationFilterApplied());
+    }
+
+    private function isAdmin()
+    {
+        return $this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
     }
 }

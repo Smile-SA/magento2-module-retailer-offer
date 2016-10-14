@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Item;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
+use Smile\RetailerOffer\Helper\Settings;
 use Magento\Framework\Event\ManagerInterface;
 
 /**
@@ -31,7 +32,7 @@ class QuoteItemPlugin
     /**
      * @var OfferHelper
      */
-    private $helper;
+    private $offerHelper;
 
     /**
      * @var \Smile\Retailer\CustomerData\RetailerData
@@ -44,17 +45,24 @@ class QuoteItemPlugin
     private $eventManager;
 
     /**
+     * @var \Smile\RetailerOffer\Helper\Settings
+     */
+    private $settingsHelper;
+
+    /**
      * ProductPlugin constructor.
      *
-     * @param ManagerInterface $eventManager The Event Manager
-     * @param OfferHelper      $offerHelper  The offer Helper
-     * @param RetailerData     $retailerData The Retailer Data Object
+     * @param ManagerInterface $eventManager   The Event Manager
+     * @param OfferHelper      $offerHelper    The offer Helper
+     * @param RetailerData     $retailerData   The Retailer Data Object
+     * @param Settings         $settingsHelper Settings Helper
      */
-    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, RetailerData $retailerData)
+    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, Settings $settingsHelper, RetailerData $retailerData)
     {
-        $this->retailerData = $retailerData;
-        $this->helper       = $offerHelper;
-        $this->eventManager = $eventManager;
+        $this->retailerData   = $retailerData;
+        $this->offerHelper    = $offerHelper;
+        $this->settingsHelper = $settingsHelper;
+        $this->eventManager   = $eventManager;
     }
 
     /**
@@ -71,25 +79,42 @@ class QuoteItemPlugin
      */
     public function aroundSetProduct(Item $item, \Closure $proceed, Product $product)
     {
-        $offerPrice   = null;
+        $resultItem = null;
+
         $currentOffer = $this->getCurrentOffer($product);
-        if ($currentOffer) {
-            $offerPrice = $currentOffer->getSpecialPrice() ? $currentOffer->getSpecialPrice() : $currentOffer->getPrice();
+
+        if (!$this->settingsHelper->isNavigationFilterApplied()) {
+            $currentOffer = $this->getCurrentOffer($product);
+
+            if (!$currentOffer) {
+
+            }
         }
 
-        /** @var \Magento\Quote\Model\Quote\Item $resultItem */
-        $resultItem = $proceed($product);
-
-        if ($offerPrice && $resultItem->getPrice() && ((float) $resultItem->getPrice() !== (float) $offerPrice)) {
-            if ($resultItem->getQuote()) {
-                $resultItem->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
+        if ($resultItem === null) {
+            $offerPrice   = null;
+            $currentOffer = $this->getCurrentOffer($product);
+            if ($currentOffer) {
+                $offerPrice = $currentOffer->getSpecialPrice() ? $currentOffer->getSpecialPrice() : $currentOffer->getPrice();
             }
 
-            $this->eventManager->dispatch(
-                "smile_retailer_suite_quote_item_price_change",
-                ['item' => $resultItem, 'product' => $product]
-            );
+            /** @var \Magento\Quote\Model\Quote\Item $resultItem */
+            $resultItem = $proceed($product);
+
+            /*if ($offerPrice && $resultItem->getPrice() && ((float) $resultItem->getPrice() !== (float) $offerPrice)) {
+                $resultItem->setPrice($offerPrice);
+                if ($resultItem->getQuote()) {
+                    $resultItem->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
+                }
+            }*/
         }
+
+        $resultItem = $proceed($product);
+
+        $this->eventManager->dispatch(
+            "smile_retailer_suite_quote_item_price_change",
+            ['item' => $resultItem, 'product' => $product]
+        );
 
         return $resultItem;
     }
@@ -127,8 +152,8 @@ class QuoteItemPlugin
         $retailerId = $this->getRetailerId();
         $pickupDate = $this->getPickupDate();
 
-        if ($retailerId && $pickupDate) {
-            $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
+        if ($retailerId) {
+            $offer = $this->offerHelper->getOffer($product, $retailerId, $pickupDate);
         }
 
         return $offer;
