@@ -108,15 +108,4 @@ class Summary extends Template
         return $this->getLayout()->createBlock(self::class . '\Retailer', "retailer.summary");
     }
 
-    /**
-     * Retrieve Overlap Summary Block
-     *
-     * @return \Magento\Framework\View\Element\BlockInterface
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getOverlapSummaryBlock()
-    {
-        return $this->getLayout()->createBlock(self::class . '\Overlap', "overlap.summary");
-    }
 }

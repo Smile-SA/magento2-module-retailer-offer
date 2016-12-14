@@ -96,22 +96,6 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterSelect name="has_overlap">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Eav\Model\Entity\Attribute\Source\Boolean</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">has_overlap</item>
-                        <item name="label" xsi:type="string" translate="true">Has Overlap</item>
-                        <item name="captionValue" xsi:type="string">0</item>
-                    </item>
-                </argument>
-            </filterSelect>
         </filters>
         <paging name="listing_paging"/>
     </listingToolbar>
@@ -194,29 +178,6 @@
                     </item>
                     <item name="label" xsi:type="string" translate="true">Product SKU</item>
                     <item name="sortOrder" xsi:type="number">40</item>
-                </item>
-            </argument>
-        </column>
-        <column name="has_overlap">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="array">
-                    <item name="active" xsi:type="array">
-                        <item name="value" xsi:type="string">1</item>
-                        <item name="label" xsi:type="string" translate="true">Yes</item>
-                    </item>
-                    <item name="inactive" xsi:type="array">
-                        <item name="value" xsi:type="string">0</item>
-                        <item name="label" xsi:type="string" translate="true">No</item>
-                    </item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="multiple" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Has Overlap</item>
-                    <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="editor" xsi:type="string">select</item>
-                    <item name="sortOrder" xsi:type="number">50</item>
                 </item>
             </argument>
         </column>
