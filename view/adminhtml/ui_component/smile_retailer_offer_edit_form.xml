@@ -142,31 +142,5 @@
                 </item>
             </argument>
         </field>
-        <field name="start_date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">40</item>
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Start Date</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
-        <field name="end_date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">50</item>
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">End Date</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
     </fieldset>
 </form>
