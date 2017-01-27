@@ -18,11 +18,19 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
+        <tab id="smile_retailersuite" translate="label" sortOrder="215">
+            <label>Smile RetailerSuite</label>
+        </tab>
 
-        <section id="smile_retailersuite_retailer_base_settings">
+        <section id="smile_retailersuite_retailer_base_settings" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Retailer Suite Base settings</label>
+            <tab>smile_retailersuite</tab>
+            <resource>Magento_Backend::config_smile_retailersuite_retailer_base_settings</resource>
+
             <group id="navigation_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="enforce_navigation_filter" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enforce navigation filtering on chosen retailer (and pickup date)</label>
+                    <label>Enforce navigation filtering on chosen retailer</label>
                     <comment>When enabled, the customer will only see the catalog of the chosen retailer in Front Office.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

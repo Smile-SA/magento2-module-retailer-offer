@@ -19,7 +19,7 @@
 
     <virtualType name="Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\Collection" type="Smile\Offer\Model\ResourceModel\Offer\Collection">
         <arguments>
-            <argument name="sellerType" xsi:type="string">Retailer</argument>
+            <argument name="sellerEntity" xsi:type="string">Smile\Retailer\Api\Data\RetailerInterface</argument>
         </arguments>
     </virtualType>
 
@@ -31,7 +31,7 @@
 
     <virtualType name="Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\Grid\Collection" type="Smile\Offer\Model\ResourceModel\Offer\Grid\Collection">
         <arguments>
-            <argument name="sellerType" xsi:type="string">Retailer</argument>
+            <argument name="sellerEntity" xsi:type="string">Smile\Retailer\Api\Data\RetailerInterface</argument>
         </arguments>
     </virtualType>
 

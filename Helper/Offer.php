@@ -17,7 +17,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Offer\Api\OfferManagementInterface;
-use Smile\Retailer\CustomerData\RetailerData;
 
 /**
  * Generic Helper for Retailer Offer
@@ -55,19 +54,18 @@ class Offer extends AbstractHelper
      *
      * @param ProductInterface $product    The product
      * @param integer          $retailerId The retailer Id
-     * @param string           $pickupDate The pickup Date
      *
      * @return OfferInterface
      */
-    public function getOffer($product, $retailerId, $pickupDate)
+    public function getOffer($product, $retailerId)
     {
         $offer = null;
 
-        if ($product->getId() && $retailerId && $pickupDate) {
-            $cacheKey = implode('_', [$product->getId(), $retailerId, $pickupDate]);
+        if ($product->getId() && $retailerId) {
+            $cacheKey = implode('_', [$product->getId(), $retailerId]);
 
             if (false === isset($this->offersCache[$cacheKey])) {
-                $offer = $this->offerManagement->getOffer($product->getId(), $retailerId, $pickupDate);
+                $offer = $this->offerManagement->getOffer($product->getId(), $retailerId);
                 $this->offersCache[$cacheKey] = $offer;
             }
 

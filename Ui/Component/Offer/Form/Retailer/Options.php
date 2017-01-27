@@ -14,7 +14,7 @@ namespace Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\App\RequestInterface;
-use Smile\Seller\Model\ResourceModel\Seller\CollectionFactory;
+use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
  * Source Model for Retailer Picker
@@ -26,7 +26,7 @@ use Smile\Seller\Model\ResourceModel\Seller\CollectionFactory;
 class Options implements OptionSourceInterface
 {
     /**
-     * @var \Smile\Seller\Model\Resource\Seller\CollectionFactory
+     * @var \Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory
      */
     protected $retailerCollectionFactory;
 

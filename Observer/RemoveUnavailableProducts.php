@@ -20,6 +20,7 @@ use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\Offer\Api\OfferManagementInterface;
 use Smile\Retailer\CustomerData\RetailerData;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Remove unavailable products (according to their current offer) from current quote
@@ -36,9 +37,9 @@ class RemoveUnavailableProducts implements ObserverInterface
     private $helper;
 
     /**
-     * @var RetailerData
+     * @var CurrentStore
      */
-    private $retailerData;
+    private $currentStore;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -50,13 +51,13 @@ class RemoveUnavailableProducts implements ObserverInterface
      *
      * @param ManagerInterface $eventManager The Event Manager
      * @param OfferHelper      $offerHelper  The offer Helper
-     * @param RetailerData     $retailerData The Retailer Data object
+     * @param CurrentStore     $currentStore The Retailer Data object
      */
-    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, RetailerData $retailerData)
+    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, CurrentStore $currentStore)
     {
         $this->eventManager = $eventManager;
         $this->helper       = $offerHelper;
-        $this->retailerData = $retailerData;
+        $this->currentStore = $currentStore;
     }
 
     /**
@@ -74,7 +75,7 @@ class RemoveUnavailableProducts implements ObserverInterface
         foreach ($productCollection as $key => $product) {
             $offer = $this->getCurrentOffer($product);
 
-            if ($offer == null || (false === $offer->isAvailable())) {
+            if ($offer === null || (false === $offer->isAvailable())) {
                 $unavailableProducts[] = $product;
                 $productCollection->removeItemByKey($key);
             }
@@ -96,25 +97,14 @@ class RemoveUnavailableProducts implements ObserverInterface
      */
     private function getCurrentOffer($product)
     {
-        $offer      = null;
+        $offer = null;
         $retailerId = $this->getRetailerId();
-        $pickupDate = $this->getPickupDate();
 
-        if ($retailerId && $pickupDate) {
-            $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
+        if ($retailerId) {
+            $offer = $this->helper->getOffer($product, $retailerId);
         }
 
         return $offer;
-    }
-
-    /**
-     * Return the current pickup date.
-     *
-     * @return string
-     */
-    private function getPickupDate()
-    {
-        return $this->retailerData->getPickupDate();
     }
 
     /**
@@ -124,6 +114,12 @@ class RemoveUnavailableProducts implements ObserverInterface
      */
     private function getRetailerId()
     {
-        return $this->retailerData->getRetailerId();
+        $retailerId = null;
+
+        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
+            $retailerId = $this->currentStore->getRetailer()->getId();
+        }
+
+        return $retailerId;
     }
 }

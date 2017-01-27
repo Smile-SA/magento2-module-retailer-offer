@@ -15,7 +15,7 @@ namespace Smile\RetailerOffer\Plugin;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
 use Smile\Offer\Api\Data\OfferInterface;
-use Smile\Retailer\CustomerData\RetailerData;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 
 /**
@@ -25,25 +25,8 @@ use Smile\RetailerOffer\Helper\Offer as OfferHelper;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class PriceBoxPlugin
+class PriceBoxPlugin extends AbstractPlugin
 {
-    /**
-     * @var \Smile\Retailer\CustomerData\RetailerData
-     */
-    private $retailerData;
-
-    /**
-     * PriceBox Plugin constructor.
-     *
-     * @param OfferHelper  $offerHelper  The offer Helper
-     * @param RetailerData $retailerData The Retailer Data Object
-     */
-    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData)
-    {
-        $this->retailerData = $retailerData;
-        $this->helper       = $offerHelper;
-    }
-
     /**
      * Adding retailer Id and Pickup date to price box cache Id.
      * The price box has basically a 3600s cache time so it could cause values for other retailer/date being cached.
@@ -68,45 +51,5 @@ class PriceBoxPlugin
         }
 
         return $cacheKey;
-    }
-
-    /**
-     * Return the current pickup date.
-     *
-     * @return string
-     */
-    private function getPickupDate()
-    {
-        return $this->retailerData->getPickupDate();
-    }
-
-    /**
-     * Return the current retailer id.
-     *
-     * @return int
-     */
-    private function getRetailerId()
-    {
-        return $this->retailerData->getRetailerId();
-    }
-
-    /**
-     * Retrieve Current Offer for the product.
-     *
-     * @param ProductInterface $product The product
-     *
-     * @return OfferInterface
-     */
-    private function getCurrentOffer($product)
-    {
-        $offer      = null;
-        $retailerId = $this->getRetailerId();
-        $pickupDate = $this->getPickupDate();
-
-        if ($retailerId && $pickupDate) {
-            $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
-        }
-
-        return $offer;
     }
 }

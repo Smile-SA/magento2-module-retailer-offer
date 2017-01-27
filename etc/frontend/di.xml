@@ -21,8 +21,8 @@
         <plugin name="filterAvailableOffer" type="Smile\RetailerOffer\Plugin\LayerPlugin"/>
     </type>
 
-    <type name="Smile\Retailer\CustomerData\RetailerData">
-        <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\RetailerDataPlugin"/>
+    <type name="Smile\StoreLocator\CustomerData\CurrentStore">
+        <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\CurrentStorePlugin"/>
     </type>
 
     <type name="Magento\Framework\Pricing\Render\PriceBox">

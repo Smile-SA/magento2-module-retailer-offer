@@ -13,7 +13,10 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Layer\Resolver;
-use Smile\Retailer\CustomerData\RetailerData;
+use Magento\Framework\App\State;
+use Smile\RetailerOffer\Helper\Offer as OfferHelper;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Using the Layer to retrieve Category Product Count if browsing for a given retailer/date
@@ -22,13 +25,8 @@ use Smile\Retailer\CustomerData\RetailerData;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class CategoryPlugin
+class CategoryPlugin extends AbstractPlugin
 {
-    /**
-     * @var RetailerData
-     */
-    private $retailerData;
-
     /**
      * @var Resolver
      */
@@ -37,12 +35,20 @@ class CategoryPlugin
     /**
      * LayerPlugin constructor.
      *
-     * @param RetailerData $retailerData  The retailer Data object
-     * @param Resolver     $layerResolver Layer Resolver
+     * @param OfferHelper  $offerHelper    The offer Helper
+     * @param CurrentStore $currentStore   The Retailer Data Object
+     * @param State        $state          The Application State
+     * @param Settings     $settingsHelper Settings Helper
+     * @param Resolver     $layerResolver  Layer Resolver
      */
-    public function __construct(RetailerData $retailerData, Resolver $layerResolver)
-    {
-        $this->retailerData  = $retailerData;
+    public function __construct(
+        OfferHelper $offerHelper,
+        CurrentStore $currentStore,
+        State $state,
+        Settings $settingsHelper,
+        Resolver $layerResolver
+    ) {
+        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper);
         $this->layerResolver = $layerResolver;
     }
 
@@ -56,7 +62,7 @@ class CategoryPlugin
      */
     public function aroundGetProductCount(\Magento\Catalog\Model\Category $category, \Closure $proceed)
     {
-        if (!$this->retailerData->getRetailerId() || !$this->retailerData->getPickupDate()) {
+        if (!$this->getRetailerId()) {
             return $proceed();
         }
 

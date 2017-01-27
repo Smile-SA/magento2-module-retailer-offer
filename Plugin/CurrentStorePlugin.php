@@ -12,7 +12,7 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Smile\Retailer\CustomerData\RetailerData;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Plugin to proceed Quote update when changing current Retailer or Pickup Date.
@@ -21,7 +21,7 @@ use Smile\Retailer\CustomerData\RetailerData;
  * @package   Smile\ElasticsuiteCatalog
  * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
-class RetailerDataPlugin
+class CurrentStorePlugin
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -39,35 +39,33 @@ class RetailerDataPlugin
     }
 
     /**
-     * Proceed current Quote update when changing current Retailer or Pickup Date.
+     * Proceed current Quote update when changing current Retailer.
      *
-     * @param \Smile\Retailer\CustomerData\RetailerData $retailerData The Retailer Data object
-     * @param \Closure                                  $proceed      The setParams method of retailer data object
-     * @param integer                                   $retailerId   The Retailer Id
-     * @param string                                    $pickupDate   The Pickup Date
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore The Retailer Data object
+     * @param \Closure                                      $proceed      The setParams method of retailer data object
+     * @param \Smile\Retailer\Api\Data\RetailerInterface    $retailer     The Retailer
      *
-     * @return \Smile\Retailer\CustomerData\RetailerData
+     * @return \Smile\StoreLocator\CustomerData\CurrentStore
      */
-    public function aroundSetParams(RetailerData $retailerData, \Closure $proceed, $retailerId, $pickupDate)
+    public function aroundSetRetailer(CurrentStore $currentStore, \Closure $proceed, $retailer)
     {
         $quote      = $this->checkoutSession->getQuote();
         $hasChanges = (
-            ($retailerData->getRetailerId() !== $retailerId || $retailerData->getPickupDate() !== $pickupDate)
-            || ($quote->getSellerId() !== $retailerId || $quote->getPickupDate() !== $pickupDate)
+            ($currentStore->getRetailer() && ($currentStore->getRetailer()->getId() !== $retailer->getId()))
+            || ($quote->getSellerId() !== $retailer->getId())
         );
 
-        $proceed($retailerId, $pickupDate);
+        $proceed($retailer);
 
         if ($hasChanges) {
             $quote = $this->checkoutSession->getQuote();
-            $quote->setSellerId($retailerId)
-                  ->setPickupDate($pickupDate)
+            $quote->setSellerId($retailer->getId())
                   ->setTotalsCollectedFlag(false)
                   ->collectTotals()
                   ->save();
             $this->checkoutSession->setQuoteId($quote->getId());
         }
 
-        return $retailerData;
+        return $currentStore;
     }
 }

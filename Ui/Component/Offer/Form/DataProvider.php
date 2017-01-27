@@ -13,9 +13,11 @@
 
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\Registry;
+use Smile\Offer\Api\OfferRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Data Provider for Retailer Offer Edit Form
@@ -26,41 +28,59 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
  */
 class DataProvider extends AbstractDataProvider
 {
-    private $dataPersistor;
-
     /**
      * @var array
      */
     private $loadedData;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var OfferRepositoryInterface
+     */
+    private $offerRepository;
+
+    /**
      * DataProvider constructor.
      *
-     * @param string                 $name              The name
-     * @param string                 $primaryFieldName  Primary field Name
-     * @param string                 $requestFieldName  Request field Name
-     * @param array                  $collectionFactory The collection factory
-     * @param DataPersistorInterface $dataPersistor     Data Persistor
-     * @param array                  $meta              Component Meta
-     * @param array                  $data              Component Data
+     * @param string                   $name              The name
+     * @param string                   $primaryFieldName  Primary field Name
+     * @param string                   $requestFieldName  Request field Name
+     * @param array                    $collectionFactory The collection factory
+     * @param Registry                 $registry          The Registry
+     * @param RequestInterface         $request           The Request
+     * @param OfferRepositoryInterface $offerRepository   The Offer Repository
+     * @param array                    $meta              Component Meta
+     * @param array                    $data              Component Data
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         $collectionFactory,
-        DataPersistorInterface $dataPersistor,
+        Registry $registry,
+        RequestInterface $request,
+        OfferRepositoryInterface $offerRepository,
         array $meta = [],
         array $data = []
     ) {
         $this->collection = $collectionFactory->create();
-        $this->dataPersistor = $dataPersistor;
-
+        $this->registry = $registry;
+        $this->offerRepository = $offerRepository;
+        $this->request = $request;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
-     * Retrieve current Data
+     * Retrieve Current data
      *
      * @return array
      */
@@ -69,24 +89,42 @@ class DataProvider extends AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $items = $this->collection->getItems();
 
-        foreach ($items as $model) {
-            $this->loadedData[$model->getId()] = $model->getData();
-        }
+        $offer = $this->getCurrentOffer();
 
-        $data = $this->dataPersistor->get('current_offer');
-        if (!empty($data)) {
-            $model = $this->collection->getNewEmptyItem();
-            $model->setData($data);
-            $this->loadedData[$model->getId()] = $model->getData();
-            $this->dataPersistor->clear('current_offer');
-        }
-
-        if (null === $this->loadedData) {
-            $this->loadedData = [];
+        if ($offer) {
+            $offerData = $offer->getData();
+            if (!empty($offerData)) {
+                $this->loadedData[$offer->getId()] = $offerData;
+            }
         }
 
         return $this->loadedData;
+    }
+
+    /**
+     * Get current offer
+     *
+     * @return \Smile\Offer\Api\Data\OfferInterface
+     * @throws NoSuchEntityException
+     */
+    private function getCurrentOffer()
+    {
+        $offer = $this->registry->registry('current_offer');
+
+        if ($offer) {
+            return $offer;
+        }
+
+        $requestId = $this->request->getParam($this->requestFieldName);
+        if ($requestId) {
+            $offer = $this->offerRepository->getById($requestId);
+        }
+
+        if (!$offer || !$offer->getId()) {
+            $offer = $this->collection->getNewEmptyItem();
+        }
+
+        return $offer;
     }
 }

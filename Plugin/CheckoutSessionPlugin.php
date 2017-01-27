@@ -13,7 +13,6 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Checkout\Model\Session;
-use Smile\Retailer\CustomerData\RetailerData;
 
 /**
  * Ensure correct appliance of retailer data to quote when retrieving it.
@@ -23,7 +22,7 @@ use Smile\Retailer\CustomerData\RetailerData;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class CheckoutSessionPlugin
+class CheckoutSessionPlugin extends AbstractPlugin
 {
     /**
      * Ensure proper binding of seller id and pickup date when retrieving quote from session.
@@ -36,11 +35,7 @@ class CheckoutSessionPlugin
     public function afterGetQuote(Session $session, $result)
     {
         if (!$result->getSellerId()) {
-            $result->setSellerId($session->getRetailerId());
-        }
-
-        if (!$result->getPickupDate()) {
-            $result->setPickupDate($session->getPickupDate());
+            $result->setSellerId($this->getRetailerId());
         }
 
         return $result;

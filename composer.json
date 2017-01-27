@@ -9,7 +9,8 @@
         "magento/module-catalog": "*",
         "magento/magento-composer-installer": "*",
         "smile/module-offer" : "*",
-        "smile/module-retailer" : "*"
+        "smile/module-retailer" : "*",
+        "smile/module-store-locator" : "*"
     },
     "license": "OSL-3.0",
     "authors": [

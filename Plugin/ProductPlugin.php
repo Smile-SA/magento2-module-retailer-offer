@@ -15,7 +15,7 @@ namespace Smile\RetailerOffer\Plugin;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\State;
 use Smile\Offer\Api\Data\OfferInterface;
-use Smile\Retailer\CustomerData\RetailerData;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\RetailerOffer\Helper\Settings;
 
@@ -34,9 +34,9 @@ class ProductPlugin
     private $helper;
 
     /**
-     * @var \Smile\Retailer\CustomerData\RetailerData
+     * @var CurrentStore
      */
-    private $retailerData;
+    private $currentStore;
 
     /**
      * @var \Smile\RetailerOffer\Helper\Settings
@@ -47,13 +47,13 @@ class ProductPlugin
      * ProductPlugin constructor.
      *
      * @param OfferHelper  $offerHelper    The offer Helper
-     * @param RetailerData $retailerData   The Retailer Data Object
+     * @param CurrentStore $currentStore   The Retailer Data Object
      * @param State        $state          The Application State
-     * @param Settings      $settingsHelper Settings Helper
+     * @param Settings     $settingsHelper Settings Helper
      */
-    public function __construct(OfferHelper $offerHelper, RetailerData $retailerData, State $state, Settings $settingsHelper)
+    public function __construct(OfferHelper $offerHelper, CurrentStore $currentStore, State $state, Settings $settingsHelper)
     {
-        $this->retailerData   = $retailerData;
+        $this->currentStore   = $currentStore;
         $this->helper         = $offerHelper;
         $this->state          = $state;
         $this->settingsHelper = $settingsHelper;
@@ -175,26 +175,6 @@ class ProductPlugin
     }
 
     /**
-     * Return the current pickup date.
-     *
-     * @return string
-     */
-    private function getPickupDate()
-    {
-        return $this->retailerData->getPickupDate();
-    }
-
-    /**
-     * Return the current retailer id.
-     *
-     * @return int
-     */
-    private function getRetailerId()
-    {
-        return $this->retailerData->getRetailerId();
-    }
-
-    /**
      * Retrieve Current Offer for the product.
      *
      * @param Product $product The product
@@ -204,21 +184,35 @@ class ProductPlugin
     private function getCurrentOffer($product)
     {
         $offer      = null;
-        $retailerId = $this->getRetailerId();
-        $pickupDate = $this->getPickupDate();
+        $retailerId = null;
+        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
+            $retailerId = $this->currentStore->getRetailer()->getId();
+        }
 
         if ($retailerId) {
-            $offer = $this->helper->getOffer($product, $retailerId, $pickupDate);
+            $offer = $this->helper->getOffer($product, $retailerId);
         }
 
         return $offer;
     }
 
+    /**
+     * Check if we should use store offers
+     *
+     * @return bool
+     */
     private function useStoreOffers()
     {
         return !($this->isAdmin() || !$this->settingsHelper->isNavigationFilterApplied());
     }
 
+    /**
+     * Check if we are browsing admin area
+     *
+     * @return bool
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function isAdmin()
     {
         return $this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;

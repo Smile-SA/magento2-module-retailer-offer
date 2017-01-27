@@ -15,11 +15,11 @@ namespace Smile\RetailerOffer\Plugin;
 use Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\Item;
 use Smile\Offer\Api\Data\OfferInterface;
-use Smile\Retailer\CustomerData\RetailerData;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\RetailerOffer\Helper\Settings;
 use Magento\Framework\Event\ManagerInterface;
-
+use Magento\Framework\App\State;
 /**
  * Check if the offer price of a previously added quote item has changed.
  *
@@ -27,42 +27,26 @@ use Magento\Framework\Event\ManagerInterface;
  * @package   Smile\RetailerOffer
  * @author    Romain Ruaud <romain.ruaud@smile.fr>
  */
-class QuoteItemPlugin
+class QuoteItemPlugin extends AbstractPlugin
 {
-    /**
-     * @var OfferHelper
-     */
-    private $offerHelper;
-
-    /**
-     * @var \Smile\Retailer\CustomerData\RetailerData
-     */
-    private $retailerData;
-
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
-     */
-    private $settingsHelper;
-
-    /**
      * ProductPlugin constructor.
      *
-     * @param ManagerInterface $eventManager   The Event Manager
      * @param OfferHelper      $offerHelper    The offer Helper
-     * @param RetailerData     $retailerData   The Retailer Data Object
+     * @param CurrentStore     $currentStore   The Current Store object
      * @param Settings         $settingsHelper Settings Helper
+     * @param State            $state          Application State
+     * @param ManagerInterface $eventManager   The Event Manager
      */
-    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, Settings $settingsHelper, RetailerData $retailerData)
+    public function __construct(OfferHelper $offerHelper, CurrentStore $currentStore, Settings $settingsHelper, State $state, ManagerInterface $eventManager)
     {
-        $this->retailerData   = $retailerData;
-        $this->offerHelper    = $offerHelper;
-        $this->settingsHelper = $settingsHelper;
-        $this->eventManager   = $eventManager;
+        $this->eventManager = $eventManager;
+        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper);
     }
 
     /**
@@ -117,45 +101,5 @@ class QuoteItemPlugin
         );
 
         return $resultItem;
-    }
-
-    /**
-     * Return the current pickup date.
-     *
-     * @return string
-     */
-    private function getPickupDate()
-    {
-        return $this->retailerData->getPickupDate();
-    }
-
-    /**
-     * Return the current retailer id.
-     *
-     * @return int
-     */
-    private function getRetailerId()
-    {
-        return $this->retailerData->getRetailerId();
-    }
-
-    /**
-     * Retrieve Current Offer for the product.
-     *
-     * @param Product $product The product
-     *
-     * @return OfferInterface
-     */
-    private function getCurrentOffer($product)
-    {
-        $offer      = null;
-        $retailerId = $this->getRetailerId();
-        $pickupDate = $this->getPickupDate();
-
-        if ($retailerId) {
-            $offer = $this->offerHelper->getOffer($product, $retailerId, $pickupDate);
-        }
-
-        return $offer;
     }
 }

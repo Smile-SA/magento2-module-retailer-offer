@@ -19,8 +19,9 @@
     <module name="Smile_RetailerOffer" setup_version="1.0.0">
         <sequence>
             <module name="Magento_Catalog" />
-            <module name="Smile_Retailer" />
             <module name="Smile_Offer" />
+            <module name="Smile_Retailer" />
+            <module name="Smile_StoreLocator" />
         </sequence>
     </module>
 </config>
