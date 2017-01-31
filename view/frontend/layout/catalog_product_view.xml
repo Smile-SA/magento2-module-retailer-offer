@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Retailer Offer product page layout
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\RetailerOffer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Apache License Version 2.0
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <container name="smile.retaileroffer.info.store" label="Product store availability block" htmlTag="div" htmlClass="product-store-availability" after="product.info.price">
+                <block class="Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability"
+                       name="smile.retaileroffer.product.availability"
+                       as="smile.retaileroffer.product.availability"
+                       template="product/view/retailer/availability.phtml">
+                    <arguments>
+                        <argument name="jsLayout" xsi:type="array">
+                            <item name="components" xsi:type="array">
+                                <item name="catalog-product-retailer-availability" xsi:type="array">
+                                    <item name="component" xsi:type="string">Smile_RetailerOffer/js/retailer/product-availability</item>
+                                    <item name="storeOffersListTemplate" xsi:type="string">Smile_RetailerOffer/retailer/product/store-list</item>
+                                </item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

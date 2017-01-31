@@ -29,6 +29,15 @@ Edit,Edit
 "Status : %1","Status : %1"
 "Retailer :","Retailer :"
 "Code : %1","Code : %1"
+"Store availability : ","Store availability : "
+"In Stock","In Stock"
+"Out Of Stock","Out Of Stock"
+"Choose this store","Choose this store"
+"View availability in stores ...","View availability in stores ..."
+"Smile RetailerSuite","Smile RetailerSuite"
+"Retailer Suite Base settings","Retailer Suite Base settings"
+"Enforce navigation filtering on chosen retailer","Enforce navigation filtering on chosen retailer"
+"When enabled, the customer will only see the catalog of the chosen retailer in Front Office.","When enabled, the customer will only see the catalog of the chosen retailer in Front Office."
 "Retailer Offer Information","Retailer Offer Information"
 "General Offer Parameters","General Offer Parameters"
 Retailer,Retailer
@@ -38,8 +47,6 @@ Retailer,Retailer
 "Offer is available","Offer is available"
 Price,Price
 "Special Price","Special Price"
-"Start Date","Start Date"
-"End Date","End Date"
 "Add Offer","Add Offer"
 Select...,Select...
 ID,ID
@@ -48,9 +55,3 @@ ID,ID
 "Product SKU","Product SKU"
 "Retailer Offers","Retailer Offers"
 "Not Selected", "Not Selected"
-"This offer currently has no overlaps with other offers.","This offer currently has no overlaps with other offers."
-"Overlapping offers :","Overlapping offers :"
-"Overlapping offers between %1 and %2 :","Overlapping offers between %1 and %2 :"
-"This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them.","This offer currently has overlaps with other offers for the same retailer and product. Please check the Summary tab to see them."
-"Offers listed here are for the same retailer and product","Offers listed here are for the same retailer and product"
-"Has Overlap","Has Overlap"

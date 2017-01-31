@@ -45,4 +45,15 @@
         <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin"/>
     </type>
 
+    <virtualType name="Smile\RetailerOffer\Model\OfferManagement" type="Smile\Offer\Model\OfferManagement">
+        <arguments>
+            <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
+        </arguments>
+    </virtualType>
+    
+    <type name="Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability">
+        <arguments>
+            <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
+        </arguments>
+    </type>
 </config>
