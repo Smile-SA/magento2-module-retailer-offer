@@ -15,13 +15,50 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 
-define(['jquery', 'uiComponent', 'Magento_Customer/js/customer-data', 'mage/translate'], function ($, Component, storage) {
+define([
+    'jquery',
+    'uiComponent',
+    'Magento_Customer/js/customer-data',
+    'ko',
+    /*'smile-geocoder',*/
+    'uiRegistry',
+    'Smile_Map/js/model/markers',
+    'mage/translate'
+    ], function ($, Component, storage, ko, registry, /*, geocoder,*/ markers) {
 
     "use strict";
 
     var retailer = storage.get('current-store');
 
     return Component.extend({
+
+        /**
+         * Constructor
+         */
+        initialize: function () {
+            this._super();
+            markers.setList(this.storeOffers);
+            this.displayedOffers = ko.observable(markers.getList());
+            this.initGeocoderBinding();
+        },
+
+        /**
+         * Init the geocoding component binding
+         */
+        initGeocoderBinding: function() {
+            registry.get(this.name + '.geocoder', function (geocoder) {
+                this.geocoder = geocoder;
+                geocoder.currentResult.subscribe(function (result) {
+                    if (result && result.location) {
+                        var callback = geocoder.filterMarkersListByPositionRadius.bind(geocoder, markers.getList(), result.location);
+                        var offers   = markers.filter(callback);
+                        this.displayedOffers(offers);
+                    } else {
+                        this.displayedOffers(this.storeOffers);
+                    }
+                }.bind(this));
+            }.bind(this));
+        },
 
         /**
          * Check if there is a current store

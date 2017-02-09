@@ -17,16 +17,18 @@
 //  Shop details on product page
 //  _____________________________________________
 
-.catalog-product-retailer-availability-content .store-name-value {
-    font-weight: bold;
-}
-
-.catalog-product-retailer-availability-content .current-store {
-    .inStock {
-        .lib-message-icon-inner(success);
+.catalog-product-retailer-availability-content {
+    .current-store {
+        .inStock {
+            .lib-message-icon-inner(success);
+        }
+        .outOfStock {
+            .lib-message-icon-inner(error);
+        }
     }
-    .outOfStock {
-        .lib-message-icon-inner(error);
+
+    .store-name-value {
+        font-weight: bold;
     }
 }
 
@@ -34,6 +36,22 @@
     border-bottom: 1px solid @color-gray-light5;
     padding-bottom: 15px;
     color: @color-gray34;
+}
+
+.catalog-product-stores-availability-content {
+    .fulltext-search-wrapper {
+        .form {
+            display: flex;
+
+            .field {
+                min-width: 30%;
+            }
+
+            button {
+                margin-left: 10px;
+            }
+        }
+    }
 }
 
 .store-offers-list {

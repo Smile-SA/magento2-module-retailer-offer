@@ -22,8 +22,10 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Url\EncoderInterface;
+use Smile\Map\Api\MapProviderInterface;
 use Smile\Map\Model\AddressFormatter;
 use Smile\Offer\Model\ResourceModel\Offer\CollectionFactory;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
 use Smile\StoreLocator\Helper\Data as StoreLocatorHelper;
 
@@ -57,6 +59,11 @@ class Availability extends \Magento\Catalog\Block\Product\View
     private $addressFormatter;
 
     /**
+     * @var \Smile\Map\Api\MapInterface
+     */
+    private $map;
+
+    /**
      * Availability constructor.
      *
      * @param Context                    $context                   Application context
@@ -73,6 +80,7 @@ class Availability extends \Magento\Catalog\Block\Product\View
      * @param RetailerCollectionFactory  $retailerCollectionFactory Retailer Collection
      * @param StoreLocatorHelper         $storeLocatorHelper        Store Locator Helper
      * @param AddressFormatter           $addressFormatter          Address Formatter
+     * @param MapProviderInterface       $mapProvider               Map Provider
      * @param array                      $data                      Block Data
      */
     public function __construct(
@@ -90,12 +98,14 @@ class Availability extends \Magento\Catalog\Block\Product\View
         RetailerCollectionFactory $retailerCollectionFactory,
         StoreLocatorHelper $storeLocatorHelper,
         AddressFormatter $addressFormatter,
+        MapProviderInterface $mapProvider,
         array $data = []
     ) {
         $this->offerCollectionFactory = $offerCollectionFactory;
         $this->retailerCollectionFactory = $retailerCollectionFactory;
         $this->storeLocatorHelper = $storeLocatorHelper;
         $this->addressFormatter = $addressFormatter;
+        $this->map = $mapProvider->getMap();
 
         parent::__construct(
             $context,
@@ -121,7 +131,14 @@ class Availability extends \Magento\Catalog\Block\Product\View
         $jsLayout = $this->jsLayout;
 
         $jsLayout['components']['catalog-product-retailer-availability']['productId'] = $this->getProduct()->getId();
+
         $jsLayout['components']['catalog-product-retailer-availability']['storeOffers'] = $this->getStoreOffers();
+
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] = $this->map->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
+            $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
+            $this->map->getConfig()
+        );
 
         return json_encode($jsLayout);
     }
@@ -152,6 +169,8 @@ class Availability extends \Magento\Catalog\Block\Product\View
                 'sellerId'     => (int) $retailer->getId(),
                 'name'         => $retailer->getName(),
                 'address'      => $this->addressFormatter->formatAddress($retailer->getAddress(), AddressFormatter::FORMAT_ONELINE),
+                'latitude'     => $retailer->getAddress()->getCoordinates()->getLatitude(),
+                'longitude'    => $retailer->getAddress()->getCoordinates()->getLongitude(),
                 'url'          => $this->storeLocatorHelper->getRetailerUrl($retailer),
                 'setStoreData' => $this->getSetStorePostData($retailer),
                 'isAvailable'  => false,
