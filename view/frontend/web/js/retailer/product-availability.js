@@ -20,11 +20,10 @@ define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'ko',
-    /*'smile-geocoder',*/
     'uiRegistry',
     'Smile_Map/js/model/markers',
     'mage/translate'
-    ], function ($, Component, storage, ko, registry, /*, geocoder,*/ markers) {
+    ], function ($, Component, storage, ko, registry, storeOffers) {
 
     "use strict";
 
@@ -37,8 +36,8 @@ define([
          */
         initialize: function () {
             this._super();
-            markers.setList(this.storeOffers);
-            this.displayedOffers = ko.observable(markers.getList());
+            storeOffers.setList(this.storeOffers);
+            this.displayedOffers = ko.observable(storeOffers.getList());
             this.initGeocoderBinding();
         },
 
@@ -50,8 +49,8 @@ define([
                 this.geocoder = geocoder;
                 geocoder.currentResult.subscribe(function (result) {
                     if (result && result.location) {
-                        var callback = geocoder.filterMarkersListByPositionRadius.bind(geocoder, markers.getList(), result.location);
-                        var offers   = markers.filter(callback);
+                        var callback = geocoder.filterMarkersListByPositionRadius.bind(geocoder, storeOffers.getList(), result.location);
+                        var offers   = storeOffers.filter(callback);
                         this.displayedOffers(offers);
                     } else {
                         this.displayedOffers(this.storeOffers);
