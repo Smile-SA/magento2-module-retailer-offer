@@ -1,0 +1,134 @@
+// /**
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
+//  * versions in the future.
+//  *
+//  *
+//  * @category  Smile
+//  * @package   Smile\RetailerOffer
+//  * @author    Romain Ruaud <romain.ruaud@smile.fr>
+//  * @copyright 2017 Smile
+//  * @license   Open Software License ("OSL") v. 3.0
+//  */
+
+
+//
+//  Shop details on product page
+//  _____________________________________________
+
+.catalog-product-retailer-availability-content {
+    .current-store {
+        .inStock {
+            .lib-message-icon-inner(success);
+        }
+        .outOfStock {
+            .lib-message-icon-inner(error);
+        }
+    }
+
+    .store-name-value {
+        font-weight: bold;
+    }
+}
+
+.product-store-availability {
+    border-bottom: 1px solid @color-gray-light5;
+    padding-bottom: 15px;
+    color: @color-gray34;
+}
+
+.catalog-product-stores-availability-content {
+    .fulltext-search-wrapper {
+        .form {
+            display: flex;
+
+            .field {
+                min-width: 30%;
+            }
+
+            button {
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.store-offers-list {
+    ul {
+        list-style-type: none;
+        margin: 10px 0 0;
+        padding: 0;
+
+        li.result-item {
+            margin: 0;
+            padding: 5px;
+            border-top: 1px solid #d8d8d8;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            ::after {
+                clear: both;
+                content: '';
+                display: table;
+            }
+
+            .store {
+                float:left;
+                min-width: 50%;
+            }
+
+            .availability {
+                float:left;
+                .available {
+                    .lib-message-icon-inner(success);
+                    margin-bottom: 0;
+                }
+
+                .unavailable {
+                    .lib-message-icon-inner(error);
+                    margin-bottom: 0;
+                }
+
+                p {
+                    min-width: 80px;
+                }
+            }
+
+            .actions {
+                margin-left:auto;
+            }
+
+            .breaker {
+                clear:both;
+            }
+        }
+    }
+}
+
+.catalog-product-retailer-availability .showavailability {
+    cursor: pointer;
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .store-offers-list {
+        ul {
+            li.result-item {
+                .availability {
+                    margin-top: 5px;
+                }
+                .actions {
+                    margin-top: 5px;
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
