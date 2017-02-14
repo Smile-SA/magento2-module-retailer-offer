@@ -8,9 +8,9 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/magento-composer-installer": "*",
-        "smile/module-offer" : "*",
-        "smile/module-retailer" : "*",
-        "smile/module-store-locator" : "*"
+        "smile/module-offer" : "1.2.x-dev",
+        "smile/module-retailer" : "1.2.x-dev",
+        "smile/module-store-locator" : "1.1.x-dev"
     },
     "license": "OSL-3.0",
     "authors": [
