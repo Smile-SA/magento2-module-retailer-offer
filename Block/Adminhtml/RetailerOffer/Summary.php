@@ -107,5 +107,4 @@ class Summary extends Template
     {
         return $this->getLayout()->createBlock(self::class . '\Retailer', "retailer.summary");
     }
-
 }

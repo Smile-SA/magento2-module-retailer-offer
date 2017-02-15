@@ -14,12 +14,12 @@ namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\Item;
-use Smile\Offer\Api\Data\OfferInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\RetailerOffer\Helper\Settings;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\App\State;
+
 /**
  * Check if the offer price of a previously added quote item has changed.
  *
@@ -64,41 +64,29 @@ class QuoteItemPlugin extends AbstractPlugin
     public function aroundSetProduct(Item $item, \Closure $proceed, Product $product)
     {
         $resultItem = null;
+        $offerPrice = null;
 
-        $currentOffer = $this->getCurrentOffer($product);
+        /** @var \Magento\Quote\Model\Quote\Item $resultItem */
+        $resultItem = $proceed($product);
 
-        if (!$this->settingsHelper->isNavigationFilterApplied()) {
-            $currentOffer = $this->getCurrentOffer($product);
-
-            if (!$currentOffer) {
-
-            }
-        }
-
-        if ($resultItem === null) {
-            $offerPrice   = null;
+        if ($this->settingsHelper->isNavigationFilterApplied()) {
             $currentOffer = $this->getCurrentOffer($product);
             if ($currentOffer) {
                 $offerPrice = $currentOffer->getSpecialPrice() ? $currentOffer->getSpecialPrice() : $currentOffer->getPrice();
             }
 
-            /** @var \Magento\Quote\Model\Quote\Item $resultItem */
-            $resultItem = $proceed($product);
-
-            /*if ($offerPrice && $resultItem->getPrice() && ((float) $resultItem->getPrice() !== (float) $offerPrice)) {
+            if ($offerPrice && $resultItem->getPrice() && ((float) $resultItem->getPrice() !== (float) $offerPrice)) {
                 $resultItem->setPrice($offerPrice);
                 if ($resultItem->getQuote()) {
                     $resultItem->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
                 }
-            }*/
+
+                $this->eventManager->dispatch(
+                    "smile_retailer_suite_quote_item_price_change",
+                    ['item' => $resultItem, 'product' => $product]
+                );
+            }
         }
-
-        $resultItem = $proceed($product);
-
-        $this->eventManager->dispatch(
-            "smile_retailer_suite_quote_item_price_change",
-            ['item' => $resultItem, 'product' => $product]
-        );
 
         return $resultItem;
     }

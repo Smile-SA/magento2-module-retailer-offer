@@ -27,6 +27,8 @@ class CheckoutSessionPlugin extends AbstractPlugin
     /**
      * Ensure proper binding of seller id and pickup date when retrieving quote from session.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need to retrieve the session.
+     *
      * @param \Magento\Checkout\Model\Session $session The checkout session
      * @param \Magento\Quote\Model\Quote      $result  The quote being retrieved
      *

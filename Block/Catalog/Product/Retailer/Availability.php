@@ -15,19 +15,13 @@ namespace Smile\RetailerOffer\Block\Catalog\Product\Retailer;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product;
-use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Json\EncoderInterface as JsonEncoderInterface;
-use Magento\Framework\Locale\FormatInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\Url\EncoderInterface;
 use Smile\Map\Api\MapProviderInterface;
 use Smile\Map\Model\AddressFormatter;
-use Smile\Offer\Model\ResourceModel\Offer\CollectionFactory;
-use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Offer\Api\Data\OfferInterface;
+use Smile\Offer\Model\Offer;
+use Smile\Offer\Model\OfferManagement;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
-use Smile\StoreLocator\Helper\Data as StoreLocatorHelper;
 
 /**
  * Block rendering availability in store for a given product.
@@ -36,22 +30,17 @@ use Smile\StoreLocator\Helper\Data as StoreLocatorHelper;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Availability extends \Magento\Catalog\Block\Product\View
+class Availability extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * @var \Smile\Offer\Model\ResourceModel\Offer\Grid\CollectionFactory
+     * @var \Smile\Offer\Model\OfferManagement
      */
-    private $offerCollectionFactory;
+    private $offerManagement;
 
     /**
      * @var RetailerCollectionFactory
      */
     private $retailerCollectionFactory;
-
-    /**
-     * @var StoreLocatorHelper
-     */
-    private $storeLocatorHelper;
 
     /**
      * @var \Smile\Map\Model\AddressFormatter
@@ -64,64 +53,52 @@ class Availability extends \Magento\Catalog\Block\Product\View
     private $map;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    private $coreRegistry;
+
+    /**
+     * @var array
+     */
+    private $storeOffers = null;
+
+    /**
      * Availability constructor.
      *
      * @param Context                    $context                   Application context
-     * @param EncoderInterface           $urlEncoder                Url encoder
-     * @param JsonEncoderInterface       $jsonEncoder               Json Encoder
-     * @param StringUtils                $string                    String utils
-     * @param Product                    $productHelper             Product Helper
-     * @param ConfigInterface            $productTypeConfig         Product Type Configuration
-     * @param FormatInterface            $localeFormat              Locale Format
-     * @param Session                    $customerSession           Customer Session
      * @param ProductRepositoryInterface $productRepository         Product Repository
-     * @param PriceCurrencyInterface     $priceCurrency             Price Currency
-     * @param CollectionFactory          $offerCollectionFactory    Offer Collection
+     * @param OfferManagement            $offerManagement           Offer Management
      * @param RetailerCollectionFactory  $retailerCollectionFactory Retailer Collection
-     * @param StoreLocatorHelper         $storeLocatorHelper        Store Locator Helper
      * @param AddressFormatter           $addressFormatter          Address Formatter
      * @param MapProviderInterface       $mapProvider               Map Provider
      * @param array                      $data                      Block Data
      */
     public function __construct(
         Context $context,
-        EncoderInterface $urlEncoder,
-        JsonEncoderInterface $jsonEncoder,
-        StringUtils $string,
-        Product $productHelper,
-        ConfigInterface $productTypeConfig,
-        FormatInterface $localeFormat,
-        Session $customerSession,
         ProductRepositoryInterface $productRepository,
-        PriceCurrencyInterface $priceCurrency,
-        CollectionFactory $offerCollectionFactory,
+        OfferManagement $offerManagement,
         RetailerCollectionFactory $retailerCollectionFactory,
-        StoreLocatorHelper $storeLocatorHelper,
         AddressFormatter $addressFormatter,
         MapProviderInterface $mapProvider,
         array $data = []
     ) {
-        $this->offerCollectionFactory = $offerCollectionFactory;
+        $this->offerManagement = $offerManagement;
         $this->retailerCollectionFactory = $retailerCollectionFactory;
-        $this->storeLocatorHelper = $storeLocatorHelper;
         $this->addressFormatter = $addressFormatter;
         $this->map = $mapProvider->getMap();
+        $this->productRepository = $productRepository;
+        $this->coreRegistry = $context->getRegistry();
 
         parent::__construct(
             $context,
-            $urlEncoder,
-            $jsonEncoder,
-            $string,
-            $productHelper,
-            $productTypeConfig,
-            $localeFormat,
-            $customerSession,
-            $productRepository,
-            $priceCurrency,
             $data
         );
     }
-
 
     /**
      * {@inheritDoc}
@@ -144,6 +121,38 @@ class Availability extends \Magento\Catalog\Block\Product\View
     }
 
     /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $identities = $this->getProduct()->getIdentities();
+
+        foreach ($this->getStoreOffers() as $offer) {
+            if (isset($offer[OfferInterface::OFFER_ID])) {
+                $identities[] = Offer::CACHE_TAG . '_' . $offer[OfferInterface::OFFER_ID];
+            }
+        }
+
+        return $identities;
+    }
+
+    /**
+     * Retrieve current product model
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    protected function getProduct()
+    {
+        if (!$this->coreRegistry->registry('product') && $this->getProductId()) {
+            return $this->productRepository->getById($this->getProductId());
+        }
+
+        return $this->coreRegistry->registry('product');
+    }
+
+    /**
      * Retrieve availability by store for the current product.
      *
      * @return array
@@ -152,38 +161,39 @@ class Availability extends \Magento\Catalog\Block\Product\View
     {
         $storeOffers = [];
 
-        $offerCollection = $this->offerCollectionFactory->create();
-        $offerCollection->addProductFilter($this->getProduct()->getId());
-
-        $offerByRetailer = [];
-        foreach ($offerCollection as $offer) {
-            $offerByRetailer[(int) $offer->getSellerId()] = $offer;
-        }
-
-        /** @var \Smile\Retailer\Model\ResourceModel\Retailer\Collection $retailerCollection */
-        $retailerCollection = $this->retailerCollectionFactory->create();
-        $retailerCollection->addAttributeToSelect('*')->addFieldToFilter('is_active', (int) true);
-
-        foreach ($retailerCollection as $retailer) {
-            $offer = [
-                'sellerId'     => (int) $retailer->getId(),
-                'name'         => $retailer->getName(),
-                'address'      => $this->addressFormatter->formatAddress($retailer->getAddress(), AddressFormatter::FORMAT_ONELINE),
-                'latitude'     => $retailer->getAddress()->getCoordinates()->getLatitude(),
-                'longitude'    => $retailer->getAddress()->getCoordinates()->getLongitude(),
-                'url'          => $this->storeLocatorHelper->getRetailerUrl($retailer),
-                'setStoreData' => $this->getSetStorePostData($retailer),
-                'isAvailable'  => false,
-            ];
-
-            if (isset($offerByRetailer[(int) $retailer->getId()])) {
-                $offer['isAvailable'] = (bool) $offerByRetailer[(int) $retailer->getId()]->isAvailable();
+        if ($this->storeOffers === null) {
+            $offerByRetailer = [];
+            foreach ($this->offerManagement->getProductOffers($this->getProduct()->getId()) as $offer) {
+                $offerByRetailer[(int) $offer->getSellerId()] = $offer;
             }
 
-            $storeOffers[] = $offer;
+            /** @var \Smile\Retailer\Model\ResourceModel\Retailer\Collection $retailerCollection */
+            $retailerCollection = $this->retailerCollectionFactory->create();
+            $retailerCollection->addAttributeToSelect('*')->addFieldToFilter('is_active', (int) true);
+
+            foreach ($retailerCollection as $retailer) {
+                $offer = [
+                    'sellerId'     => (int) $retailer->getId(),
+                    'name'         => $retailer->getName(),
+                    'address'      => $this->addressFormatter->formatAddress($retailer->getAddress(), AddressFormatter::FORMAT_ONELINE),
+                    'latitude'     => $retailer->getAddress()->getCoordinates()->getLatitude(),
+                    'longitude'    => $retailer->getAddress()->getCoordinates()->getLongitude(),
+                    'setStoreData' => $this->getSetStorePostData($retailer),
+                    'isAvailable'  => false,
+                ];
+
+                if (isset($offerByRetailer[(int) $retailer->getId()])) {
+                    $offer['isAvailable'] = (bool) $offerByRetailer[(int) $retailer->getId()]->isAvailable();
+                    $offer[OfferInterface::OFFER_ID] = $offerByRetailer[(int) $retailer->getId()]->getId();
+                }
+
+                $storeOffers[] = $offer;
+            }
         }
 
-        return $storeOffers;
+        $this->storeOffers = $storeOffers;
+
+        return $this->storeOffers;
     }
 
     /**

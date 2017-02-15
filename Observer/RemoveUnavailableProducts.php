@@ -85,7 +85,6 @@ class RemoveUnavailableProducts implements ObserverInterface
             "smile_retailer_suite_remove_unavailable_quote_items",
             ['unavailable_products' => $unavailableProducts]
         );
-
     }
 
     /**
