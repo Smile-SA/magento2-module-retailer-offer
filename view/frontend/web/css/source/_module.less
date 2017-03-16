@@ -59,6 +59,8 @@
         list-style-type: none;
         margin: 10px 0 0;
         padding: 0;
+        max-height: 420px;
+        overflow-y: scroll;
 
         li.result-item {
             margin: 0;
@@ -120,6 +122,7 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .store-offers-list {
         ul {
+            max-height: 320px;
             li.result-item {
                 .availability {
                     margin-top: 5px;

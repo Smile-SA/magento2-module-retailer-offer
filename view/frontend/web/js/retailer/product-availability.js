@@ -22,8 +22,9 @@ define([
     'ko',
     'uiRegistry',
     'Smile_Map/js/model/markers',
+    'smile-storelocator-store-collection',
     'mage/translate'
-    ], function ($, Component, storage, ko, registry, storeOffers) {
+    ], function ($, Component, storage, ko, registry, Markers, StoreCollection) {
 
     "use strict";
 
@@ -36,8 +37,9 @@ define([
          */
         initialize: function () {
             this._super();
-            storeOffers.setList(this.storeOffers);
-            this.displayedOffers = ko.observable(storeOffers.getList());
+            var offers = new StoreCollection({items : this.storeOffers});
+            this.storeOffers = ko.observable(offers.getList());
+            this.displayedOffers = ko.observable(offers.getList());
             this.initGeocoderBinding();
         },
 
@@ -49,8 +51,7 @@ define([
                 this.geocoder = geocoder;
                 geocoder.currentResult.subscribe(function (result) {
                     if (result && result.location) {
-                        var callback = geocoder.filterMarkersListByPositionRadius.bind(geocoder, storeOffers.getList(), result.location);
-                        var offers   = storeOffers.filter(callback);
+                        var offers = geocoder.filterMarkersListByPositionRadius(this.storeOffers(), result.location);
                         this.displayedOffers(offers);
                     } else {
                         this.displayedOffers(this.storeOffers);
@@ -104,8 +105,7 @@ define([
             var result = false;
             if (this.hasStore()) {
                 var retailerId = retailer().entity_id;
-
-                this.storeOffers.forEach(function(store) {
+                this.storeOffers().forEach(function(store) {
                     if ((store.isAvailable) && (parseInt(store.sellerId, 10) === parseInt(retailerId, 10))) {
                         result = true;
                     }
