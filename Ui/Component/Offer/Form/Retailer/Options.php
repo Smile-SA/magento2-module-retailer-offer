@@ -68,6 +68,7 @@ class Options implements OptionSourceInterface
     protected function getRetailerList()
     {
         if ($this->retailersList === null) {
+            $this->retailersList = [];
             $storeId = $this->request->getParam('store');
 
             /* @var $collection \Smile\Seller\Model\ResourceModel\Seller\Collection */
