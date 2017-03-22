@@ -28,6 +28,11 @@
                         </resource>
                     </resource>
                 </resource>
+                <resource id="Smile_Seller::sellers">
+                    <resource id="Smile_Retailer::retailers">
+                        <resource id="Smile_RetailerOffer::retailer_offers" title="Manage Retailer Offers"/>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

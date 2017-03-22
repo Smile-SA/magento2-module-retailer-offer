@@ -22,7 +22,7 @@
              title="Retailer Offers"
              module="Smile_RetailerOffer"
              sortOrder="20"
-             parent="Smile_Seller::sellers_menu"
+             parent="Smile_Retailer::retailers_menu"
              action="smile_retailer/offer"
              resource="Smile_RetailerOffer::retailer_offers"/>
     </menu>
