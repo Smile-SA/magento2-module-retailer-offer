@@ -63,7 +63,7 @@ class Settings extends AbstractHelper
      */
     public function getCurrentMode()
     {
-        return (string) $this->getNavigationSettings('navigation_mode');
+        return (int) $this->getNavigationSettings('navigation_mode');
     }
 
     /**
