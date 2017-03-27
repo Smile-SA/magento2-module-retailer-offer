@@ -60,7 +60,7 @@ class LayerPlugin extends AbstractPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        if (!$this->settingsHelper->isNavigationFilterApplied()) {
+        if (!$this->settingsHelper->isDriveMode()) {
             return;
         }
 

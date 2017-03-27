@@ -20,6 +20,7 @@
         <!-- Manage Retailer Offers -->
         <add id="Smile_RetailerOffer::retailer_offers"
              title="Retailer Offers"
+             translate="title"
              module="Smile_RetailerOffer"
              sortOrder="20"
              parent="Smile_Retailer::retailers_menu"

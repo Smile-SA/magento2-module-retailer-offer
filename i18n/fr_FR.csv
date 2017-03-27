@@ -22,6 +22,8 @@ Offer,Offre
 "Something went wrong while editing the offer.","Une erreur s'est produite durant l'édition de l'offre."
 "Retailer Offers List","Liste des offres magasin."
 "You saved the offer %1.","Vous avez sauvegardé l'offre %1."
+Retail,Retail
+Drive,Drive
 Edit,Éditer
 "Product :","Produit :"
 "SKU : %1","SKU : %1"
@@ -34,10 +36,11 @@ Edit,Éditer
 "Out Of Stock","Épuisé"
 "Choose this store","Choisir ce magasin"
 "View availability in stores ...","Voir les disponibilités en magasin ..."
-"Smile RetailerSuite","Smile RetailerSuite"
-"Retailer Suite Base settings","Configuration de base de Retailer Suite"
-"Enforce navigation filtering on chosen retailer","Enforce navigation filtering on chosen retailer"
-"When enabled, the customer will only see the catalog of the chosen retailer in Front Office.","Mode 'Drive', si activé, le client ne pourra naviguer qu'au sein du catalogue du magasin qu'il a choisi."
+"Elastic Suite for Retailer","Elastic Suite for Retailer"
+"Navigation mode","Mode de navigation"
+"Drive mode : the customer will only see the catalog of the chosen retailer in Front Office. Retail mode : the customer will browse the Web catalog by default.","Mode Drive : Le client ne verra que le catalogue du magasin qu'il a sélectionné. Mode Retail : le client naviguera dans le catalogue global du site."
+"Display offers on product page","Afficher les offres sur la fiche produit"
+"When enabled, offers of all stores will be displayed on product page.","Si activé, les offres magasins seront affichées sur la fiche produit."
 "Retailer Offer Information","Informations de l'offre magasin"
 "General Offer Parameters","Paramètres généraux de l'offre"
 Retailer,Magasin
@@ -53,5 +56,7 @@ ID,ID
 "Retailer Name","Nom du magasin"
 "Product Name","Nom du produit"
 "Product SKU","Réf. produit"
+"Find a store :","Find a store :"
+"City, Zipcode, Department, ...","City, Zipcode, Department, ..."
+Search,Search
 "Retailer Offers","Offres Magasin"
-"Not Selected", "Non Sélectionné"

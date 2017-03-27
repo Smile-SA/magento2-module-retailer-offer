@@ -13,6 +13,7 @@
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Smile\RetailerOffer\Model\Config\Source\Navigation;
 
 /**
  * Retailer Offer Helper
@@ -36,13 +37,43 @@ class Settings extends AbstractHelper
     const NAVIGATION_SETTINGS_CONFIG_XML_PREFIX = 'navigation_settings';
 
     /**
-     * Check if we should enforce filtering on the current retailer (and even pickup date) for navigation in Front Office.
+     * Check if we should enforce filtering on the current retailer for navigation in Front Office.
      *
      * @return bool
      */
-    public function isNavigationFilterApplied()
+    public function isDriveMode()
     {
-        return (bool) $this->getNavigationSettings('enforce_navigation_filter');
+        return (bool) ($this->getCurrentMode() === Navigation::DRIVE_MODE);
+    }
+
+    /**
+     * Check if we should enforce filtering on the current retailer for navigation in Front Office.
+     *
+     * @return bool
+     */
+    public function isRetailerMode()
+    {
+        return (bool) ($this->getCurrentMode() === Navigation::RETAIL_MODE);
+    }
+
+    /**
+     * Retrieve current navigation mode (drive or retail)
+     *
+     * @return string
+     */
+    public function getCurrentMode()
+    {
+        return (string) $this->getNavigationSettings('navigation_mode');
+    }
+
+    /**
+     * Check if we should display other offers for products.
+     *
+     * @return bool
+     */
+    public function displayOtherOffers()
+    {
+        return (bool) $this->scopeConfig->getValue('display_offers');
     }
 
     /**

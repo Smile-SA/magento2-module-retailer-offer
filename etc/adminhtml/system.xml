@@ -19,16 +19,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
 
-        <section id="smile_retailersuite_retailer_base_settings" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="smile_retailersuite_retailer_base_settings" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Elastic Suite for Retailer</label>
             <tab>smile_elasticsuite</tab>
             <resource>Magento_Backend::config_smile_retailersuite_retailer_base_settings</resource>
 
             <group id="navigation_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <field id="enforce_navigation_filter" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enforce navigation filtering on chosen retailer</label>
-                    <comment>When enabled, the customer will only see the catalog of the chosen retailer in Front Office.</comment>
+                <field id="navigation_mode" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Navigation mode</label>
+                    <comment>Drive mode : the customer will only see the catalog of the chosen retailer in Front Office. Retail mode : the customer will browse the Web catalog by default.</comment>
+                    <source_model>Smile\RetailerOffer\Model\Config\Source\Navigation</source_model>
+                </field>
+                <field id="display_offers" translate="label comment" type="select" sortOrder="210" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Display offers on product page</label>
+                    <comment>When enabled, offers of all stores will be displayed on product page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

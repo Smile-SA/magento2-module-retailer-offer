@@ -69,7 +69,7 @@ class QuoteItemPlugin extends AbstractPlugin
         /** @var \Magento\Quote\Model\Quote\Item $resultItem */
         $resultItem = $proceed($product);
 
-        if ($this->settingsHelper->isNavigationFilterApplied()) {
+        if ($this->settingsHelper->isDriveMode()) {
             $currentOffer = $this->getCurrentOffer($product);
             if ($currentOffer) {
                 $offerPrice = $currentOffer->getSpecialPrice() ? $currentOffer->getSpecialPrice() : $currentOffer->getPrice();

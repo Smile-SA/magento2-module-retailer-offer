@@ -203,7 +203,7 @@ class ProductPlugin
      */
     private function useStoreOffers()
     {
-        return !($this->isAdmin() || !$this->settingsHelper->isNavigationFilterApplied());
+        return !($this->isAdmin() || !$this->settingsHelper->isDriveMode());
     }
 
     /**
