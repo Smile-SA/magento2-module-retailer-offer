@@ -21,6 +21,7 @@ use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\Offer\Api\OfferManagementInterface;
 use Smile\Retailer\CustomerData\RetailerData;
 use Smile\StoreLocator\CustomerData\CurrentStore;
+use Smile\RetailerOffer\Helper\Settings as SettingsHelper;
 
 /**
  * Remove unavailable products (according to their current offer) from current quote
@@ -47,17 +48,28 @@ class RemoveUnavailableProducts implements ObserverInterface
     private $eventManager;
 
     /**
+     * @var \Smile\RetailerOffer\Helper\Settings
+     */
+    private $settingsHelper;
+
+    /**
      * RemoveUnavailableProducts constructor.
      *
-     * @param ManagerInterface $eventManager The Event Manager
-     * @param OfferHelper      $offerHelper  The offer Helper
-     * @param CurrentStore     $currentStore The Retailer Data object
+     * @param ManagerInterface $eventManager   The Event Manager
+     * @param OfferHelper      $offerHelper    The offer Helper
+     * @param CurrentStore     $currentStore   The Retailer Data object
+     * @param SettingsHelper   $settingsHelper Settings Helper
      */
-    public function __construct(ManagerInterface $eventManager, OfferHelper $offerHelper, CurrentStore $currentStore)
-    {
-        $this->eventManager = $eventManager;
-        $this->helper       = $offerHelper;
-        $this->currentStore = $currentStore;
+    public function __construct(
+        ManagerInterface $eventManager,
+        OfferHelper $offerHelper,
+        CurrentStore $currentStore,
+        SettingsHelper $settingsHelper
+    ) {
+        $this->eventManager   = $eventManager;
+        $this->helper         = $offerHelper;
+        $this->currentStore   = $currentStore;
+        $this->settingsHelper = $settingsHelper;
     }
 
     /**
@@ -67,6 +79,10 @@ class RemoveUnavailableProducts implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
+        if (!$this->settingsHelper->isDriveMode()) {
+            return;
+        }
+
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $observer->getEvent()->getCollection();
 
