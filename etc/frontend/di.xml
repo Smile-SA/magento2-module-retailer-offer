@@ -40,4 +40,8 @@
     <type name="Magento\Checkout\Model\Session">
         <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\CheckoutSessionPlugin"/>
     </type>
+
+    <type name="\Magento\Framework\App\Action\Action">
+        <plugin name="contextPlugin" type="Smile\RetailerOffer\Plugin\ContextPlugin" sortOrder="100"/>
+    </type>
 </config>
