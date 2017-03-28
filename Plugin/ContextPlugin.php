@@ -71,7 +71,9 @@ class ContextPlugin
     ) {
 
         if ($this->settingsHelper->isDriveMode()) {
-            $retailerId = false;
+            // Set a default value to have common vary for all customers without any chosen retailer.
+            $retailerId = 'default';
+
             if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
                 $retailerId = $this->currentStore->getRetailer()->getId();
             }
