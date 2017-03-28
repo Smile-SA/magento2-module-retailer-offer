@@ -12,6 +12,7 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
@@ -34,22 +35,30 @@ class LayerPlugin extends AbstractPlugin
     private $queryFactory;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * LayerPlugin constructor.
      *
-     * @param OfferHelper  $offerHelper    The offer Helper
-     * @param CurrentStore $currentStore   The Retailer Data Object
-     * @param State        $state          The Application State
-     * @param Settings     $settingsHelper Settings Helper
-     * @param QueryFactory $queryFactory   The Query factory
+     * @param OfferHelper          $offerHelper    The offer Helper
+     * @param CurrentStore         $currentStore   The Retailer Data Object
+     * @param State                $state          The Application State
+     * @param Settings             $settingsHelper Settings Helper
+     * @param QueryFactory         $queryFactory   The Query factory
+     * @param ScopeConfigInterface $scopeConfig    The Scope Configuration
      */
     public function __construct(
         OfferHelper $offerHelper,
         CurrentStore $currentStore,
         State $state,
         Settings $settingsHelper,
-        QueryFactory $queryFactory
+        QueryFactory $queryFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->queryFactory = $queryFactory;
+        $this->scopeConfig  = $scopeConfig;
         parent::__construct($offerHelper, $currentStore, $state, $settingsHelper);
     }
 
@@ -66,14 +75,32 @@ class LayerPlugin extends AbstractPlugin
 
         $retailerId = $this->getRetailerId();
         if ($retailerId) {
-            $sellerIdFilter       = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.seller_id', 'value' => $retailerId]);
-            $isAvailableFilter    = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]);
+            $sellerIdFilter = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.seller_id', 'value' => $retailerId]);
+            $mustClause     = ['must' => [$sellerIdFilter]];
 
-            $mustClause   = ['must' => [$sellerIdFilter, $isAvailableFilter]];
+            // If out of stock products must be shown, just keep filter on product having an offer for current retailer, wether the offer is available or not.
+            if (false === $this->isEnabledShowOutOfStock()) {
+                $isAvailableFilter = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]);
+                $mustClause['must'][] = $isAvailableFilter;
+            }
+
             $boolFilter   = $this->queryFactory->create(QueryInterface::TYPE_BOOL, $mustClause);
             $nestedFilter = $this->queryFactory->create(QueryInterface::TYPE_NESTED, ['path' => 'offer', 'query' => $boolFilter]);
 
             $collection->addQueryFilter($nestedFilter);
         }
+    }
+
+    /**
+     * Get config value for 'display out of stock' option
+     *
+     * @return bool
+     */
+    private function isEnabledShowOutOfStock()
+    {
+        return $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
