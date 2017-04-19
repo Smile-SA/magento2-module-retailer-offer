@@ -13,7 +13,9 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\RetailerOffer\Helper\Settings;
 use Smile\StoreLocator\CustomerData\CurrentStore;
@@ -35,20 +37,24 @@ class CategoryPlugin extends AbstractPlugin
     /**
      * LayerPlugin constructor.
      *
-     * @param OfferHelper  $offerHelper    The offer Helper
-     * @param CurrentStore $currentStore   The Retailer Data Object
-     * @param State        $state          The Application State
-     * @param Settings     $settingsHelper Settings Helper
-     * @param Resolver     $layerResolver  Layer Resolver
+     * @param OfferHelper          $offerHelper    The offer Helper
+     * @param CurrentStore         $currentStore   The Retailer Data Object
+     * @param State                $state          The Application State
+     * @param Settings             $settingsHelper Settings Helper
+     * @param QueryFactory         $queryFactory   Query Factory
+     * @param ScopeConfigInterface $scopeConfig    Scope Configuration
+     * @param Resolver             $layerResolver  Layer Resolver
      */
     public function __construct(
         OfferHelper $offerHelper,
         CurrentStore $currentStore,
         State $state,
         Settings $settingsHelper,
+        QueryFactory $queryFactory,
+        ScopeConfigInterface $scopeConfig,
         Resolver $layerResolver
     ) {
-        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper);
+        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper, $queryFactory, $scopeConfig);
         $this->layerResolver = $layerResolver;
     }
 
