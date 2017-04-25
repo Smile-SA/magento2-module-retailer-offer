@@ -13,7 +13,9 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote\Item;
+use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
 use Smile\RetailerOffer\Helper\Settings;
@@ -37,22 +39,30 @@ class QuoteItemPlugin extends AbstractPlugin
     /**
      * ProductPlugin constructor.
      *
-     * @param OfferHelper      $offerHelper    The offer Helper
-     * @param CurrentStore     $currentStore   The Current Store object
-     * @param Settings         $settingsHelper Settings Helper
-     * @param State            $state          Application State
-     * @param ManagerInterface $eventManager   The Event Manager
+     * @param OfferHelper          $offerHelper    The offer Helper
+     * @param CurrentStore         $currentStore   The Current Store object
+     * @param Settings             $settingsHelper Settings Helper
+     * @param State                $state          Application State
+     * @param QueryFactory         $queryFactory   Query Factory
+     * @param ScopeConfigInterface $scopeConfig    Scope Config
+     * @param ManagerInterface     $eventManager   The Event Manager
      */
-    public function __construct(OfferHelper $offerHelper, CurrentStore $currentStore, Settings $settingsHelper, State $state, ManagerInterface $eventManager)
-    {
+    public function __construct(
+        OfferHelper $offerHelper,
+        CurrentStore $currentStore,
+        Settings $settingsHelper,
+        State $state,
+        QueryFactory $queryFactory,
+        ScopeConfigInterface $scopeConfig,
+        ManagerInterface $eventManager
+    ) {
         $this->eventManager = $eventManager;
-        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper);
+        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper, $queryFactory, $scopeConfig);
     }
 
     /**
      * Check if offer price has changed for quote item.
      * This can happens if an item is already in cart when the offer price is changed.
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need the original Item.
      *
      * @param \Magento\Quote\Model\Quote\Item $item    The Quote Item
