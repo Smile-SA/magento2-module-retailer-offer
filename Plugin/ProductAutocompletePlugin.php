@@ -26,11 +26,11 @@ class ProductAutocompletePlugin extends AbstractPlugin
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param \Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\DataProvider         $dataProvider Data provider
-     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection   Product Collection
+     * @param \Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter    $filter     Collection Filter
+     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection Product Collection
      */
-    public function beforePrepareProductCollection(
-        \Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\DataProvider $dataProvider,
+    public function beforePrepareCollection(
+        \Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter $filter,
         \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection
     ) {
         $this->applyStoreLimitationToCollection($collection);
