@@ -21,6 +21,7 @@ use Smile\Map\Model\AddressFormatter;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Offer\Model\Offer;
 use Smile\Offer\Model\OfferManagement;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
 
 /**
@@ -171,13 +172,15 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
             $retailerCollection = $this->retailerCollectionFactory->create();
             $retailerCollection->addAttributeToSelect('*')->addFieldToFilter('is_active', (int) true);
 
+            /** @var RetailerInterface $retailer */
             foreach ($retailerCollection as $retailer) {
+                $address = $retailer->getExtensionAttributes()->getAddress();
                 $offer = [
                     'sellerId'     => (int) $retailer->getId(),
                     'name'         => $retailer->getName(),
-                    'address'      => $this->addressFormatter->formatAddress($retailer->getAddress(), AddressFormatter::FORMAT_ONELINE),
-                    'latitude'     => $retailer->getAddress()->getCoordinates()->getLatitude(),
-                    'longitude'    => $retailer->getAddress()->getCoordinates()->getLongitude(),
+                    'address'      => $this->addressFormatter->formatAddress($address, AddressFormatter::FORMAT_ONELINE),
+                    'latitude'     => $address->getCoordinates()->getLatitude(),
+                    'longitude'    => $address->getCoordinates()->getLongitude(),
                     'setStoreData' => $this->getSetStorePostData($retailer),
                     'isAvailable'  => false,
                 ];
