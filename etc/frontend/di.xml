@@ -42,7 +42,7 @@
     </type>
 
     <type name="\Magento\Framework\App\Action\Action">
-        <plugin name="contextPlugin" type="Smile\RetailerOffer\Plugin\ContextPlugin" sortOrder="100"/>
+        <plugin name="retailerOfferContextPlugin" type="Smile\RetailerOffer\Plugin\ContextPlugin" sortOrder="100"/>
     </type>
 
     <type name="Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter">
