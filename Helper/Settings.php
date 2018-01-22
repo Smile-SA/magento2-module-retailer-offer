@@ -25,7 +25,7 @@ use Smile\RetailerOffer\Model\Config\Source\Navigation;
 class Settings extends AbstractHelper
 {
     /**
-     * Location of RetailerSuite base settings configuration.
+     * Location of Elasticsuite for Retailers base settings configuration.
      *
      * @var string
      */
@@ -35,6 +35,25 @@ class Settings extends AbstractHelper
      * @var string
      */
     const NAVIGATION_SETTINGS_CONFIG_XML_PREFIX = 'navigation_settings';
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    private $state;
+
+    /**
+     * Settings constructor.
+     *
+     * @param \Magento\Framework\App\Helper\Context $context Helper Context
+     * @param \Magento\Framework\App\State          $state   Application State
+     */
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\State $state
+    ) {
+        $this->state = $state;
+        parent::__construct($context);
+    }
 
     /**
      * Check if we should enforce filtering on the current retailer for navigation in Front Office.
@@ -77,6 +96,16 @@ class Settings extends AbstractHelper
     }
 
     /**
+     * Check if we should use store offers
+     *
+     * @return bool
+     */
+    public function useStoreOffers()
+    {
+        return !($this->isAdmin() || !$this->isDriveMode());
+    }
+
+    /**
      * Retrieve Retailer Configuration for a given field.
      *
      * @param string $path The config path to retrieve
@@ -88,5 +117,17 @@ class Settings extends AbstractHelper
         $configPath = implode('/', [self::BASE_CONFIG_XML_PREFIX, self::NAVIGATION_SETTINGS_CONFIG_XML_PREFIX, $path]);
 
         return $this->scopeConfig->getValue($configPath);
+    }
+
+    /**
+     * Check if we are browsing admin area
+     *
+     * @return bool
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function isAdmin()
+    {
+        return $this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
     }
 }

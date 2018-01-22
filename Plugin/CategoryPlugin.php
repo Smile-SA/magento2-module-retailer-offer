@@ -12,14 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
-use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
-use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-use Smile\RetailerOffer\Helper\Settings;
-use Smile\StoreLocator\CustomerData\CurrentStore;
-
 /**
  * Using the Layer to retrieve Category Product Count if browsing for a given retailer/date
  *
@@ -27,7 +19,7 @@ use Smile\StoreLocator\CustomerData\CurrentStore;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class CategoryPlugin extends AbstractPlugin
+class CategoryPlugin
 {
     /**
      * @var Resolver
@@ -35,26 +27,29 @@ class CategoryPlugin extends AbstractPlugin
     private $layerResolver;
 
     /**
-     * LayerPlugin constructor.
+     * @var \Smile\RetailerOffer\Helper\Offer
+     */
+    private $offerHelper;
+
+    /**
+     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     */
+    private $currentStore;
+
+    /**
+     * CategoryPlugin constructor.
      *
-     * @param OfferHelper          $offerHelper    The offer Helper
-     * @param CurrentStore         $currentStore   The Retailer Data Object
-     * @param State                $state          The Application State
-     * @param Settings             $settingsHelper Settings Helper
-     * @param QueryFactory         $queryFactory   Query Factory
-     * @param ScopeConfigInterface $scopeConfig    Scope Configuration
-     * @param Resolver             $layerResolver  Layer Resolver
+     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper   The offer Helper
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore  The current Store provider.
+     * @param \Magento\Catalog\Model\Layer\Resolver         $layerResolver Layer Resolver
      */
     public function __construct(
-        OfferHelper $offerHelper,
-        CurrentStore $currentStore,
-        State $state,
-        Settings $settingsHelper,
-        QueryFactory $queryFactory,
-        ScopeConfigInterface $scopeConfig,
-        Resolver $layerResolver
+        \Smile\RetailerOffer\Helper\Offer $offerHelper,
+        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
-        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper, $queryFactory, $scopeConfig);
+        $this->offerHelper   = $offerHelper;
+        $this->currentStore  = $currentStore;
         $this->layerResolver = $layerResolver;
     }
 
@@ -68,7 +63,7 @@ class CategoryPlugin extends AbstractPlugin
      */
     public function aroundGetProductCount(\Magento\Catalog\Model\Category $category, \Closure $proceed)
     {
-        if (!$this->getRetailerId()) {
+        if (!$this->currentStore->getRetailer() || !$this->currentStore->getRetailer()->getId()) {
             return $proceed();
         }
 

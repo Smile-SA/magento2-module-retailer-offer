@@ -12,12 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Pricing\Render\PriceBox;
-use Smile\Offer\Api\Data\OfferInterface;
-use Smile\StoreLocator\CustomerData\CurrentStore;
-use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-
 /**
  * PriceBox Plugin : used to ensure variation of price box cache by offer.
  *
@@ -25,8 +19,18 @@ use Smile\RetailerOffer\Helper\Offer as OfferHelper;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class PriceBoxPlugin extends AbstractPlugin
+class PriceBoxPlugin
 {
+    /**
+     * PriceBoxPlugin constructor.
+     *
+     * @param \Smile\RetailerOffer\Helper\Offer $offerHelper Offer Helper
+     */
+    public function __construct(\Smile\RetailerOffer\Helper\Offer $offerHelper)
+    {
+        $this->offerHelper = $offerHelper;
+    }
+
     /**
      * Adding retailer Id and Pickup date to price box cache Id.
      * The price box has basically a 3600s cache time so it could cause values for other retailer/date being cached.
@@ -37,14 +41,14 @@ class PriceBoxPlugin extends AbstractPlugin
      *
      * @return string
      */
-    public function aroundGetCacheKey(PriceBox $priceBox, \Closure $proceed)
+    public function aroundGetCacheKey(\Magento\Framework\Pricing\Render\PriceBox $priceBox, \Closure $proceed)
     {
         $cacheKey = $proceed();
 
         $salableItem = $priceBox->getSaleableItem();
 
-        if ($salableItem instanceof ProductInterface) {
-            $offer = $this->getCurrentOffer($salableItem);
+        if ($salableItem instanceof \Magento\Catalog\Api\Data\ProductInterface) {
+            $offer = $this->offerHelper->getCurrentOffer($salableItem);
             if ($offer && ($offer->getId())) {
                 $cacheKey = implode('-', [$cacheKey, $offer->getId()]);
             }

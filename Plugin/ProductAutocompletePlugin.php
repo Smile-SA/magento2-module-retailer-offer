@@ -19,8 +19,23 @@ namespace Smile\RetailerOffer\Plugin;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class ProductAutocompletePlugin extends AbstractPlugin
+class ProductAutocompletePlugin
 {
+    /**
+     * @var \Smile\RetailerOffer\Api\CollectionFilterInterface
+     */
+    private $collectionFilter;
+
+    /**
+     * AttributesAutocompletePlugin constructor.
+     *
+     * @param \Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter Collection Filter
+     */
+    public function __construct(\Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter)
+    {
+        $this->collectionFilter = $collectionFilter;
+    }
+
     /**
      * Apply Store limitation to autocomplete products results if needed.
      *
@@ -33,6 +48,6 @@ class ProductAutocompletePlugin extends AbstractPlugin
         \Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter $filter,
         \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection
     ) {
-        $this->applyStoreLimitationToCollection($collection);
+        $this->collectionFilter->applyStoreLimitation($collection);
     }
 }

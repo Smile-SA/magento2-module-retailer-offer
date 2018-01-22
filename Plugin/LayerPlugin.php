@@ -12,14 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Smile\StoreLocator\CustomerData\CurrentStore;
-use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
-use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
-use Smile\RetailerOffer\Helper\Settings;
-use Magento\Framework\App\State;
-use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-
 /**
  * Add filtering for the current offer to the catalog.
  *
@@ -27,8 +19,23 @@ use Smile\RetailerOffer\Helper\Offer as OfferHelper;
  * @package   Smile\ElasticsuiteCatalog
  * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
-class LayerPlugin extends AbstractPlugin
+class LayerPlugin
 {
+    /**
+     * @var \Smile\RetailerOffer\Api\CollectionFilterInterface
+     */
+    private $collectionFilter;
+
+    /**
+     * AttributesAutocompletePlugin constructor.
+     *
+     * @param \Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter Collection Filter
+     */
+    public function __construct(\Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter)
+    {
+        $this->collectionFilter = $collectionFilter;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -36,6 +43,6 @@ class LayerPlugin extends AbstractPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        $this->applyStoreLimitationToCollection($collection);
+        $this->collectionFilter->applyStoreLimitation($collection);
     }
 }

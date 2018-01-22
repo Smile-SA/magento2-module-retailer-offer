@@ -12,13 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Catalog\Model\Product;
-use Magento\Framework\App\State;
-use Smile\Offer\Api\Data\OfferInterface;
-use Smile\StoreLocator\CustomerData\CurrentStore;
-use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-use Smile\RetailerOffer\Helper\Settings;
-
 /**
  * Replace is in stock native filter on layer.
  *
@@ -29,12 +22,12 @@ use Smile\RetailerOffer\Helper\Settings;
 class ProductPlugin
 {
     /**
-     * @var OfferHelper
+     * @var \Smile\RetailerOffer\Helper\Offer
      */
     private $helper;
 
     /**
-     * @var CurrentStore
+     * @var \Smile\StoreLocator\CustomerData\CurrentStore
      */
     private $currentStore;
 
@@ -46,16 +39,17 @@ class ProductPlugin
     /**
      * ProductPlugin constructor.
      *
-     * @param OfferHelper  $offerHelper    The offer Helper
-     * @param CurrentStore $currentStore   The Retailer Data Object
-     * @param State        $state          The Application State
-     * @param Settings     $settingsHelper Settings Helper
+     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper    The offer Helper
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Retailer Data Object
+     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper Settings Helper
      */
-    public function __construct(OfferHelper $offerHelper, CurrentStore $currentStore, State $state, Settings $settingsHelper)
-    {
+    public function __construct(
+        \Smile\RetailerOffer\Helper\Offer $offerHelper,
+        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
+        \Smile\RetailerOffer\Helper\Settings $settingsHelper
+    ) {
         $this->currentStore   = $currentStore;
         $this->helper         = $offerHelper;
-        $this->state          = $state;
         $this->settingsHelper = $settingsHelper;
     }
 
@@ -68,13 +62,13 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundIsAvailable(Product $product, \Closure $proceed)
+    public function aroundIsAvailable(\Magento\Catalog\Model\Product $product, \Closure $proceed)
     {
         $isAvailable = $proceed();
 
-        if ($this->useStoreOffers()) {
+        if ($this->settingsHelper->useStoreOffers()) {
             $isAvailable = false;
-            $offer       = $this->getCurrentOffer($product);
+            $offer       = $this->helper->getCurrentOffer($product);
 
             if ($offer !== null && $offer->isAvailable()) {
                 $isAvailable = (bool) $offer->isAvailable();
@@ -92,12 +86,12 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundGetPrice(Product $product, \Closure $proceed)
+    public function aroundGetPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
     {
         $price = $proceed();
 
-        if ($this->useStoreOffers()) {
-            $offer = $this->getCurrentOffer($product);
+        if ($this->settingsHelper->useStoreOffers()) {
+            $offer = $this->helper->getCurrentOffer($product);
 
             if ($offer && $offer->getPrice()) {
                 $price = $offer->getPrice();
@@ -117,12 +111,12 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundGetSpecialPrice(Product $product, \Closure $proceed)
+    public function aroundGetSpecialPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
     {
         $price = $proceed();
 
-        if ($this->useStoreOffers()) {
-            $offer = $this->getCurrentOffer($product);
+        if ($this->settingsHelper->useStoreOffers()) {
+            $offer = $this->helper->getCurrentOffer($product);
 
             if ($offer && $offer->getSpecialPrice()) {
                 $price = $offer->getSpecialPrice();
@@ -140,12 +134,12 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundGetFinalPrice(Product $product, \Closure $proceed)
+    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
     {
         $price = $proceed();
 
-        if ($this->useStoreOffers()) {
-            $offer = $this->getCurrentOffer($product);
+        if ($this->settingsHelper->useStoreOffers()) {
+            $offer = $this->helper->getCurrentOffer($product);
 
             if ($offer) {
                 if ($offer->getPrice() && $offer->getSpecialPrice()) {
@@ -169,52 +163,8 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundGetMinimalPrice(Product $product, \Closure $proceed)
+    public function aroundGetMinimalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
     {
         return $this->aroundGetFinalPrice($product, $proceed);
-    }
-
-    /**
-     * Retrieve Current Offer for the product.
-     *
-     * @param Product $product The product
-     *
-     * @return OfferInterface
-     */
-    private function getCurrentOffer($product)
-    {
-        $offer      = null;
-        $retailerId = null;
-        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
-            $retailerId = $this->currentStore->getRetailer()->getId();
-        }
-
-        if ($retailerId) {
-            $offer = $this->helper->getOffer($product, $retailerId);
-        }
-
-        return $offer;
-    }
-
-    /**
-     * Check if we should use store offers
-     *
-     * @return bool
-     */
-    private function useStoreOffers()
-    {
-        return !($this->isAdmin() || !$this->settingsHelper->isDriveMode());
-    }
-
-    /**
-     * Check if we are browsing admin area
-     *
-     * @return bool
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function isAdmin()
-    {
-        return $this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
     }
 }

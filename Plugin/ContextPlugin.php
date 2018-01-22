@@ -13,7 +13,6 @@
 namespace Smile\RetailerOffer\Plugin;
 
 use Smile\StoreLocator\CustomerData\CurrentStore;
-use Smile\RetailerOffer\Helper\Settings as SettingsHelper;
 
 /**
  * Plugin to ensure the context properly vary according to currently selected (or not) retailer.
@@ -40,17 +39,17 @@ class ContextPlugin
     private $settingsHelper;
 
     /**
-     * @param \Magento\Framework\App\Http\Context $httpContext    HTTP Context
-     * @param CurrentStore                        $currentStore   The Current Store
-     * @param SettingsHelper                      $settingsHelper RetailerOffer Settings Helper
+     * @param \Magento\Framework\App\Http\Context           $httpContext    HTTP Context
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Current Store
+     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper RetailerOffer Settings Helper
      */
     public function __construct(
         \Magento\Framework\App\Http\Context $httpContext,
-        CurrentStore $currentStore,
-        SettingsHelper $settingsHelper
+        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
+        \Smile\RetailerOffer\Helper\Settings $settingsHelper
     ) {
-        $this->currentStore  = $currentStore;
-        $this->httpContext   = $httpContext;
+        $this->currentStore   = $currentStore;
+        $this->httpContext    = $httpContext;
         $this->settingsHelper = $settingsHelper;
     }
 

@@ -13,10 +13,8 @@
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 use Smile\Offer\Api\Data\OfferInterface;
-use Smile\Offer\Api\OfferManagementInterface;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Generic Helper for Retailer Offer
@@ -25,12 +23,17 @@ use Smile\Offer\Api\OfferManagementInterface;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Offer extends AbstractHelper
+class Offer extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var OfferManagementInterface
+     * @var \Smile\Offer\Api\OfferManagementInterface
      */
     private $offerManagement;
+
+    /**
+     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     */
+    private $currentStore;
 
     /**
      * @var OfferInterface[]
@@ -39,23 +42,29 @@ class Offer extends AbstractHelper
 
     /**
      * ProductPlugin constructor.
-     * @param Context                  $context         Helper context.
-     * @param OfferManagementInterface $offerManagement The offer Management
+     *
+     * @param \Magento\Framework\App\Helper\Context         $context         Helper context.
+     * @param \Smile\Offer\Api\OfferManagementInterface     $offerManagement The offer Management
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore    Current Store Provider
      */
-    public function __construct(Context $context, OfferManagementInterface $offerManagement)
-    {
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Smile\Offer\Api\OfferManagementInterface $offerManagement,
+        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore
+    ) {
         $this->offerManagement = $offerManagement;
+        $this->currentStore    = $currentStore;
 
         parent::__construct($context);
     }
 
     /**
-     * Retrieve Offer for the product by retailer id and pickup date.
+     * Retrieve Offer for the product by retailer id.
      *
      * @param ProductInterface $product    The product
      * @param integer          $retailerId The retailer Id
      *
-     * @return OfferInterface
+     * @return \Smile\Offer\Api\Data\OfferInterface
      */
     public function getOffer($product, $retailerId)
     {
@@ -65,11 +74,29 @@ class Offer extends AbstractHelper
             $cacheKey = implode('_', [$product->getId(), $retailerId]);
 
             if (false === isset($this->offersCache[$cacheKey])) {
-                $offer = $this->offerManagement->getOffer($product->getId(), $retailerId);
+                $offer                        = $this->offerManagement->getOffer($product->getId(), $retailerId);
                 $this->offersCache[$cacheKey] = $offer;
             }
 
             $offer = $this->offersCache[$cacheKey];
+        }
+
+        return $offer;
+    }
+
+    /**
+     * Retrieve Current Offer for the product.
+     *
+     * @param ProductInterface $product The product
+     *
+     * @return \Smile\Offer\Api\Data\OfferInterface
+     */
+    public function getCurrentOffer($product)
+    {
+        $offer = null;
+
+        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
+            $offer = $this->getOffer($product, $this->currentStore->getRetailer()->getId());
         }
 
         return $offer;

@@ -12,16 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Quote\Model\Quote\Item;
-use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
-use Smile\StoreLocator\CustomerData\CurrentStore;
-use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-use Smile\RetailerOffer\Helper\Settings;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\App\State;
-
 /**
  * Check if the offer price of a previously added quote item has changed.
  *
@@ -29,8 +19,23 @@ use Magento\Framework\App\State;
  * @package   Smile\RetailerOffer
  * @author    Romain Ruaud <romain.ruaud@smile.fr>
  */
-class QuoteItemPlugin extends AbstractPlugin
+class QuoteItemPlugin
 {
+    /**
+     * @var \Smile\RetailerOffer\Helper\Offer
+     */
+    private $offerHelper;
+
+    /**
+     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     */
+    private $currentStore;
+
+    /**
+     * @var \Smile\RetailerOffer\Helper\Settings
+     */
+    private $settingsHelper;
+
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
@@ -39,25 +44,21 @@ class QuoteItemPlugin extends AbstractPlugin
     /**
      * ProductPlugin constructor.
      *
-     * @param OfferHelper          $offerHelper    The offer Helper
-     * @param CurrentStore         $currentStore   The Current Store object
-     * @param Settings             $settingsHelper Settings Helper
-     * @param State                $state          Application State
-     * @param QueryFactory         $queryFactory   Query Factory
-     * @param ScopeConfigInterface $scopeConfig    Scope Config
-     * @param ManagerInterface     $eventManager   The Event Manager
+     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper    The offer Helper
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Current Store object
+     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper Settings Helper
+     * @param \Magento\Framework\Event\ManagerInterface     $eventManager   The Event Manager
      */
     public function __construct(
-        OfferHelper $offerHelper,
-        CurrentStore $currentStore,
-        Settings $settingsHelper,
-        State $state,
-        QueryFactory $queryFactory,
-        ScopeConfigInterface $scopeConfig,
-        ManagerInterface $eventManager
+        \Smile\RetailerOffer\Helper\Offer $offerHelper,
+        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
+        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
-        $this->eventManager = $eventManager;
-        parent::__construct($offerHelper, $currentStore, $state, $settingsHelper, $queryFactory, $scopeConfig);
+        $this->offerHelper    = $offerHelper;
+        $this->currentStore   = $currentStore;
+        $this->settingsHelper = $settingsHelper;
+        $this->eventManager   = $eventManager;
     }
 
     /**
@@ -71,8 +72,11 @@ class QuoteItemPlugin extends AbstractPlugin
      *
      * @return bool
      */
-    public function aroundSetProduct(Item $item, \Closure $proceed, Product $product)
-    {
+    public function aroundSetProduct(
+        \Magento\Quote\Model\Quote\Item $item,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product $product
+    ) {
         $resultItem = null;
         $offerPrice = null;
 
@@ -80,7 +84,7 @@ class QuoteItemPlugin extends AbstractPlugin
         $resultItem = $proceed($product);
 
         if ($this->settingsHelper->isDriveMode()) {
-            $currentOffer = $this->getCurrentOffer($product);
+            $currentOffer = $this->offerHelper->getCurrentOffer($product);
             if ($currentOffer) {
                 $offerPrice = $currentOffer->getSpecialPrice() ? $currentOffer->getSpecialPrice() : $currentOffer->getPrice();
             }

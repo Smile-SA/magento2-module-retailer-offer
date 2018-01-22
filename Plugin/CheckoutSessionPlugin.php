@@ -12,8 +12,6 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
-use Magento\Checkout\Model\Session;
-
 /**
  * Ensure correct appliance of retailer data to quote when retrieving it.
  * We may have a quote with no values if retailer data are properly stored in cookies but not re-applied when switching retailer.
@@ -22,8 +20,23 @@ use Magento\Checkout\Model\Session;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class CheckoutSessionPlugin extends AbstractPlugin
+class CheckoutSessionPlugin
 {
+    /**
+     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     */
+    private $currentStore;
+
+    /**
+     * CheckoutSessionPlugin constructor.
+     *
+     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore The current Store provider.
+     */
+    public function __construct(\Smile\StoreLocator\CustomerData\CurrentStore $currentStore)
+    {
+        $this->currentStore = $currentStore;
+    }
+
     /**
      * Ensure proper binding of seller id and pickup date when retrieving quote from session.
      *
@@ -34,10 +47,10 @@ class CheckoutSessionPlugin extends AbstractPlugin
      *
      * @return mixed
      */
-    public function afterGetQuote(Session $session, $result)
+    public function afterGetQuote(\Magento\Checkout\Model\Session $session, $result)
     {
-        if (!$result->getSellerId()) {
-            $result->setSellerId($this->getRetailerId());
+        if (!$result->getSellerId() && $this->currentStore->getRetailer()) {
+            $result->setSellerId($this->currentStore->getRetailer()->getId());
         }
 
         return $result;
