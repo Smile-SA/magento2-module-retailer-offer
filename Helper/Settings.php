@@ -106,6 +106,19 @@ class Settings extends AbstractHelper
     }
 
     /**
+     * Get config value for 'display out of stock' option
+     *
+     * @return bool
+     */
+    public function isEnabledShowOutOfStock()
+    {
+        return $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * Retrieve Retailer Configuration for a given field.
      *
      * @param string $path The config path to retrieve

@@ -88,7 +88,7 @@ class CollectionFilter implements CollectionFilterInterface
             $mustClause     = ['must' => [$sellerIdFilter]];
 
             // If out of stock products must be shown, just keep filter on product having an offer for current retailer, wether the offer is available or not.
-            if (false === $this->isEnabledShowOutOfStock()) {
+            if (false === $this->settingsHelper->isEnabledShowOutOfStock()) {
                 $isAvailableFilter    = $this->queryFactory->create(QueryInterface::TYPE_TERM, ['field' => 'offer.is_available', 'value' => true]);
                 $mustClause['must'][] = $isAvailableFilter;
             }
@@ -128,18 +128,5 @@ class CollectionFilter implements CollectionFilterInterface
         }
 
         return $retailer;
-    }
-
-    /**
-     * Get config value for 'display out of stock' option
-     *
-     * @return bool
-     */
-    private function isEnabledShowOutOfStock()
-    {
-        return $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
     }
 }
