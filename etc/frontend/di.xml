@@ -49,4 +49,7 @@
         <plugin name="filterAutocomplete" type="Smile\RetailerOffer\Plugin\ProductAutocompletePlugin" sortOrder="100"/>
     </type>
 
+    <type name="Magento\Catalog\Helper\Product">
+        <plugin name="initProductAvailableByOffer" type="Smile\RetailerOffer\Plugin\ProductHelperPlugin"/>
+    </type>
 </config>
