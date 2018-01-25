@@ -13,17 +13,18 @@
 namespace Smile\RetailerOffer\Model;
 
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
-use Smile\RetailerOffer\Api\CollectionFilterInterface;
+use Smile\RetailerOffer\Api\CollectionProcessorInterface;
 
 /**
  * Collection Processor.
  * Used to filter product collection according current store configuration.
+ * Also used to build proper sort orders for collection according to offers data.
  *
  * @category Smile
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class CollectionFilter implements CollectionFilterInterface
+class CollectionProcessor implements CollectionProcessorInterface
 {
     /**
      * @var \Smile\RetailerOffer\Helper\Offer
@@ -97,6 +98,21 @@ class CollectionFilter implements CollectionFilterInterface
             $nestedFilter = $this->queryFactory->create(QueryInterface::TYPE_NESTED, ['path' => 'offer', 'query' => $boolFilter]);
 
             $collection->addQueryFilter($nestedFilter);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function applyStoreSortOrders(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection)
+    {
+        if (!$this->settingsHelper->isDriveMode()) {
+            return;
+        }
+
+        $retailerId = $this->getRetailerId();
+        if ($retailerId) {
+            $collection->addSortFilterParameters('price', 'offer.price', 'offer', ['offer.seller_id' => $retailerId]);
         }
     }
 

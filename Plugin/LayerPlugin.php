@@ -22,18 +22,18 @@ namespace Smile\RetailerOffer\Plugin;
 class LayerPlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Api\CollectionFilterInterface
+     * @var \Smile\RetailerOffer\Api\CollectionProcessorInterface
      */
-    private $collectionFilter;
+    private $collectionProcessor;
 
     /**
      * AttributesAutocompletePlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter Collection Filter
+     * @param \Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionProcessor Collection Processor
      */
-    public function __construct(\Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter)
+    public function __construct(\Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionProcessor)
     {
-        $this->collectionFilter = $collectionFilter;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -43,6 +43,7 @@ class LayerPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        $this->collectionFilter->applyStoreLimitation($collection);
+        $this->collectionProcessor->applyStoreLimitation($collection);
+        $this->collectionProcessor->applyStoreSortOrders($collection);
     }
 }

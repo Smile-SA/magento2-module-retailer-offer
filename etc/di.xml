@@ -17,7 +17,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="Smile\RetailerOffer\Api\CollectionFilterInterface" type="Smile\RetailerOffer\Model\CollectionFilter"/>
+    <preference for="Smile\RetailerOffer\Api\CollectionProcessorInterface" type="Smile\RetailerOffer\Model\CollectionProcessor"/>
 
     <virtualType name="Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\Collection" type="Smile\Offer\Model\ResourceModel\Offer\Collection">
         <arguments>
