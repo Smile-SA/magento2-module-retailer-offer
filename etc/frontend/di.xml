@@ -54,20 +54,5 @@
     </type>
 
     <!-- Use dedicated price filter model -->
-
-    <virtualType name="categoryFilterList" type="Smile\ElasticsuiteRating\Model\Layer\FilterList">
-        <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="price" xsi:type="string">Smile\RetailerOffer\Model\Layer\Filter\Price</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="searchFilterList" type="Smile\ElasticsuiteRating\Model\Layer\FilterList">
-        <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="price" xsi:type="string">Smile\RetailerOffer\Model\Layer\Filter\Price</item>
-            </argument>
-        </arguments>
-    </virtualType>
+    <preference for="\Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price" type="Smile\RetailerOffer\Model\Layer\Filter\Price"/>
 </config>
