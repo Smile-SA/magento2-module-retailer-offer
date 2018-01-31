@@ -22,16 +22,16 @@ namespace Smile\RetailerOffer\Plugin;
 class ProductAutocompletePlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Api\CollectionFilterInterface
+     * @var \Smile\RetailerOffer\Api\CollectionProcessorInterface
      */
     private $collectionFilter;
 
     /**
      * AttributesAutocompletePlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter Collection Filter
+     * @param \Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionFilter Collection Filter
      */
-    public function __construct(\Smile\RetailerOffer\Api\CollectionFilterInterface $collectionFilter)
+    public function __construct(\Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionFilter)
     {
         $this->collectionFilter = $collectionFilter;
     }
