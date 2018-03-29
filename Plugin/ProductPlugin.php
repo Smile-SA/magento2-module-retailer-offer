@@ -135,7 +135,7 @@ class ProductPlugin
      *
      * @return bool
      */
-    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed, $qty)
+    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed, $qty = null)
     {
         $price = $proceed($qty);
 
