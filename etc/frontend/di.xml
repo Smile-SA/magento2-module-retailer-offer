@@ -18,27 +18,27 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <type name="Magento\Catalog\Model\Layer">
-        <plugin name="filterAvailableOffer" type="Smile\RetailerOffer\Plugin\LayerPlugin"/>
+        <plugin name="filterAvailableOffer" type="Smile\RetailerOffer\Plugin\LayerPlugin" sortOrder="10"/>
     </type>
 
     <type name="Smile\StoreLocator\CustomerData\CurrentStore">
-        <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\CurrentStorePlugin"/>
+        <plugin name="updateQuote" type="Smile\RetailerOffer\Plugin\CurrentStorePlugin" sortOrder="10"/>
     </type>
 
     <type name="Magento\Framework\Pricing\Render\PriceBox">
-        <plugin name="appendOfferToCacheKey" type="Smile\RetailerOffer\Plugin\PriceBoxPlugin"/>
+        <plugin name="appendOfferToCacheKey" type="Smile\RetailerOffer\Plugin\PriceBoxPlugin" sortOrder="10"/>
     </type>
 
     <type name="Magento\Catalog\Model\Category">
-        <plugin name="filterProductCount" type="Smile\RetailerOffer\Plugin\CategoryPlugin"/>
+        <plugin name="filterProductCount" type="Smile\RetailerOffer\Plugin\CategoryPlugin" sortOrder="10"/>
     </type>
 
     <type name="Magento\Quote\Model\Quote\Item">
-        <plugin name="checkItemPriceChanges" type="Smile\RetailerOffer\Plugin\QuoteItemPlugin"/>
+        <plugin name="checkItemPriceChanges" type="Smile\RetailerOffer\Plugin\QuoteItemPlugin" sortOrder="10"/>
     </type>
 
     <type name="Magento\Checkout\Model\Session">
-        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\CheckoutSessionPlugin"/>
+        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\CheckoutSessionPlugin" sortOrder="10"/>
     </type>
 
     <type name="\Magento\Framework\App\Action\Action">
@@ -50,7 +50,7 @@
     </type>
 
     <type name="Magento\Catalog\Helper\Product">
-        <plugin name="initProductAvailableByOffer" type="Smile\RetailerOffer\Plugin\ProductHelperPlugin"/>
+        <plugin name="initProductAvailableByOffer" type="Smile\RetailerOffer\Plugin\ProductHelperPlugin" sortOrder="10"/>
     </type>
 
     <!-- Use dedicated price filter model -->

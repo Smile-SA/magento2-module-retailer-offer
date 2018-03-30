@@ -44,7 +44,7 @@
     </virtualType>
 
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin"/>
+        <plugin name="addRetailerOfferData" type="Smile\RetailerOffer\Plugin\ProductPlugin" sortOrder="10"/>
     </type>
 
     <virtualType name="Smile\RetailerOffer\Model\OfferManagement" type="Smile\Offer\Model\OfferManagement">
