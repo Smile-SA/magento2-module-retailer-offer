@@ -77,7 +77,7 @@ class CollectionProcessor implements CollectionProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function applyStoreLimitation(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection)
+    public function applyStoreLimitation($collection)
     {
         if (!$this->settingsHelper->isDriveMode()) {
             return;
@@ -104,7 +104,7 @@ class CollectionProcessor implements CollectionProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function applyStoreSortOrders(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection)
+    public function applyStoreSortOrders($collection)
     {
         if (!$this->settingsHelper->isDriveMode()) {
             return;
