@@ -24,18 +24,18 @@ interface CollectionProcessorInterface
     /**
      * Apply store limitation to a product collection.
      *
-     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection Product Collection
+     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection|\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $collection Product Collection
      *
      * @return void
      */
-    public function applyStoreLimitation(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection);
+    public function applyStoreLimitation($collection);
 
     /**
      * Apply store sort orders to a product collection.
      *
-     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection Product Collection
+     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection|\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $collection Product Collection
      *
      * @return void
      */
-    public function applyStoreSortOrders(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection);
+    public function applyStoreSortOrders($collection);
 }
