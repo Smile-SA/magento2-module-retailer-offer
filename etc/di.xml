@@ -58,4 +58,13 @@
             <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
         </arguments>
     </type>
+
+    <type name="Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product\SpecialAttributesProvider">
+        <arguments>
+            <argument name="attributes" xsi:type="array">
+                <!-- Rewrite for price.is_discount to compute it on current retailer if needed. -->
+                <item name="price.is_discount" xsi:type="object">Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
