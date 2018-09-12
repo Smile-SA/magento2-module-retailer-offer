@@ -59,6 +59,8 @@ class DataProvider extends AbstractDataProvider
 
         $this->collection = $collectionFactory->create();
 
+        $this->collection->addFilterToMap('offer_id', 'main_table.offer_id');
+
         $this->addFieldStrategies  = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
     }

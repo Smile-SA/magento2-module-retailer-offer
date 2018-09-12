@@ -30,6 +30,6 @@ class AddProductNameFilterToCollection implements AddFilterToCollectionInterface
     public function addFilter(Collection $collection, $field, $condition = null)
     {
         $collection->addEntityAttributeToSelect(\Magento\Catalog\Api\Data\ProductInterface::class, "name", $field);
-        $collection->addEntityAttributeFilter(\Magento\Catalog\Api\Data\ProductInterface::class, $field, $condition);
+        $collection->addEntityAttributeFilter(\Magento\Catalog\Api\Data\ProductInterface::class, "name", $condition);
     }
 }
