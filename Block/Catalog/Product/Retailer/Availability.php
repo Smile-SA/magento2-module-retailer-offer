@@ -36,37 +36,37 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
     /**
      * @var \Smile\Offer\Model\OfferManagement
      */
-    private $offerManagement;
+    protected $offerManagement;
 
     /**
      * @var RetailerCollectionFactory
      */
-    private $retailerCollectionFactory;
+    protected $retailerCollectionFactory;
 
     /**
      * @var \Smile\Map\Model\AddressFormatter
      */
-    private $addressFormatter;
+    protected $addressFormatter;
 
     /**
      * @var \Smile\Map\Api\MapInterface
      */
-    private $map;
+    protected $map;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    private $productRepository;
+    protected $productRepository;
 
     /**
      * @var \Magento\Framework\Registry
      */
-    private $coreRegistry;
+    protected $coreRegistry;
 
     /**
      * @var array
      */
-    private $storeOffers = null;
+    protected $storeOffers = null;
 
     /**
      * Availability constructor.
@@ -158,7 +158,7 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
      *
      * @return array
      */
-    private function getStoreOffers()
+    protected function getStoreOffers()
     {
         $storeOffers = [];
 
@@ -206,7 +206,7 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
      *
      * @return string
      */
-    private function getSetStorePostData($retailer)
+    protected function getSetStorePostData($retailer)
     {
         $setUrl   = $this->_urlBuilder->getUrl('storelocator/store/set');
         $postData = ['id' => $retailer->getId()];
