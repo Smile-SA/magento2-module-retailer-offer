@@ -15,7 +15,8 @@
         "magento/magento-composer-installer": "*",
         "smile/module-offer" : "^1.3.0",
         "smile/module-retailer" : "^1.2.0",
-        "smile/module-store-locator" : "^1.2.0"
+        "smile/module-store-locator" : "^1.2.0",
+        "smile/elasticsuite" : "<2.7.0"
     },
     "require-dev": {
         "smile/magento2-smilelab-quality-suite": "1.0.0"
@@ -29,6 +30,10 @@
         {
             "name": "Romain Ruaud",
             "email": "romain.ruaud@smile.fr"
+        },
+        {
+            "name": "Fanny DECLERCK",
+            "email": "fadec@smile.fr"
         }
     ],
     "autoload": {

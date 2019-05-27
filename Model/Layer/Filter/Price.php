@@ -116,13 +116,11 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
             return parent::addFacetToCollection($config);
         }
 
+        $facetField = $this->getFilterField();
+        $facetType  = BucketInterface::TYPE_HISTOGRAM;
         $retailerId = $this->getRetailerId();
 
-        $facetConfig = [
-            'name'         => $this->getFilterField(),
-            'type'         => BucketInterface::TYPE_HISTOGRAM,
-            'nestedFilter' => ['offer.seller_id' => $retailerId], 'minDocCount' => 1,
-        ];
+        $facetConfig = ['nestedFilter' => ['offer.seller_id' => $retailerId], 'minDocCount' => 1];
 
         $calculation = $this->dataProvider->getRangeCalculationValue();
         if ($calculation === \Magento\Catalog\Model\Layer\Filter\DataProvider\Price::RANGE_CALCULATION_MANUAL) {
@@ -132,7 +130,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
         }
 
         $productCollection = $this->getLayer()->getProductCollection();
-        $productCollection->addFacet($facetConfig);
+        $productCollection->addFacet($facetField, $facetType, $facetConfig);
 
         return $this;
     }

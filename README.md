@@ -8,6 +8,7 @@ This module add the ability to manage offers per Retailer Shop.
 
 The module requires :
 
+- [ElasticSuite](https://github.com/Smile-SA/elasticsuite) <2.7.0
 - [Retailer](https://github.com/Smile-SA/magento2-module-retailer) > 1.2.*
 - [Offer](https://github.com/Smile-SA/magento2-module-offer) > 1.3.*
 - [Store Locator](https://github.com/Smile-SA/magento2-module-store-locator) > 1.2.*
