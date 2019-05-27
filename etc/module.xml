@@ -22,6 +22,7 @@
             <module name="Smile_Offer" />
             <module name="Smile_Retailer" />
             <module name="Smile_StoreLocator" />
+            <module name="Smile_ElasticsuiteCatalogRule" />
         </sequence>
     </module>
 </config>

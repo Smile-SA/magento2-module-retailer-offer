@@ -97,6 +97,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
             $priceCurrency,
             $algorithmFactory,
             $dataProviderFactory,
+            $queryFactory,
             $data
         );
 

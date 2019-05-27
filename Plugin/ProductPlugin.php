@@ -131,12 +131,13 @@ class ProductPlugin
      *
      * @param \Magento\Catalog\Model\Product $product The product
      * @param \Closure                       $proceed The overridden getFinalPrice() method
+     * @param int                            $qty     The quantity added to the cart
      *
      * @return bool
      */
-    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed, $qty = null)
     {
-        $price = $proceed();
+        $price = $proceed($qty);
 
         if ($this->settingsHelper->useStoreOffers()) {
             $offer = $this->helper->getCurrentOffer($product);

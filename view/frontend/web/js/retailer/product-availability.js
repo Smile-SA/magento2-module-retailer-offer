@@ -38,6 +38,9 @@ define([
         initialize: function () {
             this._super();
             var offers = new StoreCollection({items : this.storeOffers});
+            offers.getList().forEach(function(marker) {
+                marker.distance = ko.observable(0);
+            });
             this.storeOffers = ko.observable(offers.getList());
             this.displayedOffers = ko.observable(offers.getList());
             this.initGeocoderBinding();

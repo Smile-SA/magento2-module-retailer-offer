@@ -111,6 +111,6 @@ abstract class AbstractOffer extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Smile_RetailerOffer::manage');
+        return $this->_authorization->isAllowed('Smile_RetailerOffer::retailer_offers');
     }
 }
