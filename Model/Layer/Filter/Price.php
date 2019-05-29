@@ -108,36 +108,6 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function addFacetToCollection($config = [])
-    {
-        if (!$this->getRetailerId() || !$this->settingsHelper->useStoreOffers()) {
-            return parent::addFacetToCollection($config);
-        }
-
-        $retailerId = $this->getRetailerId();
-
-        $facetConfig = [
-            'name'         => $this->getFilterField(),
-            'type'         => BucketInterface::TYPE_HISTOGRAM,
-            'nestedFilter' => ['offer.seller_id' => $retailerId], 'minDocCount' => 1,
-        ];
-
-        $calculation = $this->dataProvider->getRangeCalculationValue();
-        if ($calculation === \Magento\Catalog\Model\Layer\Filter\DataProvider\Price::RANGE_CALCULATION_MANUAL) {
-            if ((int) $this->dataProvider->getRangeStepValue() > 0) {
-                $facetConfig['interval'] = (int) $this->dataProvider->getRangeStepValue();
-            }
-        }
-
-        $productCollection = $this->getLayer()->getProductCollection();
-        $productCollection->addFacet($facetConfig);
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
@@ -171,6 +141,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
 
         return $this;
     }
+
 
     /**
      * Get filter field.
