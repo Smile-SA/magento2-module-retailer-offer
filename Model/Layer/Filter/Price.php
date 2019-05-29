@@ -142,6 +142,21 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
         return $this;
     }
 
+
+    /**
+     * Get filter field.
+     *
+     * @return string
+     */
+    private function getFilterField()
+    {
+        if (!$this->getRetailerId() || !$this->settingsHelper->useStoreOffers()) {
+            return 'price.price';
+        }
+
+        return 'offer.price';
+    }
+
     /**
      * Retrieve current retailer Id.
      *

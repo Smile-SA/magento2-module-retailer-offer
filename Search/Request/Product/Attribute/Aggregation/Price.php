@@ -61,7 +61,6 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
         $this->currentStore   = $currentStore;
         $this->scopeConfig     = $scopeConfig;
         $this->customerSession = $customerSession;
-
     }
 
     /**
