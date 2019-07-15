@@ -31,11 +31,4 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer\Options">
-        <arguments>
-            <argument name="retailerCollectionFactory" xsi:type="object">Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory</argument>
-        </arguments>
-    </type>
-
 </config>
