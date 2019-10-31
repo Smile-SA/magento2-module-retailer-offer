@@ -65,7 +65,7 @@
 
         <field name="seller_id">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer\Options</item>
+                <item name="options" xsi:type="object">Smile\Retailer\Ui\Component\Form\Retailer\Options</item>
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Retailer</item>
                     <item name="componentType" xsi:type="string">field</item>
