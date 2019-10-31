@@ -11,7 +11,7 @@ The module requires :
 - [ElasticSuite](https://github.com/Smile-SA/elasticsuite) >=2.8.*
 - [Retailer](https://github.com/Smile-SA/magento2-module-retailer) > 1.2.*
 - [Offer](https://github.com/Smile-SA/magento2-module-offer) > 1.3.*
-- [Store Locator](https://github.com/Smile-SA/magento2-module-store-locator) > 1.2.*
+- [Store Locator](https://github.com/Smile-SA/magento2-module-store-locator) > 1.2.* || > 2.0.*
 
 ### How to use
 
