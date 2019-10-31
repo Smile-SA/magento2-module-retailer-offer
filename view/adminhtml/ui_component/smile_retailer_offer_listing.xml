@@ -75,7 +75,7 @@
             </argument>
             <filterSelect name="retailer">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer\Options</argument>
+                    <argument name="class" xsi:type="string">Smile\Retailer\Ui\Component\Form\Retailer\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
