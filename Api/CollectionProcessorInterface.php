@@ -21,14 +21,6 @@ namespace Smile\RetailerOffer\Api;
  */
 interface CollectionProcessorInterface
 {
-    /**
-     * Apply store limitation to a product collection.
-     *
-     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection Product Collection
-     *
-     * @return void
-     */
-    public function applyStoreLimitation(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection);
 
     /**
      * Apply store sort orders to a product collection.

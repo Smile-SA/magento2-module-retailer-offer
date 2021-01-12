@@ -27,7 +27,7 @@ class LayerPlugin
     private $collectionProcessor;
 
     /**
-     * AttributesAutocompletePlugin constructor.
+     * LayerPlugin constructor.
      *
      * @param \Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionProcessor Collection Processor
      */
@@ -43,7 +43,6 @@ class LayerPlugin
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
     ) {
-        $this->collectionProcessor->applyStoreLimitation($collection);
         $this->collectionProcessor->applyStoreSortOrders($collection);
     }
 }

@@ -52,7 +52,7 @@
             <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
         </arguments>
     </virtualType>
-    
+
     <type name="Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability">
         <arguments>
             <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
@@ -66,5 +66,9 @@
                 <item name="price.is_discount" xsi:type="object">Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="Smile\ElasticsuiteCore\Model\Search\RequestMapper">
+        <plugin name="offerRequestMapper" type="Smile\RetailerOffer\Plugin\Search\RequestMapperPlugin" sortOrder="30"/>
     </type>
 </config>

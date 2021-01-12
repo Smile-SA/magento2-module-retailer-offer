@@ -45,10 +45,6 @@
         <plugin name="retailerOfferContextPlugin" type="Smile\RetailerOffer\Plugin\ContextPlugin" sortOrder="100"/>
     </type>
 
-    <type name="Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter">
-        <plugin name="filterAutocomplete" type="Smile\RetailerOffer\Plugin\ProductAutocompletePlugin" sortOrder="100"/>
-    </type>
-
     <type name="Magento\Catalog\Helper\Product">
         <plugin name="initProductAvailableByOffer" type="Smile\RetailerOffer\Plugin\ProductHelperPlugin" sortOrder="10"/>
     </type>
