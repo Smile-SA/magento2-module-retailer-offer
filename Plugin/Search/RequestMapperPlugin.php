@@ -52,11 +52,13 @@ class RequestMapperPlugin
      * Replace the price order by a offer price order.
      *
      * @param RequestMapper $subject Current request mapper object
-     * @param $result Current sort order configuraiton
+     * @param $result Current Sort order configuraiton
      * @param ContainerConfigurationInterface $containerConfiguration Container configuration
      * @param SearchCriteriaInterface $searchCriteria Search criteria
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetSortOrders(
         RequestMapper $subject,
@@ -77,6 +79,40 @@ class RequestMapperPlugin
             $sortParams['nestedFilter'] = ['offer.seller_id' => $retailer->getId()];
             $sortParams['nestedPath'] = 'offer';
             $result['offer.price'] = $sortParams;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Post process catalog filters.
+     *
+     * @param RequestMapper $subject Request mapper.
+     * @param array $result Original filters.
+     * @param ContainerConfigurationInterface $containerConfiguration Container configuration.
+     * @param SearchCriteriaInterface $searchCriteria Search criteria.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetFilters(
+        RequestMapper $subject,
+        $result,
+        ContainerConfigurationInterface $containerConfiguration,
+        SearchCriteriaInterface $searchCriteria
+    ) {
+        $retailer = $this->currentStore->getRetailer();
+        if (!$this->settingsHelper->isDriveMode() || !$retailer) {
+            return $result;
+        }
+
+        foreach ($result as $fieldName => $filterValue) {
+            if ($fieldName !== 'price.price') {
+                continue;
+            }
+            unset($result[$fieldName]);
+            $result['offer.price'] = $filterValue;
         }
 
         return $result;
