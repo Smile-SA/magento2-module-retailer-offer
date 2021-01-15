@@ -51,6 +51,4 @@
 
     <!-- Use dedicated price filter model -->
     <preference for="\Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price" type="Smile\RetailerOffer\Model\Layer\Filter\Price"/>
-    <preference for="\Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price"
-                type="Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation\Price"/>
 </config>

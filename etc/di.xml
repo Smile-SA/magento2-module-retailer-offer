@@ -71,4 +71,13 @@
     <type name="Smile\ElasticsuiteCore\Model\Search\RequestMapper">
         <plugin name="offerRequestMapper" type="Smile\RetailerOffer\Plugin\Search\RequestMapperPlugin" sortOrder="30"/>
     </type>
+
+    <!-- Replace the price aggregation resolver -->
+    <type name="Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\AggregationResolver">
+        <arguments>
+            <argument name="aggregations" xsi:type="array">
+                <item name="price" xsi:type="object">Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation\Price</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
