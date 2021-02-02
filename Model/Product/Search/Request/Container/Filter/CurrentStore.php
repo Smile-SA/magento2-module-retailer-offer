@@ -35,20 +35,28 @@ class CurrentStore implements FilterInterface
     private $currentStore;
 
     /**
+     * @var FilterInterface[]
+     */
+    private $retailerStockFilters;
+
+    /**
      * Search Blacklist filter constructor.
      *
      * @param QueryFactory $queryFactory Query Factory
      * @param CustomerCurrentStore $currentStore Current Store
      * @param Settings $settingsHelper Retailer offer settings helper
+     * @param FilterInterface[] $retailerStockFilters Retailer stock filters
      */
     public function __construct(
         QueryFactory $queryFactory,
         CustomerCurrentStore $currentStore,
-        Settings $settingsHelper
+        Settings $settingsHelper,
+        array $retailerStockFilters = []
     ) {
         $this->queryFactory = $queryFactory;
         $this->currentStore = $currentStore;
         $this->settingsHelper = $settingsHelper;
+        $this->retailerStockFilters = $retailerStockFilters;
     }
 
     /**
@@ -72,11 +80,15 @@ class CurrentStore implements FilterInterface
         // If out of stock products must be shown, just keep filter on product having an offer for current
         // retailer, wether the offer is available or not.
         if (false === $this->settingsHelper->isEnabledShowOutOfStock()) {
-            $isAvailableFilter = $this->queryFactory->create(
-                QueryInterface::TYPE_TERM,
-                ['field' => 'offer.is_available', 'value' => true]
-            );
-            $mustClause['must'][] = $isAvailableFilter;
+            foreach($this->retailerStockFilters as $retailerStockFilter) {
+                if (!$retailerStockFilter instanceof FilterInterface) {
+                    throw new \RuntimeException('The stock filter is not an FilterInterface');
+                }
+                $currentStockFilter = $retailerStockFilter->getFilterQuery();
+                if ($currentStockFilter !== null) {
+                    $mustClause['must'][] = $currentStockFilter;
+                }
+            }
         }
 
         $boolFilter = $this->queryFactory->create(QueryInterface::TYPE_BOOL, $mustClause);

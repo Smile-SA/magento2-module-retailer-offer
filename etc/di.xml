@@ -68,6 +68,14 @@
         </arguments>
     </type>
 
+    <type name="Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter\CurrentStore">
+        <arguments>
+            <argument name="retailerStockFilters" xsi:type="array">
+                <item name="offer_available" xsi:type="object">Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter\OfferAvailable</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Smile\ElasticsuiteCore\Model\Search\RequestMapper">
         <plugin name="offerRequestMapper" type="Smile\RetailerOffer\Plugin\Search\RequestMapperPlugin" sortOrder="30"/>
     </type>
