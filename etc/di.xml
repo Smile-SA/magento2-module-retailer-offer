@@ -52,7 +52,7 @@
             <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
         </arguments>
     </virtualType>
-    
+
     <type name="Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability">
         <arguments>
             <argument name="offerCollectionFactory" xsi:type="object">Smile\RetailerOffer\Model\ResourceModel\RetailerOffer\CollectionFactory</argument>
@@ -64,6 +64,27 @@
             <argument name="attributes" xsi:type="array">
                 <!-- Rewrite for price.is_discount to compute it on current retailer if needed. -->
                 <item name="price.is_discount" xsi:type="object">Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter\CurrentStore">
+        <arguments>
+            <argument name="retailerStockFilters" xsi:type="array">
+                <item name="offer_available" xsi:type="object">Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter\OfferAvailable</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Smile\ElasticsuiteCore\Model\Search\RequestMapper">
+        <plugin name="offerRequestMapper" type="Smile\RetailerOffer\Plugin\Search\RequestMapperPlugin" sortOrder="30"/>
+    </type>
+
+    <!-- Replace the price aggregation resolver -->
+    <type name="Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\AggregationResolver">
+        <arguments>
+            <argument name="aggregations" xsi:type="array">
+                <item name="price" xsi:type="object">Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation\Price</item>
             </argument>
         </arguments>
     </type>

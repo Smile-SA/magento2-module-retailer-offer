@@ -45,16 +45,10 @@
         <plugin name="retailerOfferContextPlugin" type="Smile\RetailerOffer\Plugin\ContextPlugin" sortOrder="100"/>
     </type>
 
-    <type name="Smile\ElasticsuiteCatalog\Model\Autocomplete\Product\Collection\Filter">
-        <plugin name="filterAutocomplete" type="Smile\RetailerOffer\Plugin\ProductAutocompletePlugin" sortOrder="100"/>
-    </type>
-
     <type name="Magento\Catalog\Helper\Product">
         <plugin name="initProductAvailableByOffer" type="Smile\RetailerOffer\Plugin\ProductHelperPlugin" sortOrder="10"/>
     </type>
 
     <!-- Use dedicated price filter model -->
     <preference for="\Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price" type="Smile\RetailerOffer\Model\Layer\Filter\Price"/>
-    <preference for="\Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price"
-                type="Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation\Price"/>
 </config>
