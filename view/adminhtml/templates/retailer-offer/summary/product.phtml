@@ -20,21 +20,21 @@
 ?>
 <?php if ($block->getProduct()) : ?>
     <div class="retailer-offer-summary-product">
-        <h3><span><?php echo __("Product :");?></span></h3>
+        <h3><span><?php echo $block->escapeHtml(__("Product :")); ?></span></h3>
 
         <div class="product-image"><img src="<?php echo $block->getProductImage(); ?>" /></div>
 
         <div class="info">
-            <h3><span class="product-name"><?php echo $block->getProduct()->getName();?></span></h3>
-            <p class="sku"><?php echo __("SKU : %1", $block->getProduct()->getSku()); ?></p>
+            <h3><span class="product-name"><?php echo $block->getProduct()->getName(); ?></span></h3>
+            <p class="sku"><?php $block->escapeHtml(__("SKU : %1", $block->getProduct()->getSku())); ?></p>
             <?php if ($block->getProduct()->getSpecialPrice()) : ?>
-                <p class="price regular-price"><del><?php echo $block->getProductPrice(); ?><del></p>
+                <p class="price regular-price"><del><?php echo $block->getProductPrice(); ?></del></p>
                 <p class="price special-price"><?php echo $block->getProductSpecialPrice(); ?></p>
             <?php else : ?>
                 <p class="price"><?php echo $block->getProductPrice(); ?></p>
             <?php endif;?>
-            <p class="stock"><?php echo __("Availability : %1", $block->getProductStockLabel()); ?></p>
-            <p class="status"><?php echo __("Status : %1", $block->getProductStatusLabel()); ?></p>
+            <p class="stock"><?php echo $block->escapeHtml(__("Availability : %1", $block->getProductStockLabel())); ?></p>
+            <p class="status"><?php echo $block->escapeHtml(__("Status : %1", $block->getProductStatusLabel())); ?></p>
         </div>
 
     </div>

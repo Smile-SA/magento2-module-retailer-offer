@@ -20,11 +20,11 @@
 ?>
 <?php if ($block->getRetailer()) : ?>
     <div class="retailer-offer-summary-retailer">
-        <h3><span><?php echo __("Retailer :");?></span></h3>
+        <h3><span><?php echo $block->escapeHtml(__("Retailer :")); ?></span></h3>
         <div class="info">
-            <h3><span class="retailer-name"><?php echo $block->getRetailer()->getName();?></span></h3>
-            <p class="sku"><?php echo __("Code : %1", $block->getRetailer()->getSellerCode()); ?></p>
-            <p class="status"><?php echo __("Status : %1", $block->getRetailerStatusLabel()); ?></p>
+            <h3><span class="retailer-name"><?php echo $block->getRetailer()->getName(); ?></span></h3>
+            <p class="sku"><?php echo $block->escapeHtml(__("Code : %1", $block->getRetailer()->getSellerCode())); ?></p>
+            <p class="status"><?php echo $block->escapeHtml(__("Status : %1", $block->getRetailerStatusLabel())); ?></p>
         </div>
     </div>
 <?php endif;?>
