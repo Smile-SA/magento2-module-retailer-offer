@@ -7,68 +7,82 @@
  * @category  Smile
  * @package   Smile\RetailerOffer
  * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
+ * @author   Maxime Leclercq <maxime.leclercq@smile.fr>
+ * @copyright 2021 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
+use Magento\Catalog\Model\Product\Visibility;
+use Smile\ElasticsuiteCatalog\Model\Category\Filter\Provider as FilterProvider;
+use Smile\StoreLocator\CustomerData\CurrentStore;
+
 /**
- * Using the Layer to retrieve Category Product Count if browsing for a given retailer/date
+ * Using the collection and filter provider to retrieve Category Product Count if browsing for a given retailer
  *
  * @category Smile
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @author   Maxime Leclercq <maxime.leclercq@smile.fr>
  */
 class CategoryPlugin
 {
     /**
-     * @var Resolver
-     */
-    private $layerResolver;
-
-    /**
-     * @var \Smile\RetailerOffer\Helper\Offer
-     */
-    private $offerHelper;
-
-    /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
     private $currentStore;
 
     /**
+     * @var ItemCollectionProviderInterface
+     */
+    private $collectionProvider;
+
+    /**
+     * @var FilterProvider
+     */
+    private $filterProvider;
+
+    /**
      * CategoryPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper   The offer Helper
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore  The current Store provider.
-     * @param \Magento\Catalog\Model\Layer\Resolver         $layerResolver Layer Resolver
+     * @param CurrentStore $currentStore The current Store provider.
+     * @param ItemCollectionProviderInterface $collectionProvider The category collection provider.
+     * @param FilterProvider $filterProvider The category filter provider.
      */
     public function __construct(
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver
+        CurrentStore $currentStore,
+        ItemCollectionProviderInterface $collectionProvider,
+        FilterProvider $filterProvider
     ) {
-        $this->offerHelper   = $offerHelper;
         $this->currentStore  = $currentStore;
-        $this->layerResolver = $layerResolver;
+        $this->collectionProvider = $collectionProvider;
+        $this->filterProvider = $filterProvider;
+
     }
 
     /**
-     * Use layer to retrieve category product count
+     * Use collection and filter provider to retrieve category product count
      *
-     * @param \Magento\Catalog\Model\Category $category The Category
-     * @param \Closure                        $proceed  The initial getProductCount() of category object
+     * @param Category $category The Category
+     * @param \Closure $proceed  The initial getProductCount() of category object
      *
      * @return int
      */
-    public function aroundGetProductCount(\Magento\Catalog\Model\Category $category, \Closure $proceed)
+    public function aroundGetProductCount(Category $category, \Closure $proceed)
     {
         if (!$this->currentStore->getRetailer() || !$this->currentStore->getRetailer()->getId()) {
             return $proceed();
         }
 
-        $layer = $this->layerResolver->get();
+        $collection = $this->collectionProvider->getCollection($category);
+        $collection->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
+        $query = $this->filterProvider->getQueryFilter($category);
+        if ($query !== null) {
+            $collection->addQueryFilter($query);
+        }
 
-        return $layer->setCurrentCategory($category)->getProductCollection()->getSize();
+        return $collection->getSize();
     }
 }

@@ -55,4 +55,11 @@
 
     <!-- Use dedicated price filter model -->
     <preference for="\Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price" type="Smile\RetailerOffer\Model\Layer\Filter\Price"/>
+
+    <!-- Define the category collection provider -->
+    <type name="Smile\RetailerOffer\Plugin\CategoryPlugin">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Smile\ElasticsuiteCatalog\Model\Layer\Category\ItemCollectionProvider</argument>
+        </arguments>
+    </type>
 </config>
