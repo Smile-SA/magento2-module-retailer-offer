@@ -15,6 +15,7 @@ namespace Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute;
 
 use Magento\Config\Model\Config\Source\Yesno;
 use Smile\ElasticsuiteCatalogRule\Api\Rule\Condition\Product\SpecialAttributeInterface;
+use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product as ProductCondition;
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount as BaseIsDiscount;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
@@ -69,9 +70,9 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
     /**
      * {@inheritdoc}
      */
-    public function getSearchQuery()
+    public function getSearchQuery(ProductCondition $condition)
     {
-        $query = parent::getSearchQuery();
+        $query = parent::getSearchQuery($condition);
 
         if ($this->settingsHelper->isDriveMode()) {
             $query = $this->getIsDiscountOffersQuery();
