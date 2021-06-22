@@ -16,7 +16,7 @@
         "smile/module-offer" : "~1.4.0",
         "smile/module-retailer" : "~1.2.0",
         "smile/module-store-locator" : "^1.2.0 || ~2.0",
-        "smile/elasticsuite" : "^2.8.0"
+        "smile/elasticsuite" : "^2.10.4"
     },
     "require-dev": {
         "smile/magento2-smilelab-quality-suite": "1.0.0"
