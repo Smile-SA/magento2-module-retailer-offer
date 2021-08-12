@@ -160,9 +160,9 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
      */
     protected function getStoreOffers()
     {
-        $storeOffers = [];
-
         if ($this->storeOffers === null) {
+            $storeOffers = [];
+
             $offerByRetailer = [];
             foreach ($this->offerManagement->getProductOffers($this->getProduct()->getId()) as $offer) {
                 $offerByRetailer[(int) $offer->getSellerId()] = $offer;
@@ -192,9 +192,9 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
 
                 $storeOffers[] = $offer;
             }
-        }
 
-        $this->storeOffers = $storeOffers;
+            $this->storeOffers = $storeOffers;
+        }
 
         return $this->storeOffers;
     }
