@@ -14,6 +14,7 @@
 namespace Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute;
 
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Customer\Model\Session as CustomerSession;
 use Smile\ElasticsuiteCatalogRule\Api\Rule\Condition\Product\SpecialAttributeInterface;
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product as ProductCondition;
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount as BaseIsDiscount;
@@ -32,11 +33,6 @@ use Smile\RetailerOffer\Helper\Settings;
 class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
 {
     /**
-     * @var QueryFactory
-     */
-    private $queryFactory;
-
-    /**
      * @var CurrentStore
      */
     private $currentStore;
@@ -49,22 +45,23 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
     /**
      * IsDiscount constructor.
      *
-     * @param Yesno        $booleanSource  Boolean source model
-     * @param QueryFactory $queryFactory   Query factory
-     * @param CurrentStore $currentStore   Current Store
-     * @param Settings     $settingsHelper Setting Helper
+     * @param Yesno           $booleanSource   Boolean source model
+     * @param CustomerSession $customerSession Customer Session
+     * @param QueryFactory    $queryFactory    Query factory
+     * @param CurrentStore    $currentStore    Current Store
+     * @param Settings        $settingsHelper  Setting Helper
      */
     public function __construct(
         Yesno $booleanSource,
+        CustomerSession $customerSession,
         QueryFactory $queryFactory,
         CurrentStore $currentStore,
         Settings $settingsHelper
     ) {
-        $this->queryFactory = $queryFactory;
         $this->currentStore = $currentStore;
         $this->settingsHelper = $settingsHelper;
 
-        parent::__construct($booleanSource);
+        parent::__construct($booleanSource, $customerSession, $queryFactory);
     }
 
     /**
