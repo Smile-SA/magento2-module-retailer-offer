@@ -13,6 +13,7 @@
 namespace Smile\RetailerOffer\Model\Layer\Filter;
 
 use Smile\ElasticsuiteCatalog\Model\Layer\Filter\DecimalFilterTrait;
+use Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper;
 use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
 
@@ -68,7 +69,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
      * @param \Smile\RetailerOffer\Helper\Settings                          $settingsHelper      Settings Helper.
      * @param \Smile\StoreLocator\CustomerData\CurrentStore                 $currentStore        Current Store.
      * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory     $queryFactory        Query Factory.
-     * @param \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper  $requestMapper       Request Mapper.
+     * @param \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper  $requestFieldMapper  Search request field mapper.
      * @param array                                                         $data                Custom data.
      */
     public function __construct(
@@ -85,7 +86,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
         \Smile\RetailerOffer\Helper\Settings $settingsHelper,
         \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
         \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory,
-        \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper $requestMapper,
+        \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper $requestFieldMapper,
         array $data = []
     ) {
         parent::__construct(
@@ -100,7 +101,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
             $algorithmFactory,
             $dataProviderFactory,
             $queryFactory,
-            $requestMapper,
+            $requestFieldMapper,
             $data
         );
 

@@ -88,4 +88,11 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Session proxies -->
+    <type name="Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>
