@@ -12,6 +12,9 @@
  */
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
@@ -26,9 +29,9 @@ class Delete extends AbstractOffer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Redirect|ResponseInterface|ResultInterface
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $identifier = $this->getRequest()->getParam('offer_id', false);

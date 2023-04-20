@@ -23,12 +23,18 @@ use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
 class OfferAvailable implements FilterInterface
 {
     /**
+     * @var QueryFactory
+     */
+    private QueryFactory $queryFactory;
+
+    /**
      * OfferIsInStock constructor.
      *
      * @param QueryFactory $queryFactory Query Factory
      */
-    public function __construct(QueryFactory $queryFactory)
-    {
+    public function __construct(
+        QueryFactory $queryFactory
+    ) {
         $this->queryFactory = $queryFactory;
     }
 
@@ -37,7 +43,7 @@ class OfferAvailable implements FilterInterface
      *
      * @return QueryInterface|null
      */
-    public function getFilterQuery()
+    public function getFilterQuery(): QueryInterface|null
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_TERM,

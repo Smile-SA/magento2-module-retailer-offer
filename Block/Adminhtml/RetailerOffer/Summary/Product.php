@@ -44,33 +44,33 @@ class Product extends Summary
      *
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private ProductRepositoryInterface $productRepository;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var ProductHelper
      */
-    private $productHelper;
+    private ProductHelper $productHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\Helper\Data
+     * @var PriceHelper
      */
-    private $priceHelper;
+    private PriceHelper $priceHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @var StatusSource
      */
-    private $statusSourceModel;
+    private StatusSource $statusSourceModel;
 
     /**
      * Summary constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context           Application context
-     * @param \Magento\Framework\Registry             $registry          Application registry
-     * @param ProductRepositoryInterface              $productRepository Product Repository
-     * @param ProductHelper                           $productHelper     Product Helper
-     * @param PriceHelper                             $priceHelper       Price Helper
-     * @param StatusSource                            $statusSource      Source Model for product's status.
-     * @param array                                   $data              Block's data
+     * @param Context                     $context           Application context
+     * @param Registry                    $registry          Application registry
+     * @param ProductRepositoryInterface  $productRepository Product Repository
+     * @param ProductHelper               $productHelper     Product Helper
+     * @param PriceHelper                 $priceHelper       Price Helper
+     * @param StatusSource                $statusSource      Source Model for product's status.
+     * @param array                       $data              Block's data
      */
     public function __construct(
         Context $context,
@@ -94,7 +94,7 @@ class Product extends Summary
      *
      * @return ProductInterface
      */
-    public function getProduct()
+    public function getProduct(): ProductInterface
     {
         $product = null;
 
@@ -112,7 +112,7 @@ class Product extends Summary
      *
      * @return null|string
      */
-    public function getProductImage()
+    public function getProductImage(): null|string
     {
         $image = null;
 
@@ -128,7 +128,7 @@ class Product extends Summary
      *
      * @return null|string
      */
-    public function getProductPrice()
+    public function getProductPrice(): null|string
     {
         $price = null;
 
@@ -144,7 +144,7 @@ class Product extends Summary
      *
      * @return null|string
      */
-    public function getProductSpecialPrice()
+    public function getProductSpecialPrice(): null|string
     {
         $price = null;
 
@@ -160,7 +160,7 @@ class Product extends Summary
      *
      * @return null|string
      */
-    public function getProductStockLabel()
+    public function getProductStockLabel(): null|string
     {
         $label = __('In stock');
 
@@ -176,7 +176,7 @@ class Product extends Summary
      *
      * @return string
      */
-    public function getProductStatusLabel()
+    public function getProductStatusLabel(): string
     {
         return $this->statusSourceModel->getOptionText((int) $this->getProduct()->getStatus());
     }
@@ -188,7 +188,7 @@ class Product extends Summary
      *
      * @return $this
      */
-    protected function _prepareLayout()
+    protected function _prepareLayout(): self
     {
         return $this;
     }

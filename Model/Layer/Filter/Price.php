@@ -12,10 +12,25 @@
  */
 namespace Smile\RetailerOffer\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Price as DataProviderPrice;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory;
+use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price as ResourceModelFilterPrice;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Search\Dynamic\Algorithm;
+use Magento\Store\Model\StoreManagerInterface;
 use Smile\ElasticsuiteCatalog\Model\Layer\Filter\DecimalFilterTrait;
 use Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper;
 use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
+use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Custom Price model.
@@ -32,62 +47,62 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
     use DecimalFilterTrait;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
+     * @var DataProviderPrice
      */
-    private $dataProvider;
+    private DataProviderPrice $dataProvider;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory
+     * @var QueryFactory
      */
-    private $queryFactory;
+    private QueryFactory $queryFactory;
 
     /**
      * Constructor.
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory               $filterItemFactory   Item filter factory.
-     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager        Store manager.
-     * @param \Magento\Catalog\Model\Layer                                  $layer               Search layer.
-     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder          $itemDataBuilder     Item data builder.
-     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price       $resource            Price resource.
-     * @param \Magento\Customer\Model\Session                               $customerSession     Customer session.
-     * @param \Magento\Framework\Search\Dynamic\Algorithm                   $priceAlgorithm      Price algorithm.
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface             $priceCurrency       Price currency.
-     * @param \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory  $algorithmFactory    Algorithm factory.
-     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory $dataProviderFactory Data provider.
-     * @param \Smile\RetailerOffer\Helper\Settings                          $settingsHelper      Settings Helper.
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore                 $currentStore        Current Store.
-     * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory     $queryFactory        Query Factory.
-     * @param \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper  $requestFieldMapper  Search request field mapper.
-     * @param array                                                         $data                Custom data.
+     * @param ItemFactory              $filterItemFactory   Item filter factory.
+     * @param StoreManagerInterface    $storeManager        Store manager.
+     * @param Layer                    $layer               Search layer.
+     * @param DataBuilder              $itemDataBuilder     Item data builder.
+     * @param ResourceModelFilterPrice $resource            Price resource.
+     * @param Session                  $customerSession     Customer session.
+     * @param Algorithm                $priceAlgorithm      Price algorithm.
+     * @param PriceCurrencyInterface   $priceCurrency       Price currency.
+     * @param AlgorithmFactory         $algorithmFactory    Algorithm factory.
+     * @param PriceFactory             $dataProviderFactory Data provider.
+     * @param Settings                 $settingsHelper      Settings Helper.
+     * @param CurrentStore             $currentStore        Current Store.
+     * @param QueryFactory             $queryFactory        Query Factory.
+     * @param Mapper                   $requestFieldMapper  Search request field mapper.
+     * @param array                    $data                Custom data.
      */
     public function __construct(
-        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory $algorithmFactory,
-        \Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory $dataProviderFactory,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory,
-        \Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper $requestFieldMapper,
-        array $data = []
+        ItemFactory                                                  $filterItemFactory,
+        StoreManagerInterface                                        $storeManager,
+        Layer                                                        $layer,
+        DataBuilder              $itemDataBuilder,
+        ResourceModelFilterPrice $resource,
+        Session                  $customerSession,
+        Algorithm                $priceAlgorithm,
+        PriceCurrencyInterface   $priceCurrency,
+        AlgorithmFactory         $algorithmFactory,
+        PriceFactory             $dataProviderFactory,
+        Settings                 $settingsHelper,
+        CurrentStore             $currentStore,
+        QueryFactory             $queryFactory,
+        Mapper                   $requestFieldMapper,
+        array                    $data = []
     ) {
         parent::__construct(
             $filterItemFactory,
@@ -114,7 +129,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
     /**
      * {@inheritdoc}
      */
-    public function apply(\Magento\Framework\App\RequestInterface $request)
+    public function apply(RequestInterface $request): self|Price
     {
         if (!$this->getRetailerId() || !$this->settingsHelper->useStoreOffers()) {
             return parent::apply($request);
@@ -152,7 +167,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
      *
      * @return string
      */
-    private function getFilterField()
+    private function getFilterField(): string
     {
         if (!$this->getRetailerId() || !$this->settingsHelper->useStoreOffers()) {
             return 'price.price';
@@ -166,7 +181,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
      *
      * @return int|null
      */
-    private function getRetailerId()
+    private function getRetailerId(): int|null
     {
         $retailerId = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
@@ -182,7 +197,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
      * @param int $fromValue The From value for price interval
      * @param int $toValue   The To value for price interval
      */
-    private function addQueryFilter($fromValue, $toValue)
+    private function addQueryFilter(int $fromValue, int $toValue): void
     {
         $sellerIdFilter = $this->queryFactory->create(
             QueryInterface::TYPE_TERM,

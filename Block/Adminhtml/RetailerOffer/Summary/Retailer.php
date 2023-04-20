@@ -44,15 +44,15 @@ class Retailer extends Summary
      *
      * @var RetailerRepositoryInterface
      */
-    private $retailerRepository;
+    private RetailerRepositoryInterface $retailerRepository;
 
     /**
      * Summary constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context            Application context
-     * @param \Magento\Framework\Registry             $registry           Application registry
-     * @param RetailerRepositoryInterface             $retailerRepository Retailer Repository
-     * @param array                                   $data               Block's data
+     * @param Context                     $context            Application context
+     * @param Registry                    $registry           Application registry
+     * @param RetailerRepositoryInterface $retailerRepository Retailer Repository
+     * @param array                       $data               Block's data
      */
     public function __construct(
         Context $context,
@@ -70,7 +70,7 @@ class Retailer extends Summary
      *
      * @return RetailerInterface
      */
-    public function getRetailer()
+    public function getRetailer(): RetailerInterface
     {
         $retailer = null;
 
@@ -88,7 +88,7 @@ class Retailer extends Summary
      *
      * @return string
      */
-    public function getRetailerStatusLabel()
+    public function getRetailerStatusLabel(): string
     {
         $statusesLabels = [0 => __("Inactive"), 1 => __("Active")];
 
@@ -102,7 +102,7 @@ class Retailer extends Summary
      *
      * @return $this
      */
-    protected function _prepareLayout()
+    protected function _prepareLayout(): self
     {
         return $this;
     }

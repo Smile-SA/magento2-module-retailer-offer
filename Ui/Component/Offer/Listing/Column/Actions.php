@@ -15,6 +15,7 @@ namespace Smile\RetailerOffer\Ui\Component\Offer\Listing\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Retailer Offer listing Action Column
@@ -23,12 +24,12 @@ use Magento\Framework\View\Element\UiComponentFactory;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Actions extends \Magento\Ui\Component\Listing\Columns\Column
+class Actions extends Column
 {
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    protected UrlInterface $urlBuilder;
 
     /**
      * Constructor
@@ -57,7 +58,7 @@ class Actions extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         $editUrlPath = $this->getData('config/editUrlPath') ? : '#';
         $deleteUrlPath = $this->getData('config/deleteUrlPath') ? : '#';

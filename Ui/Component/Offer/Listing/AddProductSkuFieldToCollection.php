@@ -27,7 +27,7 @@ class AddProductSkuFieldToCollection implements AddFieldToCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addField(Collection $collection, $field, $alias = null): void
     {
         $collection->addProductSkuToSelect();
     }

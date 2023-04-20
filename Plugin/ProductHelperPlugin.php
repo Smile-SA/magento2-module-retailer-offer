@@ -12,6 +12,13 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\DataObject;
+use Smile\RetailerOffer\Helper\Offer;
+use Smile\RetailerOffer\Helper\Settings;
+
 /**
  * Product Helper Plugin
  *
@@ -22,31 +29,31 @@ namespace Smile\RetailerOffer\Plugin;
 class ProductHelperPlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Offer
+     * @var Offer
      */
-    private $offerHelper;
+    private Offer $offerHelper;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
+     * @var ProductInterfaceFactory
      */
-    private $productFactory;
+    private ProductInterfaceFactory $productFactory;
 
     /**
      * HelperProductPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Settings              $settingsHelper          Settings Helper
-     * @param \Smile\RetailerOffer\Helper\Offer                 $offerHelper             Offer Helper
-     * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productInterfaceFactory Product Factory
+     * @param Settings                  $settingsHelper          Settings Helper
+     * @param Offer                     $offerHelper             Offer Helper
+     * @param ProductInterfaceFactory   $productInterfaceFactory Product Factory
      */
     public function __construct(
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Magento\Catalog\Api\Data\ProductInterfaceFactory $productInterfaceFactory
+        Settings $settingsHelper,
+        Offer $offerHelper,
+        ProductInterfaceFactory $productInterfaceFactory
     ) {
         $this->settingsHelper = $settingsHelper;
         $this->offerHelper    = $offerHelper;
@@ -56,21 +63,21 @@ class ProductHelperPlugin
     /**
      * Prevent accessing product if !available in offer
      *
-     * @param \Magento\Catalog\Helper\Product      $productHelper Product helper
-     * @param int                                  $productId     Product id
-     * @param \Magento\Framework\App\Action\Action $controller    Controller
-     * @param \Magento\Framework\DataObject        $params        Params
+     * @param Product       $productHelper Product helper
+     * @param int           $productId     Product id
+     * @param Action        $controller    Controller
+     * @param ?DataObject   $params        Params
      *
      * @return array
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      * @throws \Exception
      */
     public function beforeInitProduct(
-        \Magento\Catalog\Helper\Product $productHelper,
-        $productId,
-        $controller,
-        $params = null
-    ) {
+        Product $productHelper,
+        int $productId,
+        Action $controller,
+        ?DataObject $params = null
+    ): array {
         if ($this->settingsHelper->isDriveMode() && (false === $this->settingsHelper->isEnabledShowOutOfStock())) {
             $productMock = $this->productFactory->create([])->setId($productId);
             $offer       = $this->offerHelper->getCurrentOffer($productMock);

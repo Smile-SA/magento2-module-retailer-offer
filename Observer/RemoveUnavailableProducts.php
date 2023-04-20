@@ -13,6 +13,7 @@
 namespace Smile\RetailerOffer\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -35,22 +36,22 @@ class RemoveUnavailableProducts implements ObserverInterface
     /**
      * @var OfferHelper
      */
-    private $helper;
+    private OfferHelper $helper;
 
     /**
      * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
-    private $eventManager;
+    private ManagerInterface $eventManager;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var SettingsHelper
      */
-    private $settingsHelper;
+    private SettingsHelper $settingsHelper;
 
     /**
      * RemoveUnavailableProducts constructor.
@@ -77,30 +78,28 @@ class RemoveUnavailableProducts implements ObserverInterface
      *
      * @param EventObserver $observer The observer
      */
-    public function execute(EventObserver $observer)
+    public function execute(EventObserver $observer): void
     {
-        if (!$this->settingsHelper->isDriveMode()) {
-            return;
-        }
+        if ($this->settingsHelper->isDriveMode()) {
+            /** @var Collection $productCollection */
+            $productCollection = $observer->getEvent()->getCollection();
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $observer->getEvent()->getCollection();
+            $unavailableProducts = [];
 
-        $unavailableProducts = [];
+            foreach ($productCollection as $key => $product) {
+                $offer = $this->getCurrentOffer($product);
 
-        foreach ($productCollection as $key => $product) {
-            $offer = $this->getCurrentOffer($product);
-
-            if ($offer === null || (false === $offer->isAvailable())) {
-                $unavailableProducts[] = $product;
-                $productCollection->removeItemByKey($key);
+                if ($offer === null || (false === $offer->isAvailable())) {
+                    $unavailableProducts[] = $product;
+                    $productCollection->removeItemByKey($key);
+                }
             }
-        }
 
-        $this->eventManager->dispatch(
-            "smile_retailer_suite_remove_unavailable_quote_items",
-            ['unavailable_products' => $unavailableProducts]
-        );
+            $this->eventManager->dispatch(
+                "smile_retailer_suite_remove_unavailable_quote_items",
+                ['unavailable_products' => $unavailableProducts]
+            );
+        }
     }
 
     /**
@@ -110,7 +109,7 @@ class RemoveUnavailableProducts implements ObserverInterface
      *
      * @return OfferInterface
      */
-    private function getCurrentOffer($product)
+    private function getCurrentOffer(ProductInterface $product): OfferInterface
     {
         $offer = null;
         $retailerId = $this->getRetailerId();
@@ -127,7 +126,7 @@ class RemoveUnavailableProducts implements ObserverInterface
      *
      * @return int
      */
-    private function getRetailerId()
+    private function getRetailerId(): int
     {
         $retailerId = null;
 

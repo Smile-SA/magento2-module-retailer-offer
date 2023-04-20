@@ -12,6 +12,10 @@
  */
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 
+use Magento\Backend\Block\Context;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\FormFactory;
+
 /**
  * Product Picker for Retailer Offer Creation form
  *
@@ -22,20 +26,20 @@ namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 class ProductPicker extends \Magento\Backend\Block\AbstractBlock
 {
     /**
-     * @var \Magento\Framework\Data\FormFactory
+     * @var FormFactory
      */
-    private $formFactory;
+    private FormFactory $formFactory;
 
     /**
      * Constructor.
      *
-     * @param \Magento\Backend\Block\Context      $context     Block context.
-     * @param \Magento\Framework\Data\FormFactory $formFactory Form factory.
-     * @param array                               $data        Additional data.
+     * @param Context     $context     Block context.
+     * @param FormFactory $formFactory Form factory.
+     * @param array       $data        Additional data.
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        FormFactory $formFactory,
         array $data = []
     ) {
         $this->formFactory = $formFactory;
@@ -47,7 +51,7 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
      *
      * {@inheritDoc}
      */
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         return $this->escapeJsQuote($this->getForm()->toHtml());
     }
@@ -55,9 +59,10 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
     /**
      * Create the form containing the product picker.
      *
-     * @return \Magento\Framework\Data\Form
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Form
      */
-    private function getForm()
+    private function getForm(): Form
     {
         $form = $this->formFactory->create();
         $form->setHtmlId('offer_product_picker');

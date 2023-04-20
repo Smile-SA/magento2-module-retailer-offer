@@ -14,6 +14,10 @@
 
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
@@ -30,7 +34,7 @@ class Edit extends AbstractOffer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Page|ResponseInterface|Redirect|ResultInterface
     {
         $offerId = (int) $this->getRequest()->getParam(OfferInterface::OFFER_ID);
 

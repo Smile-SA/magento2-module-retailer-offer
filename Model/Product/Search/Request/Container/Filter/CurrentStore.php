@@ -27,17 +27,22 @@ class CurrentStore implements FilterInterface
     /**
      * @var QueryFactory
      */
-    private $queryFactory;
+    private QueryFactory $queryFactory;
 
     /**
      * @var CustomerCurrentStore
      */
-    private $currentStore;
+    private CustomerCurrentStore $currentStore;
 
     /**
      * @var FilterInterface[]
      */
-    private $retailerStockFilters;
+    private array $retailerStockFilters;
+
+    /**
+     * @var Settings
+     */
+    private Settings $settingsHelper;
 
     /**
      * Search Blacklist filter constructor.
@@ -64,7 +69,7 @@ class CurrentStore implements FilterInterface
      *
      * @return QueryInterface|null
      */
-    public function getFilterQuery()
+    public function getFilterQuery(): QueryInterface|null
     {
         $retailer = $this->currentStore->getRetailer();
         if (!$this->settingsHelper->isDriveMode() || !$retailer) {
@@ -92,11 +97,10 @@ class CurrentStore implements FilterInterface
         }
 
         $boolFilter = $this->queryFactory->create(QueryInterface::TYPE_BOOL, $mustClause);
-        $nestedFilter = $this->queryFactory->create(
+
+        return $this->queryFactory->create(
             QueryInterface::TYPE_NESTED,
             ['path' => 'offer', 'query' => $boolFilter]
         );
-
-        return $nestedFilter;
     }
 }

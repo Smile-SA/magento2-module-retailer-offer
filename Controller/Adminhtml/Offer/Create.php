@@ -12,6 +12,9 @@
  */
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
@@ -26,7 +29,7 @@ class Create extends AbstractOffer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Page|ResponseInterface|ResultInterface
     {
         $this->coreRegistry->register("current_offer", $this->offerFactory->create([]));
 

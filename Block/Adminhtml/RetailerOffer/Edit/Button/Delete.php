@@ -24,7 +24,7 @@ class Delete extends AbstractButton
     /**
      * {@inheritdoc}
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $data = [];
         if ($this->getRetailerOffer() && $this->getRetailerOffer()->getId()) {
@@ -44,7 +44,7 @@ class Delete extends AbstractButton
     /**
      * @return string
      */
-    private function getDeleteUrl()
+    private function getDeleteUrl(): string
     {
         return $this->getUrl('*/*/delete', ['offer_id' => $this->getRetailerOffer()->getId()]);
     }

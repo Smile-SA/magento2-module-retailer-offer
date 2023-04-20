@@ -20,6 +20,15 @@
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
+            <!--
+            fix report.CRITICAL: Exception: Deprecated Functionality: stripos(): Passing null to parameter #1 ($haystack) of type string is deprecated in /var/www/html/vendor/magento/module-price-permissions/Observer/AdminhtmlBlockHtmlBeforeObserver.php on line 134
+            put summary block in layout instead of ui_component to avoid empty value for getNameInLayout
+            -->
+            <block class="Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary"
+                   name="smile.retaileroffer.summary"
+                   as="smile.retailer.offer.summary"
+                   template="retailer-offer/summary.phtml"
+            />
             <uiComponent name="smile_retailer_offer_edit_form"/>
         </referenceContainer>
     </body>

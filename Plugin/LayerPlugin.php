@@ -12,6 +12,10 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Smile\RetailerOffer\Api\CollectionProcessorInterface;
+
 /**
  * Add filtering for the current offer to the catalog.
  *
@@ -22,17 +26,18 @@ namespace Smile\RetailerOffer\Plugin;
 class LayerPlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Api\CollectionProcessorInterface
+     * @var CollectionProcessorInterface
      */
-    private $collectionProcessor;
+    private CollectionProcessorInterface $collectionProcessor;
 
     /**
      * LayerPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionProcessor Collection Processor
+     * @param CollectionProcessorInterface $collectionProcessor Collection Processor
      */
-    public function __construct(\Smile\RetailerOffer\Api\CollectionProcessorInterface $collectionProcessor)
-    {
+    public function __construct(
+        CollectionProcessorInterface $collectionProcessor
+    ) {
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -40,9 +45,9 @@ class LayerPlugin
      * {@inheritDoc}
      */
     public function beforePrepareProductCollection(
-        \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $collection
-    ) {
+        Layer $layer,
+        AbstractCollection $collection
+    ): void {
         $this->collectionProcessor->applyStoreSortOrders($collection);
     }
 }

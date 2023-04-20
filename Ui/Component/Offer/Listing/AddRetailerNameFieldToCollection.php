@@ -27,7 +27,7 @@ class AddRetailerNameFieldToCollection implements AddFieldToCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addField(Collection $collection, $field, $alias = null): void
     {
         $collection->addEntityAttributeToSelect(\Smile\Retailer\Api\Data\RetailerInterface::class, "name", $field);
     }

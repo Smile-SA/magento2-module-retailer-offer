@@ -13,6 +13,8 @@
  */
 namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -32,7 +34,7 @@ class AddProductNameFieldToCollection implements AddFieldToCollectionInterface
     /**
      * @var ProductMetadataInterface
      */
-    private $productMetadata;
+    private ProductMetadataInterface $productMetadata;
 
     /**
      * AddProductNameFieldToCollection constructor.
@@ -47,10 +49,10 @@ class AddProductNameFieldToCollection implements AddFieldToCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addField(Collection $collection, $field, $alias = null): void
     {
-        $entityType = \Magento\Catalog\Api\Data\ProductInterface::class;
-        $skuField = \Magento\Catalog\Model\Product::SKU;
+        $entityType = ProductInterface::class;
+        $skuField = Product::SKU;
         $join = null;
 
         if ($this->productMetadata->getEdition() == self::MAGENTO_EE_EDITION_NAME) {

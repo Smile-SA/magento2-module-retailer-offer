@@ -11,13 +11,14 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 
-namespace Smile\RetailerOffer\Ui\Component\Offer\Form;
+namespace Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Framework\Registry;
-use Smile\Offer\Api\OfferRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+use Smile\Offer\Api\Data\OfferInterface;
+use Smile\Offer\Api\OfferRepositoryInterface;
 
 /**
  * Data Provider for Retailer Offer Edit Form
@@ -26,27 +27,27 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class DataProvider extends AbstractDataProvider
+class Edit extends AbstractDataProvider
 {
     /**
      * @var array
      */
-    private $loadedData;
+    private array $loadedData;
 
     /**
      * @var Registry
      */
-    private $registry;
+    private Registry $registry;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @var OfferRepositoryInterface
      */
-    private $offerRepository;
+    private OfferRepositoryInterface $offerRepository;
 
     /**
      * DataProvider constructor.
@@ -54,7 +55,7 @@ class DataProvider extends AbstractDataProvider
      * @param string                   $name              The name
      * @param string                   $primaryFieldName  Primary field Name
      * @param string                   $requestFieldName  Request field Name
-     * @param array                    $collectionFactory The collection factory
+     * @param mixed                    $collectionFactory The collection factory
      * @param Registry                 $registry          The Registry
      * @param RequestInterface         $request           The Request
      * @param OfferRepositoryInterface $offerRepository   The Offer Repository
@@ -62,10 +63,10 @@ class DataProvider extends AbstractDataProvider
      * @param array                    $data              Component Data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
-        $collectionFactory,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
+        mixed $collectionFactory,
         Registry $registry,
         RequestInterface $request,
         OfferRepositoryInterface $offerRepository,
@@ -84,7 +85,7 @@ class DataProvider extends AbstractDataProvider
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -105,10 +106,10 @@ class DataProvider extends AbstractDataProvider
     /**
      * Get current offer
      *
-     * @return \Smile\Offer\Api\Data\OfferInterface
+     * @return OfferInterface
      * @throws NoSuchEntityException
      */
-    private function getCurrentOffer()
+    private function getCurrentOffer(): OfferInterface
     {
         $offer = $this->registry->registry('current_offer');
 

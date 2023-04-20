@@ -13,7 +13,10 @@
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Smile\Offer\Api\Data\OfferInterface;
+use Smile\Offer\Api\OfferManagementInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
@@ -23,34 +26,34 @@ use Smile\StoreLocator\CustomerData\CurrentStore;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Offer extends \Magento\Framework\App\Helper\AbstractHelper
+class Offer extends AbstractHelper
 {
     /**
-     * @var \Smile\Offer\Api\OfferManagementInterface
+     * @var OfferManagementInterface
      */
-    private $offerManagement;
+    private OfferManagementInterface $offerManagement;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
      * @var OfferInterface[]
      */
-    private $offersCache = [];
+    private array $offersCache = [];
 
     /**
      * ProductPlugin constructor.
      *
-     * @param \Magento\Framework\App\Helper\Context         $context         Helper context.
-     * @param \Smile\Offer\Api\OfferManagementInterface     $offerManagement The offer Management
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore    Current Store Provider
+     * @param Context                   $context         Helper context.
+     * @param OfferManagementInterface  $offerManagement The offer Management
+     * @param CurrentStore              $currentStore    Current Store Provider
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Smile\Offer\Api\OfferManagementInterface $offerManagement,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore
+        Context $context,
+        OfferManagementInterface $offerManagement,
+        CurrentStore $currentStore
     ) {
         $this->offerManagement = $offerManagement;
         $this->currentStore    = $currentStore;
@@ -62,11 +65,11 @@ class Offer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Offer for the product by retailer id.
      *
      * @param ProductInterface $product    The product
-     * @param integer          $retailerId The retailer Id
+     * @param int              $retailerId The retailer Id
      *
-     * @return \Smile\Offer\Api\Data\OfferInterface
+     * @return OfferInterface
      */
-    public function getOffer($product, $retailerId)
+    public function getOffer(ProductInterface $product, int $retailerId): OfferInterface
     {
         $offer = null;
 
@@ -89,9 +92,9 @@ class Offer extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param ProductInterface $product The product
      *
-     * @return \Smile\Offer\Api\Data\OfferInterface
+     * @return ?OfferInterface
      */
-    public function getCurrentOffer($product)
+    public function getCurrentOffer(ProductInterface $product): ?OfferInterface
     {
         $offer = null;
 

@@ -12,6 +12,11 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Catalog\Model\Product;
+use Smile\RetailerOffer\Helper\Offer;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
+
 /**
  * Replace is in stock native filter on layer.
  *
@@ -22,31 +27,31 @@ namespace Smile\RetailerOffer\Plugin;
 class ProductPlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Helper\Offer
+     * @var Offer
      */
-    private $helper;
+    private Offer $helper;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
      * ProductPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper    The offer Helper
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Retailer Data Object
-     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper Settings Helper
+     * @param Offer        $offerHelper    The offer Helper
+     * @param CurrentStore $currentStore   The Retailer Data Object
+     * @param Settings     $settingsHelper Settings Helper
      */
     public function __construct(
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper
+        Offer $offerHelper,
+        CurrentStore $currentStore,
+        Settings $settingsHelper
     ) {
         $this->currentStore   = $currentStore;
         $this->helper         = $offerHelper;
@@ -57,12 +62,12 @@ class ProductPlugin
      * Return offer availability (if any) instead of the product one.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need to call the parent method.
      *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden isAvailable() method
+     * @param Product   $product The product
+     * @param \Closure  $proceed The overridden isAvailable() method
      *
      * @return bool
      */
-    public function aroundIsAvailable(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundIsAvailable(Product $product, \Closure $proceed): bool
     {
         $isAvailable = $proceed();
 
@@ -81,12 +86,12 @@ class ProductPlugin
     /**
      * Return offer price (if any) instead of the product one.
      *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getPrice() method
+     * @param Product   $product The product
+     * @param \Closure  $proceed The overridden getPrice() method
      *
-     * @return bool
+     * @return float|null
      */
-    public function aroundGetPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetPrice(Product $product, \Closure $proceed): float|null
     {
         $price = $proceed();
 
@@ -106,12 +111,12 @@ class ProductPlugin
     /**
      * Return offer special price (if any) instead of the product one.
      *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getSpecialPrice() method
+     * @param Product   $product The product
+     * @param \Closure  $proceed The overridden getSpecialPrice() method
      *
-     * @return bool
+     * @return float|null
      */
-    public function aroundGetSpecialPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetSpecialPrice(Product $product, \Closure $proceed): float|null
     {
         $price = $proceed();
 
@@ -129,13 +134,13 @@ class ProductPlugin
     /**
      * Return offer final price (if any) instead of the product one.
      *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getFinalPrice() method
-     * @param int                            $qty     The quantity added to the cart
+     * @param Product   $product The product
+     * @param \Closure  $proceed The overridden getFinalPrice() method
+     * @param ?float    $qty     The quantity added to the cart
      *
-     * @return bool
+     * @return float|null
      */
-    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed, $qty = null)
+    public function aroundGetFinalPrice(Product $product, \Closure $proceed, ?float $qty = null): float|null
     {
         $price = $proceed($qty);
 
@@ -159,12 +164,12 @@ class ProductPlugin
     /**
      * Return offer minimal price (if any) instead of the product one.
      *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getFinalPrice() method
+     * @param Product   $product The product
+     * @param \Closure  $proceed The overridden getFinalPrice() method
      *
-     * @return bool
+     * @return float|null
      */
-    public function aroundGetMinimalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetMinimalPrice(Product $product, \Closure $proceed): float|null
     {
         return $this->aroundGetFinalPrice($product, $proceed);
     }

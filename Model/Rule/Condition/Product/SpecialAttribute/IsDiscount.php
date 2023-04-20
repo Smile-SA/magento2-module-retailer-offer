@@ -35,12 +35,12 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
     /**
      * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
      * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
      * IsDiscount constructor.
@@ -67,7 +67,7 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
     /**
      * {@inheritdoc}
      */
-    public function getSearchQuery(ProductCondition $condition)
+    public function getSearchQuery(ProductCondition $condition): QueryInterface|null
     {
         $query = parent::getSearchQuery($condition);
 
@@ -85,11 +85,11 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
     /**
      * Retrieve query based on 'offer.is_discount' for current retailer.
      *
-     * @param integer $retailerId Retailer Id
+     * @param int $retailerId Retailer Id
      *
      * @return QueryInterface
      */
-    private function getIsDiscountForCurrentRetailerQuery($retailerId)
+    private function getIsDiscountForCurrentRetailerQuery(int $retailerId): QueryInterface
     {
         $sellerIdFilter = $this->queryFactory->create(
             QueryInterface::TYPE_TERM,
@@ -109,7 +109,7 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
      *
      * @return QueryInterface
      */
-    private function getIsDiscountOffersQuery()
+    private function getIsDiscountOffersQuery(): QueryInterface
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_NESTED,
@@ -122,7 +122,7 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
      *
      * @return QueryInterface
      */
-    private function getIsDiscountOfferTermQuery()
+    private function getIsDiscountOfferTermQuery(): QueryInterface
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_TERM,

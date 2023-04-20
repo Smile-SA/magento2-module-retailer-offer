@@ -27,18 +27,18 @@ class RequestMapperPlugin
     /**
      * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
      * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
      * RequestMapperPlugin constructor.
      *
-     * @param CurrentStore $currentStore Current Store
-     * @param Settings $settingsHelper Settings Helper
+     * @param CurrentStore  $currentStore   Current Store
+     * @param Settings      $settingsHelper Settings Helper
      */
     public function __construct(
         CurrentStore $currentStore,
@@ -51,10 +51,10 @@ class RequestMapperPlugin
     /**
      * Replace the price order by a offer price order.
      *
-     * @param RequestMapper $subject Current request mapper object
-     * @param $result Current Sort order configuraiton
-     * @param ContainerConfigurationInterface $containerConfiguration Container configuration
-     * @param SearchCriteriaInterface $searchCriteria Search criteria
+     * @param RequestMapper                     $subject                    Current request mapper object
+     * @param array                             $result                     Current Sort order configuraiton
+     * @param ContainerConfigurationInterface   $containerConfiguration     Container configuration
+     * @param SearchCriteriaInterface           $searchCriteria             Search criteria
      *
      * @return array
      *
@@ -62,10 +62,10 @@ class RequestMapperPlugin
      */
     public function afterGetSortOrders(
         RequestMapper $subject,
-        $result,
+        array $result,
         ContainerConfigurationInterface $containerConfiguration,
         SearchCriteriaInterface $searchCriteria
-    ) {
+    ): array {
         $retailer = $this->currentStore->getRetailer();
         if (!$this->settingsHelper->isDriveMode() || !$retailer) {
             return $result;
@@ -87,10 +87,10 @@ class RequestMapperPlugin
     /**
      * Post process catalog filters.
      *
-     * @param RequestMapper $subject Request mapper.
-     * @param array $result Original filters.
-     * @param ContainerConfigurationInterface $containerConfiguration Container configuration.
-     * @param SearchCriteriaInterface $searchCriteria Search criteria.
+     * @param RequestMapper                     $subject                    Request mapper.
+     * @param array                             $result                     Original filters.
+     * @param ContainerConfigurationInterface   $containerConfiguration     Container configuration.
+     * @param SearchCriteriaInterface           $searchCriteria             Search criteria.
      *
      * @return array
      *
@@ -98,10 +98,10 @@ class RequestMapperPlugin
      */
     public function afterGetFilters(
         RequestMapper $subject,
-        $result,
+        array $result,
         ContainerConfigurationInterface $containerConfiguration,
         SearchCriteriaInterface $searchCriteria
-    ) {
+    ): array {
         $retailer = $this->currentStore->getRetailer();
         if (!$this->settingsHelper->isDriveMode() || !$retailer) {
             return $result;

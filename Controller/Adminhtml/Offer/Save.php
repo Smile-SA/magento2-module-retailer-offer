@@ -14,6 +14,9 @@
 
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
@@ -29,9 +32,9 @@ class Save extends AbstractOffer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Redirect|ResponseInterface|ResultInterface
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $data         = $this->getRequest()->getPostValue();

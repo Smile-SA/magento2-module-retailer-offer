@@ -14,7 +14,10 @@ namespace Smile\RetailerOffer\Controller;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -31,14 +34,14 @@ class Availability extends Action
      *
      * @var PageFactory
      */
-    private $resultPageFactory;
+    private PageFactory $resultPageFactory;
 
     /**
      * Forward factory.
      *
      * @var ForwardFactory
      */
-    private $resultForwardFactory;
+    private ForwardFactory $resultForwardFactory;
 
     /**
      * Constructor.
@@ -61,7 +64,7 @@ class Availability extends Action
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): ResponseInterface|ResultInterface|Page
     {
         $productId = $this->getRequest()->getParam('product_id');
 

@@ -12,6 +12,14 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Tax\Model\Config;
+use Smile\RetailerOffer\Helper\Offer;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
+
 /**
  * Check if the offer price of a previously added quote item has changed.
  *
@@ -22,45 +30,45 @@ namespace Smile\RetailerOffer\Plugin;
 class QuoteItemPlugin
 {
     /**
-     * @var \Smile\RetailerOffer\Helper\Offer
+     * @var Offer
      */
-    private $offerHelper;
+    private Offer $offerHelper;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
-    private $eventManager;
+    private ManagerInterface $eventManager;
 
     /**
-     * @var \Magento\Tax\Model\Config
+     * @var Config
      */
-    private $taxConfig;
+    private Config $taxConfig;
 
     /**
      * ProductPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper    The offer Helper
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Current Store object
-     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper Settings Helper
-     * @param \Magento\Framework\Event\ManagerInterface     $eventManager   The Event Manager
-     * @param \Magento\Tax\Model\Config                     $taxConfig      Tax config.
+     * @param Offer             $offerHelper    The offer Helper
+     * @param CurrentStore      $currentStore   The Current Store object
+     * @param Settings          $settingsHelper Settings Helper
+     * @param ManagerInterface  $eventManager   The Event Manager
+     * @param Config            $taxConfig      Tax config.
      */
     public function __construct(
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Tax\Model\Config $taxConfig
+        Offer $offerHelper,
+        CurrentStore $currentStore,
+        Settings $settingsHelper,
+        ManagerInterface $eventManager,
+        Config $taxConfig
     ) {
         $this->offerHelper    = $offerHelper;
         $this->currentStore   = $currentStore;
@@ -74,21 +82,21 @@ class QuoteItemPlugin
      * This can happens if an item is already in cart when the offer price is changed.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need the original Item.
      *
-     * @param \Magento\Quote\Model\Quote\Item $item    The Quote Item
-     * @param \Closure                        $proceed The overridden setProduct() method
-     * @param \Magento\Catalog\Model\Product  $product The product
+     * @param Item      $item    The Quote Item
+     * @param \Closure  $proceed The overridden setProduct() method
+     * @param Product   $product The product
      *
      * @return bool
      */
     public function aroundSetProduct(
-        \Magento\Quote\Model\Quote\Item $item,
+        Item $item,
         \Closure $proceed,
-        \Magento\Catalog\Model\Product $product
-    ) {
+        Product $product
+    ): Item {
         $resultItem = null;
         $offerPrice = null;
 
-        /** @var \Magento\Quote\Model\Quote\Item $resultItem */
+        /** @var Item $resultItem */
         $resultItem = $proceed($product);
 
         if ($this->settingsHelper->isDriveMode()) {
@@ -117,11 +125,11 @@ class QuoteItemPlugin
     /**
      * Return quote item price (include or exclude tax).
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param Item $item
      *
      * @return float|null
      */
-    private function getQuoteItemPrice(\Magento\Quote\Model\Quote\Item $item)
+    private function getQuoteItemPrice(Item $item): float|null
     {
         return !$this->taxConfig->priceIncludesTax() ? $item->getPrice() : $item->getPriceInclTax();
     }

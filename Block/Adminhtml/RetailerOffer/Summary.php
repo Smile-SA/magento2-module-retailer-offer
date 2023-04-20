@@ -16,13 +16,14 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as StatusSource;
 use Magento\Framework\Registry;
+use Magento\Framework\Pricing\Helper\Data as PriceHelper;
+use Magento\Framework\View\Element\BlockInterface;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
-use Magento\Catalog\Helper\Product as ProductHelper;
-use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /**
  * Panel to display offer's summary in the offer edit form.
@@ -49,14 +50,14 @@ class Summary extends Template
      *
      * @var Registry
      */
-    private $registry;
+    private Registry $registry;
 
     /**
      * Summary constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context  Application context
-     * @param \Magento\Framework\Registry             $registry Application registry
-     * @param array                                   $data     Block's data
+     * @param Context   $context  Application context
+     * @param Registry  $registry Application registry
+     * @param array     $data     Block's data
      */
     public function __construct(
         Context $context,
@@ -71,9 +72,9 @@ class Summary extends Template
     /**
      * Get current offer
      *
-     * @return OfferInterface
+     * @return OfferInterface|null
      */
-    public function getRetailerOffer()
+    public function getRetailerOffer(): OfferInterface|null
     {
         $offer = $this->registry->registry('current_offer');
 
@@ -87,11 +88,11 @@ class Summary extends Template
     /**
      * Retrieve Product Summary Block
      *
-     * @return \Magento\Framework\View\Element\BlockInterface
+     * @return BlockInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getProductSummaryBlock()
+    public function getProductSummaryBlock(): BlockInterface
     {
         return $this->getLayout()->createBlock(self::class . '\Product', "product.summary");
     }
@@ -99,11 +100,11 @@ class Summary extends Template
     /**
      * Retrieve Retailer Summary Block
      *
-     * @return \Magento\Framework\View\Element\BlockInterface
+     * @return BlockInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getRetailerSummaryBlock()
+    public function getRetailerSummaryBlock(): BlockInterface
     {
         return $this->getLayout()->createBlock(self::class . '\Retailer', "retailer.summary");
     }

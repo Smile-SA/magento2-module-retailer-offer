@@ -12,6 +12,8 @@
  */
 namespace Smile\RetailerOffer\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Navigation
  *
@@ -19,7 +21,7 @@ namespace Smile\RetailerOffer\Model\Config\Source;
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Navigation implements \Magento\Framework\Option\ArrayInterface
+class Navigation implements ArrayInterface
 {
     /**
      * Constant value for "Retail" mode
@@ -36,7 +38,7 @@ class Navigation implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [['value' => 0, 'label' => __('Retail')], ['value' => 1, 'label' => __('Drive')]];
     }
@@ -46,7 +48,7 @@ class Navigation implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [0 => __('Retail'), 1 => __('Drive')];
     }

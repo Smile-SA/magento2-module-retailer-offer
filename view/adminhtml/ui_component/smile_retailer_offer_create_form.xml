@@ -37,7 +37,7 @@
     </argument>
     <dataSource name="smile_retailer_offer_create_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider</argument>
+            <argument name="class" xsi:type="string">Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider\Create</argument>
             <argument name="name" xsi:type="string">smile_retailer_offer_create_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">main_table.offer_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>

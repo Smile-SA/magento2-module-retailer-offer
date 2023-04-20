@@ -32,24 +32,24 @@ class CategoryPlugin
     /**
      * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
      * @var ItemCollectionProviderInterface
      */
-    private $collectionProvider;
+    private ItemCollectionProviderInterface $collectionProvider;
 
     /**
      * @var FilterProvider
      */
-    private $filterProvider;
+    private FilterProvider $filterProvider;
 
     /**
      * CategoryPlugin constructor.
      *
-     * @param CurrentStore $currentStore The current Store provider.
-     * @param ItemCollectionProviderInterface $collectionProvider The category collection provider.
-     * @param FilterProvider $filterProvider The category filter provider.
+     * @param CurrentStore                      $currentStore           The current Store provider.
+     * @param ItemCollectionProviderInterface   $collectionProvider     The category collection provider.
+     * @param FilterProvider                    $filterProvider         The category filter provider.
      */
     public function __construct(
         CurrentStore $currentStore,
@@ -68,9 +68,9 @@ class CategoryPlugin
      * @param Category $category The Category
      * @param \Closure $proceed  The initial getProductCount() of category object
      *
-     * @return int
+     * @return int|null
      */
-    public function aroundGetProductCount(Category $category, \Closure $proceed)
+    public function aroundGetProductCount(Category $category, \Closure $proceed): int|null
     {
         if (!$this->currentStore->getRetailer() || !$this->currentStore->getRetailer()->getId()) {
             return $proceed();

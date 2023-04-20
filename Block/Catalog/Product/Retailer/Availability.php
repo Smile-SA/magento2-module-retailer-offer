@@ -14,8 +14,13 @@ namespace Smile\RetailerOffer\Block\Catalog\Product\Retailer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Helper\Product;
 use Magento\Customer\Model\Session;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Smile\Map\Api\MapInterface;
 use Smile\Map\Api\MapProviderInterface;
 use Smile\Map\Model\AddressFormatter;
 use Smile\Offer\Api\Data\OfferInterface;
@@ -31,42 +36,42 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCol
  * @package  Smile\RetailerOffer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Availability extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Availability extends Template implements IdentityInterface
 {
     /**
-     * @var \Smile\Offer\Model\OfferManagement
+     * @var OfferManagement
      */
-    protected $offerManagement;
+    protected OfferManagement $offerManagement;
 
     /**
      * @var RetailerCollectionFactory
      */
-    protected $retailerCollectionFactory;
+    protected RetailerCollectionFactory $retailerCollectionFactory;
 
     /**
-     * @var \Smile\Map\Model\AddressFormatter
+     * @var AddressFormatter
      */
-    protected $addressFormatter;
+    protected AddressFormatter $addressFormatter;
 
     /**
-     * @var \Smile\Map\Api\MapInterface
+     * @var MapInterface
      */
-    protected $map;
+    protected MapInterface $map;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $coreRegistry;
+    protected Registry $coreRegistry;
 
     /**
-     * @var array
+     * @var ?array
      */
-    protected $storeOffers = null;
+    protected ?array $storeOffers = null;
 
     /**
      * Availability constructor.
@@ -104,7 +109,7 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
     /**
      * {@inheritDoc}
      */
-    public function getJsLayout()
+    public function getJsLayout(): false|string
     {
         $jsLayout = $this->jsLayout;
 
@@ -126,7 +131,7 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
      *
      * @return string[]
      */
-    public function getIdentities()
+    public function getIdentities(): array
     {
         $identities = $this->getProduct()->getIdentities();
 
@@ -142,9 +147,9 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
     /**
      * Retrieve current product model
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return ProductModel
      */
-    protected function getProduct()
+    protected function getProduct(): ProductModel
     {
         if (!$this->coreRegistry->registry('product') && $this->getProductId()) {
             return $this->productRepository->getById($this->getProductId());
@@ -158,7 +163,7 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
      *
      * @return array
      */
-    protected function getStoreOffers()
+    protected function getStoreOffers(): array
     {
         if ($this->storeOffers === null) {
             $storeOffers = [];
@@ -202,11 +207,11 @@ class Availability extends \Magento\Framework\View\Element\Template implements \
     /**
      * Get the JSON post data used to build the set store link.
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The store
+     * @param RetailerInterface $retailer The store
      *
-     * @return string
+     * @return array
      */
-    protected function getSetStorePostData($retailer)
+    protected function getSetStorePostData(RetailerInterface $retailer): array
     {
         $setUrl   = $this->_urlBuilder->getUrl('storelocator/store/set');
         $postData = ['id' => $retailer->getId()];

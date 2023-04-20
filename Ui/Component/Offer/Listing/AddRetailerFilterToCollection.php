@@ -28,7 +28,7 @@ class AddRetailerFilterToCollection implements AddFilterToCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addFilter(Collection $collection, $field, $condition = null)
+    public function addFilter(Collection $collection, $field, $condition = null): void
     {
         $collection->addFieldToFilter(OfferInterface::SELLER_ID, $condition);
     }

@@ -16,6 +16,7 @@ namespace Smile\RetailerOffer\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
@@ -32,33 +33,33 @@ use Smile\Offer\Api\Data\OfferInterfaceFactory as OfferFactory;
 abstract class AbstractOffer extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|null
+     * @var ?PageFactory
      */
-    protected $resultPageFactory = null;
+    protected ?PageFactory $resultPageFactory = null;
 
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory|null
+     * @var ?ForwardFactory
      */
-    protected $resultForwardFactory = null;
+    protected ?ForwardFactory $resultForwardFactory = null;
 
     /**
      * Core registry
      *
      * @var Registry
      */
-    protected $coreRegistry;
+    protected Registry $coreRegistry;
 
     /**
-     * @var \Smile\Offer\Api\OfferRepositoryInterface
+     * @var OfferRepository
      */
-    protected $offerRepository;
+    protected OfferRepository $offerRepository;
 
     /**
      * Retailer Factory
      *
-     * @var \Smile\Offer\Api\Data\OfferInterfaceFactory
+     * @var OfferFactory
      */
-    protected $offerFactory;
+    protected OfferFactory $offerFactory;
 
     /**
      * Abstract constructor.
@@ -90,11 +91,11 @@ abstract class AbstractOffer extends Action
     /**
      * Create result page
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
-    protected function createPage()
+    protected function createPage(): Page
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Smile_Retailer::retailer_offers')
             ->addBreadcrumb(__('Sellers'), __('Retailers'), __('Offers'));
@@ -109,7 +110,7 @@ abstract class AbstractOffer extends Action
      *
      * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smile_RetailerOffer::retailer_offers');
     }

@@ -12,7 +12,10 @@
  */
 namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
+use Magento\Framework\Api\Filter;
 use Magento\Ui\DataProvider\AbstractDataProvider;
+use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
  * Data Provider for UI Retailer Offer
@@ -24,26 +27,31 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 class DataProvider extends AbstractDataProvider
 {
     /**
-     * @var \Magento\Ui\DataProvider\AddFieldToCollectionInterface[]
+     * @var AddFieldToCollectionInterface[]
      */
-    private $addFieldStrategies;
+    private array $addFieldStrategies;
 
     /**
-     * @var \Magento\Ui\DataProvider\AddFilterToCollectionInterface[]
+     * @var AddFilterToCollectionInterface[]
      */
-    private $addFilterStrategies;
+    private array $addFilterStrategies;
+
+    /**
+     * @var mixed
+     */
+    protected mixed $collectionFactory;
 
     /**
      * Construct
      *
-     * @param string                                                    $name                Component name
-     * @param string                                                    $primaryFieldName    Primary field Name
-     * @param string                                                    $requestFieldName    Request field name
-     * @param CollectionFactory                                         $collectionFactory   The collection factory
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[]  $addFieldStrategies  Add field Strategy
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies Add filter Strategy
-     * @param array                                                     $meta                Component Meta
-     * @param array                                                     $data                Component extra data
+     * @param string                            $name                Component name
+     * @param string                            $primaryFieldName    Primary field Name
+     * @param string                            $requestFieldName    Request field name
+     * @param mixed                             $collectionFactory   The collection factory
+     * @param AddFieldToCollectionInterface[]   $addFieldStrategies  Add field Strategy
+     * @param AddFilterToCollectionInterface[]  $addFilterStrategies Add filter Strategy
+     * @param array                             $meta                Component Meta
+     * @param array                             $data                Component extra data
      */
     public function __construct(
         $name,
@@ -60,7 +68,6 @@ class DataProvider extends AbstractDataProvider
         $this->collection = $collectionFactory->create();
 
         $this->collection->addFilterToMap('offer_id', 'main_table.offer_id');
-
         $this->addFieldStrategies  = $addFieldStrategies;
         $this->addFilterStrategies = $addFilterStrategies;
     }
@@ -73,21 +80,20 @@ class DataProvider extends AbstractDataProvider
      *
      * @return void
      */
-    public function addField($field, $alias = null)
+    public function addField($field, $alias = null): void
     {
         if (isset($this->addFieldStrategies[$field])) {
             $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias);
-
-            return;
         }
-
-        parent::addField($field, $alias);
+        if (!isset($this->addFieldStrategies[$field])) {
+            parent::addField($field, $alias);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
+    public function addFilter(Filter $filter): void
     {
         if (isset($this->addFilterStrategies[$filter->getField()])) {
             $this->addFilterStrategies[$filter->getField()]
@@ -96,10 +102,9 @@ class DataProvider extends AbstractDataProvider
                     $filter->getField(),
                     [$filter->getConditionType() => $filter->getValue()]
                 );
-
-            return;
         }
-
-        parent::addFilter($filter);
+        if (!isset($this->addFilterStrategies[$filter->getField()])) {
+            parent::addFilter($filter);
+        }
     }
 }

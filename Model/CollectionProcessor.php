@@ -12,8 +12,15 @@
  */
 namespace Smile\RetailerOffer\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection;
+use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\RetailerOffer\Api\CollectionProcessorInterface;
+use Smile\RetailerOffer\Helper\Offer;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Collection Processor.
@@ -27,45 +34,45 @@ use Smile\RetailerOffer\Api\CollectionProcessorInterface;
 class CollectionProcessor implements CollectionProcessorInterface
 {
     /**
-     * @var \Smile\RetailerOffer\Helper\Offer
+     * @var Offer
      */
-    private $helper;
+    private Offer $helper;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    protected $settingsHelper;
+    protected Settings $settingsHelper;
 
     /**
-     * @var \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory
+     * @var QueryFactory
      */
-    protected $queryFactory;
+    protected QueryFactory $queryFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * ProductPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Offer                         $offerHelper    The offer Helper
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore             $currentStore   The Retailer Data Object
-     * @param \Smile\RetailerOffer\Helper\Settings                      $settingsHelper Settings Helper
-     * @param \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory   Query Factory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface        $scopeConfig    Scope Configuration
+     * @param Offer                 $offerHelper    The offer Helper
+     * @param CurrentStore          $currentStore   The Retailer Data Object
+     * @param Settings              $settingsHelper Settings Helper
+     * @param QueryFactory          $queryFactory   Query Factory
+     * @param ScopeConfigInterface  $scopeConfig    Scope Configuration
      */
     public function __construct(
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory $queryFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        Offer $offerHelper,
+        CurrentStore $currentStore,
+        Settings $settingsHelper,
+        QueryFactory $queryFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->currentStore   = $currentStore;
         $this->helper         = $offerHelper;
@@ -77,15 +84,13 @@ class CollectionProcessor implements CollectionProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function applyStoreSortOrders(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection)
+    public function applyStoreSortOrders(Collection $collection): void
     {
-        if (!$this->settingsHelper->isDriveMode()) {
-            return;
-        }
-
-        $retailerId = $this->getRetailerId();
-        if ($retailerId) {
-            $collection->addSortFilterParameters('price', 'offer.price', 'offer', ['offer.seller_id' => $retailerId]);
+        if ($this->settingsHelper->isDriveMode()) {
+            $retailerId = $this->getRetailerId();
+            if ($retailerId) {
+                $collection->addSortFilterParameters('price', 'offer.price', 'offer', ['offer.seller_id' => $retailerId]);
+            }
         }
     }
 
@@ -94,7 +99,7 @@ class CollectionProcessor implements CollectionProcessorInterface
      *
      * @return int|null
      */
-    private function getRetailerId()
+    private function getRetailerId(): int|null
     {
         $retailerId = null;
         if ($this->getRetailer()) {
@@ -107,9 +112,9 @@ class CollectionProcessor implements CollectionProcessorInterface
     /**
      * Retrieve current retailer
      *
-     * @return null|\Smile\Retailer\Api\Data\RetailerInterface
+     * @return null|RetailerInterface
      */
-    private function getRetailer()
+    private function getRetailer(): null|RetailerInterface
     {
         $retailer = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {

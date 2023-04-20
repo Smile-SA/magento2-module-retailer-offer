@@ -12,6 +12,8 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Checkout\Model\Session;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
@@ -24,31 +26,35 @@ use Smile\StoreLocator\CustomerData\CurrentStore;
 class CurrentStorePlugin
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
-    private $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * RetailerDataPlugin constructor.
      *
-     * @param \Magento\Checkout\Model\Session $checkoutSession The Checkout Session
+     * @param Session $checkoutSession The Checkout Session
      */
-    public function __construct(\Magento\Checkout\Model\Session $checkoutSession)
-    {
+    public function __construct(
+        Session $checkoutSession
+    ) {
         $this->checkoutSession = $checkoutSession;
     }
 
     /**
      * Proceed current Quote update when changing current Retailer.
      *
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore The Retailer Data object
-     * @param \Closure                                      $proceed      The setParams method of retailer data object
-     * @param \Smile\Retailer\Api\Data\RetailerInterface    $retailer     The Retailer
+     * @param CurrentStore      $currentStore The Retailer Data object
+     * @param \Closure          $proceed      The setParams method of retailer data object
+     * @param RetailerInterface $retailer     The Retailer
      *
-     * @return \Smile\StoreLocator\CustomerData\CurrentStore
+     * @return CurrentStore
      */
-    public function aroundSetRetailer(CurrentStore $currentStore, \Closure $proceed, $retailer)
-    {
+    public function aroundSetRetailer(
+        CurrentStore $currentStore,
+        \Closure $proceed,
+        RetailerInterface $retailer
+    ): CurrentStore {
         $quote      = $this->checkoutSession->getQuote();
         $hasChanges = (
             ($currentStore->getRetailer() && ($currentStore->getRetailer()->getId() !== $retailer->getId()))

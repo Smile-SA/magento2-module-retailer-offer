@@ -12,6 +12,9 @@
  */
 namespace Smile\RetailerOffer\Plugin;
 
+use Magento\Framework\Pricing\Render\PriceBox;
+use Smile\RetailerOffer\Helper\Offer;
+
 /**
  * PriceBox Plugin : used to ensure variation of price box cache by offer.
  *
@@ -22,26 +25,32 @@ namespace Smile\RetailerOffer\Plugin;
 class PriceBoxPlugin
 {
     /**
+     * @var Offer
+     */
+    private Offer $offerHelper;
+
+    /**
      * PriceBoxPlugin constructor.
      *
-     * @param \Smile\RetailerOffer\Helper\Offer $offerHelper Offer Helper
+     * @param Offer $offerHelper Offer Helper
      */
-    public function __construct(\Smile\RetailerOffer\Helper\Offer $offerHelper)
-    {
+    public function __construct(
+        Offer $offerHelper
+    ) {
         $this->offerHelper = $offerHelper;
     }
 
     /**
      * Adding retailer Id and Pickup date to price box cache Id.
      * The price box has basically a 3600s cache time so it could cause values for other retailer/date being cached.
-     * @see \Magento\Framework\Pricing\Render\PriceBox::DEFAULT_LIFETIME
+     * @see PriceBox::DEFAULT_LIFETIME
      *
-     * @param \Magento\Framework\Pricing\Render\PriceBox $priceBox The Price Box Renderer
-     * @param \Closure                                   $proceed  The getCacheKey() method of price box renderer.
+     * @param PriceBox $priceBox The Price Box Renderer
+     * @param \Closure $proceed  The getCacheKey() method of price box renderer.
      *
      * @return string
      */
-    public function aroundGetCacheKey(\Magento\Framework\Pricing\Render\PriceBox $priceBox, \Closure $proceed)
+    public function aroundGetCacheKey(PriceBox $priceBox, \Closure $proceed): string
     {
         $cacheKey = $proceed();
 

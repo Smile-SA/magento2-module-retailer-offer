@@ -12,6 +12,8 @@
  */
 namespace Smile\RetailerOffer\Api;
 
+use Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection;
+
 /**
  * Collection Processor : Used to filter product collection according store configuration.
  *
@@ -25,9 +27,9 @@ interface CollectionProcessorInterface
     /**
      * Apply store sort orders to a product collection.
      *
-     * @param \Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection Product Collection
+     * @param Collection $collection Product Collection
      *
      * @return void
      */
-    public function applyStoreSortOrders(\Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection $collection);
+    public function applyStoreSortOrders(Collection $collection): void;
 }

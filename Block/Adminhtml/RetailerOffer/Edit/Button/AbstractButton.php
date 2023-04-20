@@ -31,14 +31,14 @@ class AbstractButton implements ButtonProviderInterface
      *
      * @var Context
      */
-    protected $context;
+    protected Context $context;
 
     /**
      * Registry
      *
      * @var Registry
      */
-    protected $registry;
+    protected Registry $registry;
 
     /**
      * Generic constructor
@@ -62,7 +62,7 @@ class AbstractButton implements ButtonProviderInterface
      *
      * @return string
      */
-    public function getUrl($route = '', $params = [])
+    public function getUrl(string $route = '', array $params = []): string
     {
         return $this->context->getUrl($route, $params);
     }
@@ -72,7 +72,7 @@ class AbstractButton implements ButtonProviderInterface
      *
      * @return OfferInterface
      */
-    public function getRetailerOffer()
+    public function getRetailerOffer(): OfferInterface
     {
         return $this->registry->registry('current_offer');
     }
@@ -80,7 +80,7 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         return [];
     }

@@ -12,7 +12,14 @@
  */
 namespace Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation;
 
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Price as FilterDataProviderPrice;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Price aggregation
@@ -24,36 +31,36 @@ use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
 class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price
 {
     /**
-     * @var \Smile\RetailerOffer\Helper\Settings
+     * @var Settings
      */
-    private $settingsHelper;
+    private Settings $settingsHelper;
 
     /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
+     * @var CurrentStore
      */
-    private $currentStore;
+    private CurrentStore $currentStore;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
-    private $customerSession;
+    private Session $customerSession;
 
     /**
      * Price constructor.
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig Scope Config
-     * @param \Magento\Customer\Model\Session $customerSession Customer session, if any
+     * @param ScopeConfigInterface  $scopeConfig        Scope Config
+     * @param Session               $customerSession    Customer session, if any
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Customer\Model\Session $customerSession,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore
+        ScopeConfigInterface $scopeConfig,
+        Session $customerSession,
+        Settings $settingsHelper,
+        CurrentStore $currentStore
     ) {
         parent::__construct($scopeConfig, $customerSession);
 
@@ -66,7 +73,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
     /**
      * {@inheritdoc}
      */
-    public function getAggregationData(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
+    public function getAggregationData(Attribute $attribute): array
     {
         $retailerId = $this->getRetailerId();
         if (!$retailerId || !$this->settingsHelper->useStoreOffers()) {
@@ -80,7 +87,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
         ];
 
         $calculation = $this->getRangeCalculationValue();
-        if ($calculation === \Magento\Catalog\Model\Layer\Filter\DataProvider\Price::RANGE_CALCULATION_MANUAL) {
+        if ($calculation === FilterDataProviderPrice::RANGE_CALCULATION_MANUAL) {
             if ((int)$this->getRangeStepValue() > 0) {
                 $bucketConfig['interval'] = (int)$this->getRangeStepValue();
             }
@@ -94,7 +101,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
      *
      * @return int|null
      */
-    private function getRetailerId()
+    private function getRetailerId(): int|null
     {
         $retailerId = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
@@ -107,22 +114,22 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
     /**
      * @return mixed
      */
-    private function getRangeCalculationValue()
+    private function getRangeCalculationValue(): mixed
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_RANGE_CALCULATION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * @return mixed
      */
-    private function getRangeStepValue()
+    private function getRangeStepValue(): mixed
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_RANGE_STEP,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

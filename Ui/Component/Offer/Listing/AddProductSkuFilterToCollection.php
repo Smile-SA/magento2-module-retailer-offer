@@ -27,7 +27,7 @@ class AddProductSkuFilterToCollection implements AddFilterToCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function addFilter(Collection $collection, $field, $condition = null)
+    public function addFilter(Collection $collection, $field, $condition = null): void
     {
         $collection->setSkuFilter($condition);
     }

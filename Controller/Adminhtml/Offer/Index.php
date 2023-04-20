@@ -14,6 +14,7 @@
 
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Page;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
@@ -28,9 +29,9 @@ class Index extends AbstractOffer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Page
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Retailer Offers List'));
 

@@ -13,6 +13,9 @@
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\State;
+use Magento\Store\Model\ScopeInterface;
 use Smile\RetailerOffer\Model\Config\Source\Navigation;
 
 /**
@@ -37,19 +40,19 @@ class Settings extends AbstractHelper
     const NAVIGATION_SETTINGS_CONFIG_XML_PREFIX = 'navigation_settings';
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
-    private $state;
+    private State $state;
 
     /**
      * Settings constructor.
      *
-     * @param \Magento\Framework\App\Helper\Context $context Helper Context
-     * @param \Magento\Framework\App\State          $state   Application State
+     * @param Context $context Helper Context
+     * @param State   $state   Application State
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\State $state
+        Context $context,
+        State $state
     ) {
         $this->state = $state;
         parent::__construct($context);
@@ -60,7 +63,7 @@ class Settings extends AbstractHelper
      *
      * @return bool
      */
-    public function isDriveMode()
+    public function isDriveMode(): bool
     {
         return (bool) ($this->getCurrentMode() === Navigation::DRIVE_MODE);
     }
@@ -70,7 +73,7 @@ class Settings extends AbstractHelper
      *
      * @return bool
      */
-    public function isRetailerMode()
+    public function isRetailerMode(): bool
     {
         return (bool) ($this->getCurrentMode() === Navigation::RETAIL_MODE);
     }
@@ -78,9 +81,9 @@ class Settings extends AbstractHelper
     /**
      * Retrieve current navigation mode (drive or retail)
      *
-     * @return string
+     * @return int
      */
-    public function getCurrentMode()
+    public function getCurrentMode(): int
     {
         return (int) $this->getNavigationSettings('navigation_mode');
     }
@@ -90,7 +93,7 @@ class Settings extends AbstractHelper
      *
      * @return bool
      */
-    public function displayOtherOffers()
+    public function displayOtherOffers(): bool
     {
         return (bool) $this->scopeConfig->getValue('display_offers');
     }
@@ -100,7 +103,7 @@ class Settings extends AbstractHelper
      *
      * @return bool
      */
-    public function useStoreOffers()
+    public function useStoreOffers(): bool
     {
         return !($this->isAdmin() || !$this->isDriveMode());
     }
@@ -110,11 +113,11 @@ class Settings extends AbstractHelper
      *
      * @return bool
      */
-    public function isEnabledShowOutOfStock()
+    public function isEnabledShowOutOfStock(): bool
     {
         return $this->scopeConfig->isSetFlag(
             'cataloginventory/options/show_out_of_stock',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -125,7 +128,7 @@ class Settings extends AbstractHelper
      *
      * @return mixed
      */
-    protected function getNavigationSettings($path)
+    protected function getNavigationSettings(string $path): mixed
     {
         $configPath = implode('/', [self::BASE_CONFIG_XML_PREFIX, self::NAVIGATION_SETTINGS_CONFIG_XML_PREFIX, $path]);
 
@@ -139,7 +142,7 @@ class Settings extends AbstractHelper
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function isAdmin()
+    private function isAdmin(): bool
     {
         return $this->state->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
     }
