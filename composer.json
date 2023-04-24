@@ -14,9 +14,9 @@
         "magento/framework": ">=103.0.4",
         "magento/module-catalog": "*",
         "magento/magento-composer-installer": "*",
-        "smile/module-offer" : "~2.1.0",
-        "smile/module-retailer" : "~2.0.0",
-        "smile/module-store-locator" : "~2.0",
+        "smile/module-offer" : "dev-fix-compatibility-2-4-6",
+        "smile/module-retailer" : "dev-fix-compatibility-2-4-6",
+        "smile/module-store-locator" : "dev-fix-compatibility-2-4-6",
         "smile/elasticsuite" : "^2.11"
     },
     "require-dev": {
