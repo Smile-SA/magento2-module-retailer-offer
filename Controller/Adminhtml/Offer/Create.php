@@ -1,35 +1,18 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
- * Retailer Offer Creation Controller
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Retailer Offer Creation Controller.
  */
 class Create extends AbstractOffer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function execute(): Page|ResponseInterface|ResultInterface
+    public function execute()
     {
         $this->coreRegistry->register("current_offer", $this->offerFactory->create([]));
 

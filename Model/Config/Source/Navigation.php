@@ -1,46 +1,26 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Model\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- * Navigation
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Navigation source.
  */
 class Navigation implements ArrayInterface
 {
-    /**
-     * Constant value for "Retail" mode
-     */
-    const RETAIL_MODE = 0;
+    public const RETAIL_MODE = 0;
+    public const DRIVE_MODE = 1;
 
     /**
-     * Constant value for "Drive" mode
-     */
-    const DRIVE_MODE = 1;
-
-    /**
-     * Options getter
-     *
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {
-        return [['value' => 0, 'label' => __('Retail')], ['value' => 1, 'label' => __('Drive')]];
+        return [
+            ['value' => 0, 'label' => __('Retail')],
+            ['value' => 1, 'label' => __('Drive')],
+        ];
     }
 
     /**

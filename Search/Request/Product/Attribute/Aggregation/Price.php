@@ -1,15 +1,5 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation;
 
 use Magento\Catalog\Model\Layer\Filter\DataProvider\Price as FilterDataProviderPrice;
@@ -17,63 +7,31 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price as BasePrice;
 use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
 use Smile\RetailerOffer\Helper\Settings;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
- * Price aggregation
+ * Price aggregation.
  *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Fanny DECLERCK <fadec@smile.fr>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price
+class Price extends BasePrice
 {
-    /**
-     * @var Settings
-     */
-    private Settings $settingsHelper;
-
-    /**
-     * @var CurrentStore
-     */
-    private CurrentStore $currentStore;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private ScopeConfigInterface $scopeConfig;
-
-    /**
-     * @var Session
-     */
-    private Session $customerSession;
-
-    /**
-     * Price constructor.
-     *
-     * @param ScopeConfigInterface  $scopeConfig        Scope Config
-     * @param Session               $customerSession    Customer session, if any
-     */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
+        private ScopeConfigInterface $scopeConfig,
         Session $customerSession,
-        Settings $settingsHelper,
-        CurrentStore $currentStore
+        private Settings $settingsHelper,
+        private CurrentStore $currentStore
     ) {
         parent::__construct($scopeConfig, $customerSession);
-
-        $this->settingsHelper = $settingsHelper;
-        $this->currentStore   = $currentStore;
-        $this->scopeConfig     = $scopeConfig;
-        $this->customerSession = $customerSession;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getAggregationData(Attribute $attribute): array
+    public function getAggregationData(Attribute $attribute)
     {
         $retailerId = $this->getRetailerId();
         if (!$retailerId || !$this->settingsHelper->useStoreOffers()) {
@@ -88,8 +46,9 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
 
         $calculation = $this->getRangeCalculationValue();
         if ($calculation === FilterDataProviderPrice::RANGE_CALCULATION_MANUAL) {
-            if ((int)$this->getRangeStepValue() > 0) {
-                $bucketConfig['interval'] = (int)$this->getRangeStepValue();
+            $interval = $this->getRangeStepValue();
+            if ($interval > 0) {
+                $bucketConfig['interval'] = $interval;
             }
         }
 
@@ -98,10 +57,8 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
 
     /**
      * Retrieve current retailer Id.
-     *
-     * @return int|null
      */
-    private function getRetailerId(): int|null
+    private function getRetailerId(): ?int
     {
         $retailerId = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
@@ -112,24 +69,18 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
     }
 
     /**
-     * @return mixed
+     * Get range calculation value.
      */
-    private function getRangeCalculationValue(): mixed
+    private function getRangeCalculationValue(): string
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_RANGE_CALCULATION,
-            ScopeInterface::SCOPE_STORE
-        );
+        return (string) $this->scopeConfig->getValue(self::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE);
     }
 
     /**
-     * @return mixed
+     * Get range step value.
      */
-    private function getRangeStepValue(): mixed
+    private function getRangeStepValue(): int
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_RANGE_STEP,
-            ScopeInterface::SCOPE_STORE
-        );
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
     }
 }

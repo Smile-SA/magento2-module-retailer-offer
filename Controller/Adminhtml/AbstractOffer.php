@@ -1,16 +1,4 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Aurelien Foucret <aurelien.foucret@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
 namespace Smile\RetailerOffer\Controller\Adminhtml;
 
@@ -20,78 +8,27 @@ use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
-use Smile\Offer\Api\OfferRepositoryInterface as OfferRepository;
 use Smile\Offer\Api\Data\OfferInterfaceFactory as OfferFactory;
+use Smile\Offer\Api\OfferRepositoryInterface as OfferRepository;
 
 /**
  * Abstract Controller for retailer offer management.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Aurelien Foucret <aurelien.foucret@smile.fr>
  */
 abstract class AbstractOffer extends Action
 {
-    /**
-     * @var ?PageFactory
-     */
-    protected ?PageFactory $resultPageFactory = null;
-
-    /**
-     * @var ?ForwardFactory
-     */
-    protected ?ForwardFactory $resultForwardFactory = null;
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected Registry $coreRegistry;
-
-    /**
-     * @var OfferRepository
-     */
-    protected OfferRepository $offerRepository;
-
-    /**
-     * Retailer Factory
-     *
-     * @var OfferFactory
-     */
-    protected OfferFactory $offerFactory;
-
-    /**
-     * Abstract constructor.
-     *
-     * @param Context         $context              Application context
-     * @param PageFactory     $resultPageFactory    Result Page factory
-     * @param ForwardFactory  $resultForwardFactory Result forward factory
-     * @param Registry        $coreRegistry         Application registry
-     * @param OfferRepository $offerRepository      Offer Repository
-     * @param OfferFactory    $offerFactory         Offer Factory
-     */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory,
-        Registry $coreRegistry,
-        OfferRepository $offerRepository,
-        OfferFactory $offerFactory
+        protected PageFactory $resultPageFactory,
+        protected ForwardFactory $resultForwardFactory,
+        protected Registry $coreRegistry,
+        protected OfferRepository $offerRepository,
+        protected OfferFactory $offerFactory
     ) {
-        $this->resultPageFactory    = $resultPageFactory;
-        $this->resultForwardFactory = $resultForwardFactory;
-        $this->coreRegistry         = $coreRegistry;
-        $this->offerRepository      = $offerRepository;
-        $this->offerFactory         = $offerFactory;
-
         parent::__construct($context);
     }
 
     /**
-     * Create result page
-     *
-     * @return Page
+     * Create result page.
      */
     protected function createPage(): Page
     {
@@ -104,11 +41,7 @@ abstract class AbstractOffer extends Action
     }
 
     /**
-     * Check if allowed to manage offer
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     *
-     * @return bool
+     * @inheritdoc
      */
     protected function _isAllowed(): bool
     {

@@ -1,59 +1,26 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\Collection as RetailerCollection;
 
 /**
- * Source Model for Retailer Picker
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Source Model for Retailer Picker.
  */
 class Options implements OptionSourceInterface
 {
-    /**
-     * @var RetailerCollection
-     */
-    protected RetailerCollection $retailerCollection;
-
-    /**
-     * @var RequestInterface
-     */
-    protected RequestInterface $request;
-
-    /**
-     * @var ?array
-     */
     protected ?array $retailersList = null;
 
-    /**
-     * @param RetailerCollection    $retailerCollection        The Retailer Collection Factory
-     * @param RequestInterface      $request                   The application request
-     */
     public function __construct(
-        RetailerCollection $retailerCollection,
-        RequestInterface $request
+        protected RetailerCollection $retailerCollection,
+        protected RequestInterface $request
     ) {
-        $this->retailerCollection = $retailerCollection;
-        $this->request = $request;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {
@@ -61,9 +28,7 @@ class Options implements OptionSourceInterface
     }
 
     /**
-     * Retrieve retailer tree
-     *
-     * @return array
+     * Retrieve retailer tree.
      */
     protected function getRetailerList(): array
     {

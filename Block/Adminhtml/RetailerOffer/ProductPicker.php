@@ -1,66 +1,40 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 
+use Magento\Backend\Block\AbstractBlock;
 use Magento\Backend\Block\Context;
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Product Picker for Retailer Offer Creation form
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Product Picker for Retailer Offer Creation form.
  */
-class ProductPicker extends \Magento\Backend\Block\AbstractBlock
+class ProductPicker extends AbstractBlock
 {
-    /**
-     * @var FormFactory
-     */
-    private FormFactory $formFactory;
-
-    /**
-     * Constructor.
-     *
-     * @param Context     $context     Block context.
-     * @param FormFactory $formFactory Form factory.
-     * @param array       $data        Additional data.
-     */
     public function __construct(
         Context $context,
-        FormFactory $formFactory,
+        private FormFactory $formFactory,
         array $data = []
     ) {
-        $this->formFactory = $formFactory;
         parent::__construct($context, $data);
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited
-     *
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    protected function _toHtml(): string
+    protected function _toHtml()
     {
-        return $this->escapeJsQuote($this->getForm()->toHtml());
+        return $this->getForm()->toHtml();
     }
 
     /**
      * Create the form containing the product picker.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return Form
+     * @throws LocalizedException
      */
     private function getForm(): Form
     {
@@ -79,24 +53,24 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
 
         $data = [
             'name'  => 'product_id',
-            'label' => __("Product"),
+            'label' => __('Product'),
             'required' => true,
             'class' => 'widget-option',
-            'note' => __("The product you wish to create an offer for"),
+            'note' => __('The product you wish to create an offer for'),
         ];
 
         $productPickerField = $productPickerFieldset->addField('product_picker', 'label', $data);
         $pickerConfig = [
             'button' => ['open' => __("Select Product ...")],
-            'type' => 'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            'type' => Chooser::class,
         ];
 
         $helperBlock = $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            Chooser::class,
             '',
             ['data' => $pickerConfig]
         );
-        if ($helperBlock instanceof \Magento\Framework\DataObject) {
+        if ($helperBlock instanceof DataObject) {
             $helperBlock
                 ->setConfig($pickerConfig)
                 ->setFieldsetId($productPickerFieldset->getId())

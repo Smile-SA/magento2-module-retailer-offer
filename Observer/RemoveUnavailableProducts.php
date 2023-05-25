@@ -1,84 +1,34 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Helper\Offer as OfferHelper;
-use Smile\Offer\Api\OfferManagementInterface;
-use Smile\Retailer\CustomerData\RetailerData;
-use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Settings as SettingsHelper;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
- * Remove unavailable products (according to their current offer) from current quote
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Remove unavailable products (according to their current offer) from current quote.
  */
 class RemoveUnavailableProducts implements ObserverInterface
 {
-    /**
-     * @var OfferHelper
-     */
-    private OfferHelper $helper;
-
-    /**
-     * @var CurrentStore
-     */
-    private CurrentStore $currentStore;
-
-    /**
-     * @var ManagerInterface
-     */
-    private ManagerInterface $eventManager;
-
-    /**
-     * @var SettingsHelper
-     */
-    private SettingsHelper $settingsHelper;
-
-    /**
-     * RemoveUnavailableProducts constructor.
-     *
-     * @param ManagerInterface $eventManager   The Event Manager
-     * @param OfferHelper      $offerHelper    The offer Helper
-     * @param CurrentStore     $currentStore   The Retailer Data object
-     * @param SettingsHelper   $settingsHelper Settings Helper
-     */
     public function __construct(
-        ManagerInterface $eventManager,
-        OfferHelper $offerHelper,
-        CurrentStore $currentStore,
-        SettingsHelper $settingsHelper
+        private ManagerInterface $eventManager,
+        private OfferHelper $offerHelper,
+        private CurrentStore $currentStore,
+        private SettingsHelper $settingsHelper
     ) {
-        $this->eventManager   = $eventManager;
-        $this->helper         = $offerHelper;
-        $this->currentStore   = $currentStore;
-        $this->settingsHelper = $settingsHelper;
     }
 
     /**
-     * Remove unavailable products (according to their current offer) from current quote
-     *
-     * @param EventObserver $observer The observer
+     * @inheritdoc
      */
-    public function execute(EventObserver $observer): void
+    public function execute(Observer $observer)
     {
         if ($this->settingsHelper->isDriveMode()) {
             /** @var Collection $productCollection */
@@ -104,10 +54,6 @@ class RemoveUnavailableProducts implements ObserverInterface
 
     /**
      * Retrieve Current Offer for the product.
-     *
-     * @param ProductInterface $product The product
-     *
-     * @return OfferInterface
      */
     private function getCurrentOffer(ProductInterface $product): OfferInterface
     {
@@ -115,7 +61,7 @@ class RemoveUnavailableProducts implements ObserverInterface
         $retailerId = $this->getRetailerId();
 
         if ($retailerId) {
-            $offer = $this->helper->getOffer($product, $retailerId);
+            $offer = $this->offerHelper->getOffer($product, $retailerId);
         }
 
         return $offer;
@@ -123,15 +69,13 @@ class RemoveUnavailableProducts implements ObserverInterface
 
     /**
      * Return the current retailer id.
-     *
-     * @return int
      */
-    private function getRetailerId(): int
+    private function getRetailerId(): ?int
     {
         $retailerId = null;
 
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
-            $retailerId = $this->currentStore->getRetailer()->getId();
+            $retailerId = (int) $this->currentStore->getRetailer()->getId();
         }
 
         return $retailerId;

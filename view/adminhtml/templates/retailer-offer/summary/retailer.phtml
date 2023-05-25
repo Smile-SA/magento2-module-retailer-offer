@@ -1,30 +1,22 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- *
- * Summary panel for offer edition : Product.
- */
-?>
 
-<?php
-/** @var \Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary\Retailer $block */
+// Summary panel for offer edition (retailer)
+
+use Magento\Framework\Escaper;
+use Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary\Retailer;
+
+/** @var Retailer $block */
+/** @var Escaper $escaper */
 ?>
-<?php if ($block->getRetailer()) : ?>
+<?php if ($block->getRetailer()): ?>
     <div class="retailer-offer-summary-retailer">
-        <h3><span><?php echo __("Retailer :");?></span></h3>
+        <h3><span><?= $escaper->escapeHtml(__('Retailer :')) ?></span></h3>
         <div class="info">
-            <h3><span class="retailer-name"><?php echo $block->getRetailer()->getName();?></span></h3>
-            <p class="sku"><?php echo __("Code : %1", $block->getRetailer()->getSellerCode()); ?></p>
-            <p class="status"><?php echo __("Status : %1", $block->getRetailerStatusLabel()); ?></p>
+            <h3>
+                <span class="retailer-name"><?= $escaper->escapeHtml($block->getRetailer()->getName()) ?></span>
+            </h3>
+            <p class="sku"><?= $escaper->escapeHtml(__('Code : %1', $block->getRetailer()->getSellerCode())) ?></p>
+            <p class="status"><?= $escaper->escapeHtml(__('Status : %1', $block->getRetailerStatusLabel())) ?></p>
         </div>
     </div>
-<?php endif;?>
+<?php endif ?>

@@ -1,22 +1,10 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Block\Catalog\Product\Retailer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product as ProductModel;
-use Magento\Catalog\Helper\Product;
-use Magento\Customer\Model\Session;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
@@ -31,73 +19,23 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCol
 
 /**
  * Block rendering availability in store for a given product.
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class Availability extends Template implements IdentityInterface
 {
-    /**
-     * @var OfferManagement
-     */
-    protected OfferManagement $offerManagement;
-
-    /**
-     * @var RetailerCollectionFactory
-     */
-    protected RetailerCollectionFactory $retailerCollectionFactory;
-
-    /**
-     * @var AddressFormatter
-     */
-    protected AddressFormatter $addressFormatter;
-
-    /**
-     * @var MapInterface
-     */
     protected MapInterface $map;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected ProductRepositoryInterface $productRepository;
-
-    /**
-     * @var Registry
-     */
     protected Registry $coreRegistry;
-
-    /**
-     * @var ?array
-     */
     protected ?array $storeOffers = null;
 
-    /**
-     * Availability constructor.
-     *
-     * @param Context                    $context                   Application context
-     * @param ProductRepositoryInterface $productRepository         Product Repository
-     * @param OfferManagement            $offerManagement           Offer Management
-     * @param RetailerCollectionFactory  $retailerCollectionFactory Retailer Collection
-     * @param AddressFormatter           $addressFormatter          Address Formatter
-     * @param MapProviderInterface       $mapProvider               Map Provider
-     * @param array                      $data                      Block Data
-     */
     public function __construct(
         Context $context,
-        ProductRepositoryInterface $productRepository,
-        OfferManagement $offerManagement,
-        RetailerCollectionFactory $retailerCollectionFactory,
-        AddressFormatter $addressFormatter,
+        protected ProductRepositoryInterface $productRepository,
+        protected OfferManagement $offerManagement,
+        protected RetailerCollectionFactory $retailerCollectionFactory,
+        protected AddressFormatter $addressFormatter,
         MapProviderInterface $mapProvider,
         array $data = []
     ) {
-        $this->offerManagement = $offerManagement;
-        $this->retailerCollectionFactory = $retailerCollectionFactory;
-        $this->addressFormatter = $addressFormatter;
         $this->map = $mapProvider->getMap();
-        $this->productRepository = $productRepository;
         $this->coreRegistry = $context->getRegistry();
 
         parent::__construct(
@@ -107,17 +45,16 @@ class Availability extends Template implements IdentityInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function getJsLayout(): false|string
+    public function getJsLayout()
     {
         $jsLayout = $this->jsLayout;
 
         $jsLayout['components']['catalog-product-retailer-availability']['productId'] = $this->getProduct()->getId();
-
         $jsLayout['components']['catalog-product-retailer-availability']['storeOffers'] = $this->getStoreOffers();
-
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] = $this->map->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] =
+            $this->map->getIdentifier();
         $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
             $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
             $this->map->getConfig()
@@ -145,9 +82,7 @@ class Availability extends Template implements IdentityInterface
     }
 
     /**
-     * Retrieve current product model
-     *
-     * @return ProductModel
+     * Retrieve current product model.
      */
     protected function getProduct(): ProductModel
     {
@@ -160,8 +95,6 @@ class Availability extends Template implements IdentityInterface
 
     /**
      * Retrieve availability by store for the current product.
-     *
-     * @return array
      */
     protected function getStoreOffers(): array
     {
@@ -175,17 +108,18 @@ class Availability extends Template implements IdentityInterface
 
             /** @var \Smile\Retailer\Model\ResourceModel\Retailer\Collection $retailerCollection */
             $retailerCollection = $this->retailerCollectionFactory->create();
-            $retailerCollection->addAttributeToSelect('*')->addFieldToFilter('is_active', (int) true);
+            $retailerCollection->addAttributeToSelect('*')
+                ->addFieldToFilter('is_active', 1);
 
             /** @var RetailerInterface $retailer */
             foreach ($retailerCollection as $retailer) {
                 $address = $retailer->getExtensionAttributes()->getAddress();
                 $offer = [
-                    'sellerId'     => (int) $retailer->getId(),
-                    'name'         => $retailer->getName(),
-                    'address'      => $this->addressFormatter->formatAddress($address, AddressFormatter::FORMAT_ONELINE),
-                    'latitude'     => $address->getCoordinates()->getLatitude(),
-                    'longitude'    => $address->getCoordinates()->getLongitude(),
+                    'sellerId' => (int) $retailer->getId(),
+                    'name' => $retailer->getName(),
+                    'address' => $this->addressFormatter->formatAddress($address, AddressFormatter::FORMAT_ONELINE),
+                    'latitude' => $address->getCoordinates()->getLatitude(),
+                    'longitude' => $address->getCoordinates()->getLongitude(),
                     'setStoreData' => $this->getSetStorePostData($retailer),
                     'isAvailable'  => false,
                 ];
@@ -206,14 +140,10 @@ class Availability extends Template implements IdentityInterface
 
     /**
      * Get the JSON post data used to build the set store link.
-     *
-     * @param RetailerInterface $retailer The store
-     *
-     * @return array
      */
     protected function getSetStorePostData(RetailerInterface $retailer): array
     {
-        $setUrl   = $this->_urlBuilder->getUrl('storelocator/store/set');
+        $setUrl = $this->_urlBuilder->getUrl('storelocator/store/set');
         $postData = ['id' => $retailer->getId()];
 
         return ['action' => $setUrl, 'data' => $postData];

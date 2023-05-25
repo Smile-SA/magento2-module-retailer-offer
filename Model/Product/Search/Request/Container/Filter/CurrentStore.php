@@ -1,20 +1,11 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Maxime Leclercq <maxime.leclercq@smile.fr>
- * @copyright 2021 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter;
 
+use RuntimeException;
 use Smile\ElasticsuiteCore\Api\Search\Request\Container\FilterInterface;
-use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
+use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
 use Smile\RetailerOffer\Helper\Settings;
 use Smile\StoreLocator\CustomerData\CurrentStore as CustomerCurrentStore;
 
@@ -24,52 +15,18 @@ use Smile\StoreLocator\CustomerData\CurrentStore as CustomerCurrentStore;
  */
 class CurrentStore implements FilterInterface
 {
-    /**
-     * @var QueryFactory
-     */
-    private QueryFactory $queryFactory;
-
-    /**
-     * @var CustomerCurrentStore
-     */
-    private CustomerCurrentStore $currentStore;
-
-    /**
-     * @var FilterInterface[]
-     */
-    private array $retailerStockFilters;
-
-    /**
-     * @var Settings
-     */
-    private Settings $settingsHelper;
-
-    /**
-     * Search Blacklist filter constructor.
-     *
-     * @param QueryFactory $queryFactory Query Factory
-     * @param CustomerCurrentStore $currentStore Current Store
-     * @param Settings $settingsHelper Retailer offer settings helper
-     * @param FilterInterface[] $retailerStockFilters Retailer stock filters
-     */
     public function __construct(
-        QueryFactory $queryFactory,
-        CustomerCurrentStore $currentStore,
-        Settings $settingsHelper,
-        array $retailerStockFilters = []
+        private QueryFactory $queryFactory,
+        private CustomerCurrentStore $currentStore,
+        private Settings $settingsHelper,
+        private array $retailerStockFilters = []
     ) {
-        $this->queryFactory = $queryFactory;
-        $this->currentStore = $currentStore;
-        $this->settingsHelper = $settingsHelper;
-        $this->retailerStockFilters = $retailerStockFilters;
     }
 
     /**
      * Append offer filter if the drive mode is enabled.
-     *
-     * @return QueryInterface|null
      */
-    public function getFilterQuery(): QueryInterface|null
+    public function getFilterQuery(): ?QueryInterface
     {
         $retailer = $this->currentStore->getRetailer();
         if (!$this->settingsHelper->isDriveMode() || !$retailer) {
@@ -85,9 +42,9 @@ class CurrentStore implements FilterInterface
         // If out of stock products must be shown, just keep filter on product having an offer for current
         // retailer, wether the offer is available or not.
         if (false === $this->settingsHelper->isEnabledShowOutOfStock()) {
-            foreach($this->retailerStockFilters as $retailerStockFilter) {
+            foreach ($this->retailerStockFilters as $retailerStockFilter) {
                 if (!$retailerStockFilter instanceof FilterInterface) {
-                    throw new \RuntimeException('The stock filter is not an FilterInterface');
+                    throw new RuntimeException('The stock filter is not an FilterInterface');
                 }
                 $currentStockFilter = $retailerStockFilter->getFilterQuery();
                 if ($currentStockFilter !== null) {

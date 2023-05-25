@@ -1,15 +1,5 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Maxime Leclercq <maxime.leclercq@smile.fr>
- * @copyright 2021 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Plugin\Search;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -24,39 +14,14 @@ use Smile\StoreLocator\CustomerData\CurrentStore;
  */
 class RequestMapperPlugin
 {
-    /**
-     * @var CurrentStore
-     */
-    private CurrentStore $currentStore;
-
-    /**
-     * @var Settings
-     */
-    private Settings $settingsHelper;
-
-    /**
-     * RequestMapperPlugin constructor.
-     *
-     * @param CurrentStore  $currentStore   Current Store
-     * @param Settings      $settingsHelper Settings Helper
-     */
     public function __construct(
-        CurrentStore $currentStore,
-        Settings $settingsHelper
+        private CurrentStore $currentStore,
+        private Settings $settingsHelper
     ) {
-        $this->currentStore = $currentStore;
-        $this->settingsHelper = $settingsHelper;
     }
 
     /**
      * Replace the price order by a offer price order.
-     *
-     * @param RequestMapper                     $subject                    Current request mapper object
-     * @param array                             $result                     Current Sort order configuraiton
-     * @param ContainerConfigurationInterface   $containerConfiguration     Container configuration
-     * @param SearchCriteriaInterface           $searchCriteria             Search criteria
-     *
-     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -86,13 +51,6 @@ class RequestMapperPlugin
 
     /**
      * Post process catalog filters.
-     *
-     * @param RequestMapper                     $subject                    Request mapper.
-     * @param array                             $result                     Original filters.
-     * @param ContainerConfigurationInterface   $containerConfiguration     Container configuration.
-     * @param SearchCriteriaInterface           $searchCriteria             Search criteria.
-     *
-     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

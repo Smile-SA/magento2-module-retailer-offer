@@ -1,25 +1,17 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
-/**
- * Template to display store availability on product view.
- *
- * @var $block \Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability
- */
+// Template to display store availability on product view.
+
+use Magento\Framework\Escaper;
+use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
+
+/** @var Availability $block */
+/** @var Escaper $escaper */
 ?>
-<div id="catalog-product-retailer-availability" data-block="catalog-product-retailer-availability" class="block catalog-product-retailer-availability">
+<div id="catalog-product-retailer-availability"
+     data-block="catalog-product-retailer-availability"
+     class="block catalog-product-retailer-availability"
+>
     <div class="block catalog-product-stores-availability-content"
          data-role="dropdownDialog"
          data-bind="scope: 'catalog-product-retailer-availability'"
@@ -38,11 +30,14 @@
 
                 <form class="form" data-bind="submit: onSearch">
                     <div class="field">
-                        <input type="text" name="text" data-bind="value: fulltextSearch, attr: {placeholder: searchPlaceholderText}" />
+                        <input type="text" name="text"
+                               data-bind="value: fulltextSearch, attr: {placeholder: searchPlaceholderText}"/>
                     </div>
                     <div class="actions-toolbar">
                         <div class="primary">
-                            <button type="submit" class="action primary"><span data-bind="text: searchButtonText"></span></button>
+                            <button type="submit" class="action primary">
+                                <span data-bind="text: searchButtonText"></span>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -56,11 +51,12 @@
     </div>
     <div class="catalog-product-retailer-availability-content">
         <div class="title">
-            <span><?php echo __("Store availability : ") ;?></span>
+            <span><?= $escaper->escapeHtml(__('Store availability : ')) ?></span>
         </div>
         <div class="content-wrapper" data-bind="scope: 'catalog-product-retailer-availability'">
             <div data-bind="visible: hasStore()" class="current-store">
-                <p class="availability" data-bind="css: { inStock: getIsInStock() == true, outOfStock: getIsInStock() == false }">
+                <p class="availability"
+                   data-bind="css: { inStock: getIsInStock() == true, outOfStock: getIsInStock() == false }">
                     <span data-bind="text: getStoreName() + ':' " class="store-name-value"></span>
                     <span data-bind="html: getStockLabel()" class="stock-label"></span>
                 </p>
@@ -73,5 +69,5 @@
 </div>
 
 <script type="text/x-magento-init">
-    { "*" : { "Magento_Ui/js/core/app": <?php echo  /* @noEscape */ $block->getJsLayout(); ?> } }
+    { "*" : { "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?> } }
 </script>

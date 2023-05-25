@@ -1,15 +1,5 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -20,54 +10,25 @@ use Smile\Offer\Api\OfferManagementInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
- * Generic Helper for Retailer Offer
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Generic Helper for Retailer Offer.
  */
 class Offer extends AbstractHelper
 {
-    /**
-     * @var OfferManagementInterface
-     */
-    private OfferManagementInterface $offerManagement;
-
-    /**
-     * @var CurrentStore
-     */
-    private CurrentStore $currentStore;
-
     /**
      * @var OfferInterface[]
      */
     private array $offersCache = [];
 
-    /**
-     * ProductPlugin constructor.
-     *
-     * @param Context                   $context         Helper context.
-     * @param OfferManagementInterface  $offerManagement The offer Management
-     * @param CurrentStore              $currentStore    Current Store Provider
-     */
     public function __construct(
         Context $context,
-        OfferManagementInterface $offerManagement,
-        CurrentStore $currentStore
+        private OfferManagementInterface $offerManagement,
+        private CurrentStore $currentStore
     ) {
-        $this->offerManagement = $offerManagement;
-        $this->currentStore    = $currentStore;
-
         parent::__construct($context);
     }
 
     /**
      * Retrieve Offer for the product by retailer id.
-     *
-     * @param ProductInterface $product    The product
-     * @param int              $retailerId The retailer Id
-     *
-     * @return OfferInterface
      */
     public function getOffer(ProductInterface $product, int $retailerId): OfferInterface
     {
@@ -89,10 +50,6 @@ class Offer extends AbstractHelper
 
     /**
      * Retrieve Current Offer for the product.
-     *
-     * @param ProductInterface $product The product
-     *
-     * @return ?OfferInterface
      */
     public function getCurrentOffer(ProductInterface $product): ?OfferInterface
     {

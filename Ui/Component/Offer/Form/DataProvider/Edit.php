@@ -1,15 +1,4 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider;
 
@@ -21,71 +10,31 @@ use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Offer\Api\OfferRepositoryInterface;
 
 /**
- * Data Provider for Retailer Offer Edit Form
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Data Provider for Retailer Offer Edit Form.
  */
 class Edit extends AbstractDataProvider
 {
-    /**
-     * @var array
-     */
     private array $loadedData;
 
-    /**
-     * @var Registry
-     */
-    private Registry $registry;
-
-    /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
-     * @var OfferRepositoryInterface
-     */
-    private OfferRepositoryInterface $offerRepository;
-
-    /**
-     * DataProvider constructor.
-     *
-     * @param string                   $name              The name
-     * @param string                   $primaryFieldName  Primary field Name
-     * @param string                   $requestFieldName  Request field Name
-     * @param mixed                    $collectionFactory The collection factory
-     * @param Registry                 $registry          The Registry
-     * @param RequestInterface         $request           The Request
-     * @param OfferRepositoryInterface $offerRepository   The Offer Repository
-     * @param array                    $meta              Component Meta
-     * @param array                    $data              Component Data
-     */
     public function __construct(
         string $name,
         string $primaryFieldName,
         string $requestFieldName,
         mixed $collectionFactory,
-        Registry $registry,
-        RequestInterface $request,
-        OfferRepositoryInterface $offerRepository,
+        private Registry $registry,
+        private RequestInterface $request,
+        private OfferRepositoryInterface $offerRepository,
         array $meta = [],
         array $data = []
     ) {
         $this->collection = $collectionFactory->create();
-        $this->registry = $registry;
-        $this->offerRepository = $offerRepository;
-        $this->request = $request;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
-     * Retrieve Current data
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function getData(): array
+    public function getData()
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -106,7 +55,6 @@ class Edit extends AbstractDataProvider
     /**
      * Get current offer
      *
-     * @return OfferInterface
      * @throws NoSuchEntityException
      */
     private function getCurrentOffer(): OfferInterface
