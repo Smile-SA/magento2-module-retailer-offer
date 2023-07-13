@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
 use Exception;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
  * Delete Controller for Offer.
  */
-class Delete extends AbstractOffer
+class Delete extends AbstractOffer implements HttpGetActionInterface
 {
     /**
      * @inheritdoc
@@ -22,7 +25,7 @@ class Delete extends AbstractOffer
         $identifier = $this->getRequest()->getParam('offer_id', false);
         $model = $this->offerFactory->create();
         if ($identifier) {
-            $model = $this->offerRepository->getById($identifier);
+            $model = $this->offerRepository->getById((int) $identifier);
             if (!$model->getId()) {
                 $this->messageManager->addErrorMessage(__('This offer no longer exists.'));
 

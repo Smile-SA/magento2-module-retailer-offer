@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
 
 use Closure;
@@ -67,8 +69,8 @@ class QuoteItemPlugin
     /**
      * Return quote item price (include or exclude tax).
      */
-    private function getQuoteItemPrice(Item $item): ?float
+    private function getQuoteItemPrice(Item $item): float
     {
-        return !$this->taxConfig->priceIncludesTax() ? $item->getPrice() : $item->getPriceInclTax();
+        return (float) (!$this->taxConfig->priceIncludesTax() ? $item->getPrice() : $item->getPriceInclTax());
     }
 }

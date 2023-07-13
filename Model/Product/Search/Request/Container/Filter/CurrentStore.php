@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter;
 
 use RuntimeException;

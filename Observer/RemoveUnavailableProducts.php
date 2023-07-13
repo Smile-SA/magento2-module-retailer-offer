@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -55,7 +57,7 @@ class RemoveUnavailableProducts implements ObserverInterface
     /**
      * Retrieve Current Offer for the product.
      */
-    private function getCurrentOffer(ProductInterface $product): OfferInterface
+    private function getCurrentOffer(ProductInterface $product): ?OfferInterface
     {
         $offer = null;
         $retailerId = $this->getRetailerId();

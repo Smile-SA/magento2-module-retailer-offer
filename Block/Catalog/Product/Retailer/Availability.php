@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Catalog\Product\Retailer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product as ProductModel;
@@ -14,11 +17,14 @@ use Smile\Map\Model\AddressFormatter;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\Offer\Model\Offer;
 use Smile\Offer\Model\OfferManagement;
+use Smile\Retailer\Api\Data\RetailerExtensionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
 
 /**
  * Block rendering availability in store for a given product.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Availability extends Template implements IdentityInterface
 {
@@ -84,7 +90,7 @@ class Availability extends Template implements IdentityInterface
     /**
      * Retrieve current product model.
      */
-    protected function getProduct(): ProductModel
+    protected function getProduct(): ProductInterface|ProductModel|null
     {
         if (!$this->coreRegistry->registry('product') && $this->getProductId()) {
             return $this->productRepository->getById($this->getProductId());
@@ -102,7 +108,8 @@ class Availability extends Template implements IdentityInterface
             $storeOffers = [];
 
             $offerByRetailer = [];
-            foreach ($this->offerManagement->getProductOffers($this->getProduct()->getId()) as $offer) {
+            $produdtId = (int) $this->getProduct()->getId();
+            foreach ($this->offerManagement->getProductOffers($produdtId) as $offer) {
                 $offerByRetailer[(int) $offer->getSellerId()] = $offer;
             }
 
@@ -113,7 +120,9 @@ class Availability extends Template implements IdentityInterface
 
             /** @var RetailerInterface $retailer */
             foreach ($retailerCollection as $retailer) {
-                $address = $retailer->getExtensionAttributes()->getAddress();
+                /** @var RetailerExtensionInterface $retailerExtensionInterface */
+                $retailerExtensionInterface = $retailer->getExtensionAttributes();
+                $address = $retailerExtensionInterface->getAddress();
                 $offer = [
                     'sellerId' => (int) $retailer->getId(),
                     'name' => $retailer->getName(),

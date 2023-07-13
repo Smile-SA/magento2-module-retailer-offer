@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -50,7 +52,7 @@ class CollectionProcessor implements CollectionProcessorInterface
     {
         $retailerId = null;
         if ($this->getRetailer()) {
-            $retailerId = $this->getRetailer()->getId();
+            $retailerId = (int) $this->getRetailer()->getId();
         }
 
         return $retailerId;
@@ -63,6 +65,7 @@ class CollectionProcessor implements CollectionProcessorInterface
     {
         $retailer = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
+            /** @var RetailerInterface $retailer */
             $retailer = $this->currentStore->getRetailer();
         }
 

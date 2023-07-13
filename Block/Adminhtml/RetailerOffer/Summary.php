@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 
 use Magento\Backend\Block\Template;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -33,12 +35,12 @@ class Offer extends AbstractHelper
     public function getOffer(ProductInterface $product, int $retailerId): OfferInterface
     {
         $offer = null;
-
-        if ($product->getId() && $retailerId) {
-            $cacheKey = implode('_', [$product->getId(), $retailerId]);
+        $productId = (int) $product->getId();
+        if ($productId && $retailerId) {
+            $cacheKey = implode('_', [$productId, $retailerId]);
 
             if (false === isset($this->offersCache[$cacheKey])) {
-                $offer                        = $this->offerManagement->getOffer($product->getId(), $retailerId);
+                $offer                        = $this->offerManagement->getOffer($productId, $retailerId);
                 $this->offersCache[$cacheKey] = $offer;
             }
 
@@ -55,8 +57,11 @@ class Offer extends AbstractHelper
     {
         $offer = null;
 
-        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
-            $offer = $this->getOffer($product, $this->currentStore->getRetailer()->getId());
+        if ($this->currentStore->getRetailer()) {
+            $retailerId = (int) $this->currentStore->getRetailer()->getId();
+            if ($retailerId) {
+                $offer = $this->getOffer($product, $retailerId);
+            }
         }
 
         return $offer;

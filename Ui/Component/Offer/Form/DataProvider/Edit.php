@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider;
 
 use Magento\Framework\App\RequestInterface;
@@ -45,7 +47,7 @@ class Edit extends AbstractDataProvider
         if ($offer) {
             $offerData = $offer->getData();
             if (!empty($offerData)) {
-                $this->loadedData[$offer->getId()] = $offerData;
+                $this->loadedData[$offer->getOfferId()] = $offerData;
             }
         }
 
@@ -57,7 +59,7 @@ class Edit extends AbstractDataProvider
      *
      * @throws NoSuchEntityException
      */
-    private function getCurrentOffer(): OfferInterface
+    private function getCurrentOffer(): ?OfferInterface
     {
         $offer = $this->registry->registry('current_offer');
 

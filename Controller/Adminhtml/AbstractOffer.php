@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;

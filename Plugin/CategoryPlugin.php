@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
 
 use Closure;
@@ -7,6 +9,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Smile\ElasticsuiteCatalog\Model\Category\Filter\Provider as FilterProvider;
+use Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
@@ -30,6 +33,7 @@ class CategoryPlugin
             return $proceed();
         }
 
+        /** @var Collection $collection */
         $collection = $this->collectionProvider->getCollection($category);
         $collection->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
         $query = $this->filterProvider->getQueryFilter($category);

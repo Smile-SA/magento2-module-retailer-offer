@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer;
@@ -15,6 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Store\Model\StoreManagerInterface;
 use Smile\ElasticsuiteCatalog\Model\Layer\Filter\DecimalFilterTrait;
+use Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection;
 use Smile\ElasticsuiteCatalog\Model\Search\Request\Field\Mapper;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
@@ -144,6 +147,8 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
             ['path' => 'offer', 'query' => $boolFilter]
         );
 
-        $this->getLayer()->getProductCollection()->addQueryFilter($nestedFilter);
+        /** @var Collection $collection */
+        $collection = $this->getLayer()->getProductCollection();
+        $collection->addQueryFilter($nestedFilter);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider;
 
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -26,6 +28,6 @@ class Create extends AbstractDataProvider
      */
     public function getData()
     {
-        return null;
+        return [];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 
 use Magento\Backend\Block\AbstractBlock;
@@ -65,16 +67,16 @@ class ProductPicker extends AbstractBlock
             'type' => Chooser::class,
         ];
 
+        /** @var Chooser $helperBlock */
         $helperBlock = $this->getLayout()->createBlock(
             Chooser::class,
             '',
             ['data' => $pickerConfig]
         );
         if ($helperBlock instanceof DataObject) {
-            $helperBlock
-                ->setConfig($pickerConfig)
-                ->setFieldsetId($productPickerFieldset->getId())
-                ->prepareElementHtml($productPickerField);
+            $helperBlock->setConfig($pickerConfig);
+            $helperBlock->setFieldsetId($productPickerFieldset->getId());
+            $helperBlock->prepareElementHtml($productPickerField);
         }
 
         return $form;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
 use Magento\Framework\Data\Collection;

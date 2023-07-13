@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
 
 use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Smile\ElasticsuiteCatalog\Model\ResourceModel\Product\Fulltext\Collection as ProductFulltextCollection;
 use Smile\RetailerOffer\Api\CollectionProcessorInterface;
 
 /**
@@ -18,7 +20,7 @@ class LayerPlugin
     /**
      * Add offer filtering.
      */
-    public function beforePrepareProductCollection(Layer $layer, AbstractCollection $collection): void
+    public function beforePrepareProductCollection(Layer $layer, ProductFulltextCollection $collection): void
     {
         $this->collectionProcessor->applyStoreSortOrders($collection);
     }

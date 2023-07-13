@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Backend\App\Area\FrontNameResolver;

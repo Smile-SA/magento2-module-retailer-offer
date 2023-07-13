@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin\Search;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;

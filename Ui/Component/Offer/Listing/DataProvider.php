@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
 use Magento\Framework\Api\Filter;
@@ -31,7 +33,7 @@ class DataProvider extends AbstractDataProvider
     /**
      * @inheritdoc
      */
-    public function addField($field, $alias = null)
+    public function addField($field, $alias = null): void
     {
         if (isset($this->addFieldStrategies[$field])) {
             $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias);
@@ -45,7 +47,7 @@ class DataProvider extends AbstractDataProvider
     /**
      * @inheritdoc
      */
-    public function addFilter(Filter $filter)
+    public function addFilter(Filter $filter): mixed
     {
         if (isset($this->addFilterStrategies[$filter->getField()])) {
             $this->addFilterStrategies[$filter->getField()]

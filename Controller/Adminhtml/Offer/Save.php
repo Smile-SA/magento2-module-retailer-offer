@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
 use Exception;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Smile\Offer\Model\Offer;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
  * Retailer Offer Adminhtml Save controller.
  */
-class Save extends AbstractOffer
+class Save extends AbstractOffer implements HttpPostActionInterface
 {
     /**
      * @inheritdoc
@@ -20,11 +25,14 @@ class Save extends AbstractOffer
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data = $this->getRequest()->getPostValue();
-        $redirectBack = $this->getRequest()->getParam('back', false);
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $data = $request->getPostValue();
+        $redirectBack = $request->getParam('back', false);
 
         if ($data) {
-            $identifier = $this->getRequest()->getParam('offer_id');
+            $identifier = $request->getParam('offer_id');
+            /** @var Offer $model */
             $model = $this->offerFactory->create();
 
             if ($identifier) {
@@ -54,7 +62,7 @@ class Save extends AbstractOffer
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(Session::class)->setFormData($data);
-                $returnParams = ['offer_id' => $this->getRequest()->getParam('offer_id')];
+                $returnParams = ['offer_id' => $request->getParam('offer_id')];
 
                 return $resultRedirect->setPath('*/*/edit', $returnParams);
             }

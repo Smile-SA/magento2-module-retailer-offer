@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation;
 
 use Magento\Catalog\Model\Layer\Filter\DataProvider\Price as FilterDataProviderPrice;

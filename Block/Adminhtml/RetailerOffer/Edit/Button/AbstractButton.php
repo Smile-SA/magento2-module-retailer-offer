@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Edit\Button;
 
 use Magento\Framework\Registry;
@@ -29,7 +31,7 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * Get current offer.
      */
-    public function getRetailerOffer(): OfferInterface
+    public function getRetailerOffer(): ?OfferInterface
     {
         return $this->registry->registry('current_offer');
     }

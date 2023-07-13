@@ -1,7 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
@@ -9,10 +19,12 @@ use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 /**
  * Retailer Offer Adminhtml Edit controller.
  */
-class Edit extends AbstractOffer
+class Edit extends AbstractOffer implements HttpGetActionInterface
 {
     /**
      * @inheritdoc
+     * @return Page|ResponseInterface|Redirect|ResultInterface|void
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -40,6 +52,10 @@ class Edit extends AbstractOffer
             }
         }
 
-        $this->_forward('create');
+        /** @var Forward $redirect */
+        $redirect = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+        $redirect->forward('create');
+
+        return $redirect;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
 
 use Closure;
@@ -31,8 +33,8 @@ class PriceBoxPlugin
 
         if ($salableItem instanceof ProductInterface) {
             $offer = $this->offerHelper->getCurrentOffer($salableItem);
-            if ($offer && ($offer->getId())) {
-                $cacheKey = implode('-', [$cacheKey, $offer->getId()]);
+            if ($offer && ($offer->getOfferId())) {
+                $cacheKey = implode('-', [$cacheKey, $offer->getOfferId()]);
             }
         }
 

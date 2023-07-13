@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as StatusSource;
 use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
@@ -35,7 +38,7 @@ class Product extends Summary
     /**
      * Get current Product : product of the current offer.
      */
-    public function getProduct(): ProductInterface
+    public function getProduct(): ?ProductInterface
     {
         $product = null;
         $offer = $this->getRetailerOffer();
@@ -53,9 +56,11 @@ class Product extends Summary
     public function getProductImage(): ?string
     {
         $image = null;
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $image = (string) $this->productHelper->getSmallImageUrl($this->getProduct());
+        if ($product) {
+            $image = (string) $this->productHelper->getSmallImageUrl($product);
         }
 
         return $image;
@@ -67,9 +72,11 @@ class Product extends Summary
     public function getProductPrice(): ?string
     {
         $price = null;
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $price = (string) $this->priceHelper->currency($this->getProduct()->getPrice());
+        if ($product) {
+            $price = (string) $this->priceHelper->currency($product->getPrice());
         }
 
         return $price;
@@ -81,9 +88,11 @@ class Product extends Summary
     public function getProductSpecialPrice(): ?string
     {
         $price = null;
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $price = (string) $this->priceHelper->currency($this->getProduct()->getSpecialPrice());
+        if ($product) {
+            $price = (string) $this->priceHelper->currency($product->getSpecialPrice());
         }
 
         return $price;
@@ -95,8 +104,10 @@ class Product extends Summary
     public function getProductStockLabel(): ?Phrase
     {
         $label = __('In stock');
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
 
-        if (!$this->getProduct()->isAvailable()) {
+        if (!$product->isAvailable()) {
             $label = __('Out of stock');
         }
 
@@ -106,9 +117,9 @@ class Product extends Summary
     /**
      * Retrieve Product Status Label.
      */
-    public function getProductStatusLabel(): string
+    public function getProductStatusLabel(): Phrase|string
     {
-        return $this->statusSource->getOptionText((int) $this->getProduct()->getStatus());
+        return $this->statusSource->getOptionText((string) $this->getProduct()->getStatus());
     }
 
     /**
