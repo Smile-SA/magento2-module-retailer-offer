@@ -7,6 +7,7 @@ namespace Smile\RetailerOffer\Plugin;
 use Closure;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Model\Config;
 use Smile\RetailerOffer\Helper\Offer;
@@ -52,8 +53,11 @@ class QuoteItemPlugin
 
             if ($offerPrice && $resultItemPrice && ((float) $resultItemPrice !== (float) $offerPrice)) {
                 $resultItem->setPrice($offerPrice);
-                if ($resultItem->getQuote()) {
-                    $resultItem->getQuote()->setTotalsCollectedFlag(false)->collectTotals()->save();
+                /** @var ?Quote $quote */
+                $quote = $resultItem->getQuote();
+                if ($quote) {
+                    $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+                    $resultItem->setQuote($quote);
                 }
 
                 $this->eventManager->dispatch(

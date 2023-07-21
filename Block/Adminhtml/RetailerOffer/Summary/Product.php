@@ -56,7 +56,7 @@ class Product extends Summary
     public function getProductImage(): ?string
     {
         $image = null;
-        /** @var ProductModel $product */
+        /** @var ?ProductModel $product */
         $product = $this->getProduct();
 
         if ($product) {
@@ -72,7 +72,7 @@ class Product extends Summary
     public function getProductPrice(): ?string
     {
         $price = null;
-        /** @var ProductModel $product */
+        /** @var ?ProductModel $product */
         $product = $this->getProduct();
 
         if ($product) {
@@ -88,7 +88,7 @@ class Product extends Summary
     public function getProductSpecialPrice(): ?string
     {
         $price = null;
-        /** @var ProductModel $product */
+        /** @var ?ProductModel $product */
         $product = $this->getProduct();
 
         if ($product) {
