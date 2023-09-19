@@ -22,7 +22,7 @@ use Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary\Product;
             </h3>
             <p class="sku"><?= $escaper->escapeHtml(__('SKU : %1', $block->getProduct()->getSku())) ?></p>
             <?php if ($block->getProduct()->getSpecialPrice()): ?>
-                <p class="price regular-price"><del><?= /* @noEscape */ $block->getProductPrice() ?><del></p>
+                <p class="price regular-price"><del><?= /* @noEscape */ $block->getProductPrice() ?></del></p>
                 <p class="price special-price"><?= /* @noEscape */ $block->getProductSpecialPrice() ?></p>
             <?php else: ?>
                 <p class="price"><?= /* @noEscape */ $block->getProductPrice() ?></p>
