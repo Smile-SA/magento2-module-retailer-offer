@@ -1,34 +1,24 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Listing;
 
-use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 use Magento\Framework\Data\Collection;
+use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Smile\Offer\Model\ResourceModel\Offer\Grid\Collection as OfferGridCollection;
 
 /**
- * Add field strategy for Product SKU Field
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Add field strategy for Product SKU Field.
  */
 class AddProductSkuFieldToCollection implements AddFieldToCollectionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addField(Collection $collection, $field, $alias = null)
     {
+        /** @var OfferGridCollection $collection */
         $collection->addProductSkuToSelect();
     }
 }

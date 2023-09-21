@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/**
- * Retailer Offer edition UI Component
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain RUAUD <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Apache License Version 2.0
- */
--->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
@@ -39,7 +23,7 @@
     </argument>
     <dataSource name="smile_retailer_offer_edit_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider</argument>
+            <argument name="class" xsi:type="string">Smile\RetailerOffer\Ui\Component\Offer\Form\DataProvider\Edit</argument>
             <argument name="name" xsi:type="string">smile_retailer_offer_edit_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">main_table.offer_id</argument>
             <argument name="requestFieldName" xsi:type="string">offer_id</argument>
@@ -56,25 +40,6 @@
             </item>
         </argument>
     </dataSource>
-
-    <fieldset name="summary">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Offer Summary</item>
-                <item name="collapsible" xsi:type="boolean">true</item>
-            </item>
-        </argument>
-        <container name="offer_summary">
-            <htmlContent name="offer_summary_container">
-                <argument name="block" xsi:type="object">Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary</argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="sortOrder" xsi:type="number">10</item>
-                    </item>
-                </argument>
-            </htmlContent>
-        </container>
-    </fieldset>
 
     <fieldset name="conditions">
         <argument name="data" xsi:type="array">

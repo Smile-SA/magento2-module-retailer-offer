@@ -1,84 +1,48 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Ui\Component\Offer\Form\Retailer;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\App\RequestInterface;
-use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
+use Magento\Framework\Data\OptionSourceInterface;
+use Smile\Retailer\Model\ResourceModel\Retailer\Collection as RetailerCollection;
 
 /**
- * Source Model for Retailer Picker
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Source Model for Retailer Picker.
  */
 class Options implements OptionSourceInterface
 {
-    /**
-     * @var \Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory
-     */
-    protected $retailerCollectionFactory;
+    protected ?array $retailersList = null;
 
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var array
-     */
-    protected $retailersList;
-
-    /**
-     * @param CollectionFactory $retailerCollectionFactory The Retailer Collection Factory
-     * @param RequestInterface  $request                   The application request
-     */
     public function __construct(
-        CollectionFactory $retailerCollectionFactory,
-        RequestInterface $request
+        protected RetailerCollection $retailerCollection,
+        protected RequestInterface $request
     ) {
-        $this->retailerCollectionFactory = $retailerCollectionFactory;
-        $this->request = $request;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return $this->getRetailerList();
     }
 
     /**
-     * Retrieve retailer tree
-     *
-     * @return array
+     * Retrieve retailer tree.
      */
-    protected function getRetailerList()
+    protected function getRetailerList(): array
     {
         if ($this->retailersList === null) {
             $this->retailersList = [];
             $storeId = $this->request->getParam('store');
 
-            /* @var $collection \Smile\Seller\Model\ResourceModel\Seller\Collection */
-            $collection = $this->retailerCollectionFactory->create();
-
-            $collection
+            $this->retailerCollection
                 ->addAttributeToSelect(['name', 'is_active'])
                 ->setStoreId($storeId);
 
-            foreach ($collection as $retailer) {
+            foreach ($this->retailerCollection as $retailer) {
                 $this->retailersList[$retailer->getId()] = [
                     'value'     => $retailer->getId(),
                     'is_active' => $retailer->getIsActive(),

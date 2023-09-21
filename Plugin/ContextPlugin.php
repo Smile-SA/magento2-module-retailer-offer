@@ -1,73 +1,38 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
 
+use Closure;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\RequestInterface;
+use Smile\RetailerOffer\Helper\Settings;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Plugin to ensure the context properly vary according to currently selected (or not) retailer.
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class ContextPlugin
 {
-    /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
-     */
-    private $currentStore;
-
-    /**
-     * @var \Magento\Framework\App\Http\Context
-     */
-    private $httpContext;
-
-    /**
-     * @var \Smile\RetailerOffer\Helper\Settings
-     */
-    private $settingsHelper;
-
-    /**
-     * @param \Magento\Framework\App\Http\Context           $httpContext    HTTP Context
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Current Store
-     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper RetailerOffer Settings Helper
-     */
     public function __construct(
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper
+        private Context $httpContext,
+        private CurrentStore $currentStore,
+        private Settings $settingsHelper
     ) {
-        $this->currentStore   = $currentStore;
-        $this->httpContext    = $httpContext;
-        $this->settingsHelper = $settingsHelper;
     }
 
     /**
-     * Ensure proper vary on frontend according to current Retailer Id (if any)
+     * Ensure proper vary on frontend according to current Retailer Id (if any).
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @param \Magento\Framework\App\ActionInterface  $subject The Action
-     * @param \Closure                                $proceed The \Magento\Framework\App\Action\Action::dispatch() method
-     * @param \Magento\Framework\App\RequestInterface $request HTTP Request
-     *
-     * @return mixed
      */
     public function aroundDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+        ActionInterface $subject,
+        Closure $proceed,
+        RequestInterface $request
+    ): mixed {
 
         if ($this->settingsHelper->isDriveMode()) {
             // Set a default value to have common vary for all customers without any chosen retailer.

@@ -1,80 +1,46 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Smile\Offer\Api\Data\OfferInterface;
+use Smile\Offer\Api\OfferManagementInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
- * Generic Helper for Retailer Offer
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Generic Helper for Retailer Offer.
  */
-class Offer extends \Magento\Framework\App\Helper\AbstractHelper
+class Offer extends AbstractHelper
 {
-    /**
-     * @var \Smile\Offer\Api\OfferManagementInterface
-     */
-    private $offerManagement;
-
-    /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
-     */
-    private $currentStore;
-
     /**
      * @var OfferInterface[]
      */
-    private $offersCache = [];
+    private array $offersCache = [];
 
-    /**
-     * ProductPlugin constructor.
-     *
-     * @param \Magento\Framework\App\Helper\Context         $context         Helper context.
-     * @param \Smile\Offer\Api\OfferManagementInterface     $offerManagement The offer Management
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore    Current Store Provider
-     */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Smile\Offer\Api\OfferManagementInterface $offerManagement,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore
+        Context $context,
+        private OfferManagementInterface $offerManagement,
+        private CurrentStore $currentStore
     ) {
-        $this->offerManagement = $offerManagement;
-        $this->currentStore    = $currentStore;
-
         parent::__construct($context);
     }
 
     /**
      * Retrieve Offer for the product by retailer id.
-     *
-     * @param ProductInterface $product    The product
-     * @param integer          $retailerId The retailer Id
-     *
-     * @return \Smile\Offer\Api\Data\OfferInterface
      */
-    public function getOffer($product, $retailerId)
+    public function getOffer(ProductInterface $product, int $retailerId): OfferInterface
     {
         $offer = null;
-
-        if ($product->getId() && $retailerId) {
-            $cacheKey = implode('_', [$product->getId(), $retailerId]);
+        $productId = (int) $product->getId();
+        if ($productId && $retailerId) {
+            $cacheKey = implode('_', [$productId, $retailerId]);
 
             if (false === isset($this->offersCache[$cacheKey])) {
-                $offer                        = $this->offerManagement->getOffer($product->getId(), $retailerId);
+                $offer                        = $this->offerManagement->getOffer($productId, $retailerId);
                 $this->offersCache[$cacheKey] = $offer;
             }
 
@@ -86,17 +52,16 @@ class Offer extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Retrieve Current Offer for the product.
-     *
-     * @param ProductInterface $product The product
-     *
-     * @return \Smile\Offer\Api\Data\OfferInterface
      */
-    public function getCurrentOffer($product)
+    public function getCurrentOffer(ProductInterface $product): ?OfferInterface
     {
         $offer = null;
 
-        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
-            $offer = $this->getOffer($product, $this->currentStore->getRetailer()->getId());
+        if ($this->currentStore->getRetailer()) {
+            $retailerId = (int) $this->currentStore->getRetailer()->getId();
+            if ($retailerId) {
+                $offer = $this->getOffer($product, $retailerId);
+            }
         }
 
         return $offer;

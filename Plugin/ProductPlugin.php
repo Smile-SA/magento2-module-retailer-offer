@@ -1,74 +1,35 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\ElasticsuiteCatalog
- * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Plugin;
+
+use Closure;
+use Magento\Catalog\Model\Product;
+use Smile\RetailerOffer\Helper\Offer;
+use Smile\RetailerOffer\Helper\Settings;
 
 /**
  * Replace is in stock native filter on layer.
- *
- * @category  Smile
- * @package   Smile\ElasticsuiteCatalog
- * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
 class ProductPlugin
 {
-    /**
-     * @var \Smile\RetailerOffer\Helper\Offer
-     */
-    private $helper;
-
-    /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
-     */
-    private $currentStore;
-
-    /**
-     * @var \Smile\RetailerOffer\Helper\Settings
-     */
-    private $settingsHelper;
-
-    /**
-     * ProductPlugin constructor.
-     *
-     * @param \Smile\RetailerOffer\Helper\Offer             $offerHelper    The offer Helper
-     * @param \Smile\StoreLocator\CustomerData\CurrentStore $currentStore   The Retailer Data Object
-     * @param \Smile\RetailerOffer\Helper\Settings          $settingsHelper Settings Helper
-     */
-    public function __construct(
-        \Smile\RetailerOffer\Helper\Offer $offerHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper
-    ) {
-        $this->currentStore   = $currentStore;
-        $this->helper         = $offerHelper;
-        $this->settingsHelper = $settingsHelper;
+    public function __construct(private Offer $offerHelper, private Settings $settingsHelper)
+    {
     }
 
     /**
      * Return offer availability (if any) instead of the product one.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) We do not need to call the parent method.
-     *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden isAvailable() method
-     *
-     * @return bool
      */
-    public function aroundIsAvailable(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundIsAvailable(Product $product, Closure $proceed): bool
     {
         $isAvailable = $proceed();
 
         if ($this->settingsHelper->useStoreOffers()) {
             $isAvailable = false;
-            $offer       = $this->helper->getCurrentOffer($product);
+            $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer !== null && $offer->isAvailable()) {
                 $isAvailable = (bool) $offer->isAvailable();
@@ -80,18 +41,13 @@ class ProductPlugin
 
     /**
      * Return offer price (if any) instead of the product one.
-     *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getPrice() method
-     *
-     * @return bool
      */
-    public function aroundGetPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetPrice(Product $product, Closure $proceed): mixed
     {
         $price = $proceed();
 
         if ($this->settingsHelper->useStoreOffers()) {
-            $offer = $this->helper->getCurrentOffer($product);
+            $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer && $offer->getPrice()) {
                 $price = $offer->getPrice();
@@ -105,18 +61,13 @@ class ProductPlugin
 
     /**
      * Return offer special price (if any) instead of the product one.
-     *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getSpecialPrice() method
-     *
-     * @return bool
      */
-    public function aroundGetSpecialPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetSpecialPrice(Product $product, Closure $proceed): mixed
     {
         $price = $proceed();
 
         if ($this->settingsHelper->useStoreOffers()) {
-            $offer = $this->helper->getCurrentOffer($product);
+            $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer && $offer->getSpecialPrice()) {
                 $price = $offer->getSpecialPrice();
@@ -128,19 +79,13 @@ class ProductPlugin
 
     /**
      * Return offer final price (if any) instead of the product one.
-     *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getFinalPrice() method
-     * @param int                            $qty     The quantity added to the cart
-     *
-     * @return bool
      */
-    public function aroundGetFinalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed, $qty = null)
+    public function aroundGetFinalPrice(Product $product, Closure $proceed, mixed $qty = null): mixed
     {
         $price = $proceed($qty);
 
         if ($this->settingsHelper->useStoreOffers()) {
-            $offer = $this->helper->getCurrentOffer($product);
+            $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer) {
                 if ($offer->getPrice() && $offer->getSpecialPrice()) {
@@ -158,13 +103,8 @@ class ProductPlugin
 
     /**
      * Return offer minimal price (if any) instead of the product one.
-     *
-     * @param \Magento\Catalog\Model\Product $product The product
-     * @param \Closure                       $proceed The overridden getFinalPrice() method
-     *
-     * @return bool
      */
-    public function aroundGetMinimalPrice(\Magento\Catalog\Model\Product $product, \Closure $proceed)
+    public function aroundGetMinimalPrice(Product $product, Closure $proceed): mixed
     {
         return $this->aroundGetFinalPrice($product, $proceed);
     }

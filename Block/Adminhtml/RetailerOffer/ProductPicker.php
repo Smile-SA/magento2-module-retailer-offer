@@ -1,63 +1,44 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer;
 
-/**
- * Product Picker for Retailer Offer Creation form
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
- */
-class ProductPicker extends \Magento\Backend\Block\AbstractBlock
-{
-    /**
-     * @var \Magento\Framework\Data\FormFactory
-     */
-    private $formFactory;
+use Magento\Backend\Block\AbstractBlock;
+use Magento\Backend\Block\Context;
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 
-    /**
-     * Constructor.
-     *
-     * @param \Magento\Backend\Block\Context      $context     Block context.
-     * @param \Magento\Framework\Data\FormFactory $formFactory Form factory.
-     * @param array                               $data        Additional data.
-     */
+/**
+ * Product Picker for Retailer Offer Creation form.
+ */
+class ProductPicker extends AbstractBlock
+{
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        private FormFactory $formFactory,
         array $data = []
     ) {
-        $this->formFactory = $formFactory;
         parent::__construct($context, $data);
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited
-     *
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function _toHtml()
     {
-        return $this->escapeJsQuote($this->getForm()->toHtml());
+        return $this->getForm()->toHtml();
     }
 
     /**
      * Create the form containing the product picker.
      *
-     * @return \Magento\Framework\Data\Form
+     * @throws LocalizedException
      */
-    private function getForm()
+    private function getForm(): Form
     {
         $form = $this->formFactory->create();
         $form->setHtmlId('offer_product_picker');
@@ -74,28 +55,28 @@ class ProductPicker extends \Magento\Backend\Block\AbstractBlock
 
         $data = [
             'name'  => 'product_id',
-            'label' => __("Product"),
+            'label' => __('Product'),
             'required' => true,
             'class' => 'widget-option',
-            'note' => __("The product you wish to create an offer for"),
+            'note' => __('The product you wish to create an offer for'),
         ];
 
         $productPickerField = $productPickerFieldset->addField('product_picker', 'label', $data);
         $pickerConfig = [
             'button' => ['open' => __("Select Product ...")],
-            'type' => 'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            'type' => Chooser::class,
         ];
 
+        /** @var Chooser $helperBlock */
         $helperBlock = $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
+            Chooser::class,
             '',
             ['data' => $pickerConfig]
         );
-        if ($helperBlock instanceof \Magento\Framework\DataObject) {
-            $helperBlock
-                ->setConfig($pickerConfig)
-                ->setFieldsetId($productPickerFieldset->getId())
-                ->prepareElementHtml($productPickerField);
+        if ($helperBlock instanceof DataObject) {
+            $helperBlock->setConfig($pickerConfig);
+            $helperBlock->setFieldsetId($productPickerFieldset->getId());
+            $helperBlock->prepareElementHtml($productPickerField);
         }
 
         return $form;

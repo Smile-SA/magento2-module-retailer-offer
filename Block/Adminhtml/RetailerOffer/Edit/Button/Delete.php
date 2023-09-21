@@ -1,33 +1,21 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Edit\Button;
 
 /**
- * Delete button for offer edition
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Delete button for offer edition.
  */
 class Delete extends AbstractButton
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {
         $data = [];
-        if ($this->getRetailerOffer() && $this->getRetailerOffer()->getId()) {
+        if ($this->getRetailerOffer() && $this->getRetailerOffer()->getOfferId()) {
             $data = [
                 'label' => __('Delete'),
                 'class' => 'delete',
@@ -42,10 +30,10 @@ class Delete extends AbstractButton
     }
 
     /**
-     * @return string
+     * Get the deletion url.
      */
-    private function getDeleteUrl()
+    private function getDeleteUrl(): string
     {
-        return $this->getUrl('*/*/delete', ['offer_id' => $this->getRetailerOffer()->getId()]);
+        return $this->getUrl('*/*/delete', ['offer_id' => $this->getRetailerOffer()->getOfferId()]);
     }
 }

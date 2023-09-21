@@ -1,123 +1,66 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
 
-use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as StatusSource;
+use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 use Magento\Framework\Registry;
-use Smile\Offer\Api\Data\OfferInterface;
 use Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
 
 /**
- * Panel to display product's summary in the offer edit form
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Panel to display product's summary in the offer edit form.
  */
 class Product extends Summary
 {
-    /**
-     * @var string
-     */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
     protected $_template = 'retailer-offer/summary/product.phtml';
 
-    /**
-     * Product Repository
-     *
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var \Magento\Catalog\Helper\Product
-     */
-    private $productHelper;
-
-    /**
-     * @var \Magento\Framework\Pricing\Helper\Data
-     */
-    private $priceHelper;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
-     */
-    private $statusSourceModel;
-
-    /**
-     * Summary constructor.
-     *
-     * @param \Magento\Backend\Block\Template\Context $context           Application context
-     * @param \Magento\Framework\Registry             $registry          Application registry
-     * @param ProductRepositoryInterface              $productRepository Product Repository
-     * @param ProductHelper                           $productHelper     Product Helper
-     * @param PriceHelper                             $priceHelper       Price Helper
-     * @param StatusSource                            $statusSource      Source Model for product's status.
-     * @param array                                   $data              Block's data
-     */
     public function __construct(
         Context $context,
         Registry $registry,
-        ProductRepositoryInterface $productRepository,
-        ProductHelper $productHelper,
-        PriceHelper $priceHelper,
-        StatusSource $statusSource,
+        private ProductRepositoryInterface $productRepository,
+        private ProductHelper $productHelper,
+        private PriceHelper $priceHelper,
+        private StatusSource $statusSource,
         array $data = []
     ) {
-        $this->productRepository  = $productRepository;
-        $this->productHelper      = $productHelper;
-        $this->priceHelper        = $priceHelper;
-        $this->statusSourceModel  = $statusSource;
-
         parent::__construct($context, $registry, $data);
     }
 
     /**
      * Get current Product : product of the current offer.
-     *
-     * @return ProductInterface
      */
-    public function getProduct()
+    public function getProduct(): ?ProductInterface
     {
         $product = null;
+        $offer = $this->getRetailerOffer();
 
-        if ($offer = $this->getRetailerOffer()) {
-            if ($offer->getProductId()) {
-                $product = $this->productRepository->getById((int) $offer->getProductId());
-            }
+        if ($offer && $offer->getProductId()) {
+            $product = $this->productRepository->getById((int) $offer->getProductId());
         }
 
         return $product;
     }
 
     /**
-     * Retrieve Product Small Image
-     *
-     * @return null|string
+     * Retrieve Product Small Image.
      */
-    public function getProductImage()
+    public function getProductImage(): ?string
     {
         $image = null;
+        /** @var ?ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $image = $this->productHelper->getSmallImageUrl($this->getProduct());
+        if ($product) {
+            $image = (string) $this->productHelper->getSmallImageUrl($product);
         }
 
         return $image;
@@ -125,15 +68,15 @@ class Product extends Summary
 
     /**
      * Retrieve Product Price
-     *
-     * @return null|string
      */
-    public function getProductPrice()
+    public function getProductPrice(): ?string
     {
         $price = null;
+        /** @var ?ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $price = $this->priceHelper->currency($this->getProduct()->getPrice());
+        if ($product) {
+            $price = (string) $this->priceHelper->currency($product->getPrice());
         }
 
         return $price;
@@ -141,30 +84,30 @@ class Product extends Summary
 
     /**
      * Retrieve Product Special Price
-     *
-     * @return null|string
      */
-    public function getProductSpecialPrice()
+    public function getProductSpecialPrice(): ?string
     {
         $price = null;
+        /** @var ?ProductModel $product */
+        $product = $this->getProduct();
 
-        if ($this->getProduct()) {
-            $price = $this->priceHelper->currency($this->getProduct()->getSpecialPrice());
+        if ($product) {
+            $price = (string) $this->priceHelper->currency($product->getSpecialPrice());
         }
 
         return $price;
     }
 
     /**
-     * Retrieve Product Special Price
-     *
-     * @return null|string
+     * Retrieve Product Special Price.
      */
-    public function getProductStockLabel()
+    public function getProductStockLabel(): ?Phrase
     {
         $label = __('In stock');
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
 
-        if (!$this->getProduct()->isAvailable()) {
+        if (!$product->isAvailable()) {
             $label = __('Out of stock');
         }
 
@@ -172,21 +115,15 @@ class Product extends Summary
     }
 
     /**
-     * Retrieve Product Status Label
-     *
-     * @return string
+     * Retrieve Product Status Label.
      */
-    public function getProductStatusLabel()
+    public function getProductStatusLabel(): Phrase|string
     {
-        return $this->statusSourceModel->getOptionText((int) $this->getProduct()->getStatus());
+        return $this->statusSource->getOptionText((string) $this->getProduct()->getStatus());
     }
 
     /**
-     * Prepare Layout. Overridden to prevent triggering the parent one.
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {

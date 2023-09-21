@@ -1,16 +1,7 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @author    Maxime Leclercq <maxime.leclercq@smile.fr>
- * @copyright 2018 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute;
 
 use Magento\Config\Model\Config\Source\Yesno;
@@ -20,52 +11,30 @@ use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product as ProductConditi
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount as BaseIsDiscount;
 use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
-use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
  * Is Discount rule condition.
  * Override the virtual category discount rule condition for use offer data when in drive mode.
  *
- * @category Smile
- * @package  Smile\RetailerOffer
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
 {
-    /**
-     * @var CurrentStore
-     */
-    private $currentStore;
-
-    /**
-     * @var Settings
-     */
-    private $settingsHelper;
-
-    /**
-     * IsDiscount constructor.
-     *
-     * @param Yesno           $booleanSource   Boolean source model
-     * @param CustomerSession $customerSession Customer Session
-     * @param QueryFactory    $queryFactory    Query factory
-     * @param CurrentStore    $currentStore    Current Store
-     * @param Settings        $settingsHelper  Setting Helper
-     */
     public function __construct(
         Yesno $booleanSource,
         CustomerSession $customerSession,
         QueryFactory $queryFactory,
-        CurrentStore $currentStore,
-        Settings $settingsHelper
+        private CurrentStore $currentStore,
+        private Settings $settingsHelper
     ) {
-        $this->currentStore = $currentStore;
-        $this->settingsHelper = $settingsHelper;
 
         parent::__construct($booleanSource, $customerSession, $queryFactory);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSearchQuery(ProductCondition $condition)
     {
@@ -84,12 +53,8 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
 
     /**
      * Retrieve query based on 'offer.is_discount' for current retailer.
-     *
-     * @param integer $retailerId Retailer Id
-     *
-     * @return QueryInterface
      */
-    private function getIsDiscountForCurrentRetailerQuery($retailerId)
+    private function getIsDiscountForCurrentRetailerQuery(int $retailerId): QueryInterface
     {
         $sellerIdFilter = $this->queryFactory->create(
             QueryInterface::TYPE_TERM,
@@ -106,10 +71,8 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
 
     /**
      * Filter products having a discounted offer.
-     *
-     * @return QueryInterface
      */
-    private function getIsDiscountOffersQuery()
+    private function getIsDiscountOffersQuery(): QueryInterface
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_NESTED,
@@ -119,10 +82,8 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
 
     /**
      * Retrieve term query to match discounted offers.
-     *
-     * @return QueryInterface
      */
-    private function getIsDiscountOfferTermQuery()
+    private function getIsDiscountOfferTermQuery(): QueryInterface
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_TERM,

@@ -1,20 +1,6 @@
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
-
 define([
     'Magento_Ui/js/form/components/html',
-    'jquery',
-    'MutationObserver'
+    'jquery'
 ], function (Component, $) {
     'use strict';
 
@@ -30,8 +16,7 @@ define([
         /**
          * Initialize the component
          */
-        initialize: function ()
-        {
+        initialize: function () {
             this._super();
             this.initProductListener();
         },
@@ -41,8 +26,7 @@ define([
          *
          * @returns {exports}
          */
-        initObservable: function ()
-        {
+        initObservable: function () {
             this._super();
             this.observe('value');
 
@@ -52,8 +36,7 @@ define([
         /**
          * Init Observer on the product id field.
          */
-        initProductListener: function ()
-        {
+        initProductListener: function () {
             var observer = new MutationObserver(function () {
                 var rootNode = document.getElementById(this.index);
                 if (rootNode !== null) {
@@ -72,8 +55,7 @@ define([
         /**
          * Update value of the Product Object
          */
-        updateProduct: function ()
-        {
+        updateProduct: function () {
             var fieldName = this.dataScope.split(".").pop();
             var field     = $(this.rootNode).find("[name=" + fieldName + "]");
 
@@ -84,4 +66,3 @@ define([
         }
     })
 });
-

@@ -1,15 +1,7 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Maxime Leclercq <maxime.leclercq@smile.fr>
- * @copyright 2021 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Model\Product\Search\Request\Container\Filter;
 
 use Smile\ElasticsuiteCore\Api\Search\Request\Container\FilterInterface;
@@ -22,22 +14,14 @@ use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
  */
 class OfferAvailable implements FilterInterface
 {
-    /**
-     * OfferIsInStock constructor.
-     *
-     * @param QueryFactory $queryFactory Query Factory
-     */
-    public function __construct(QueryFactory $queryFactory)
+    public function __construct(private QueryFactory $queryFactory)
     {
-        $this->queryFactory = $queryFactory;
     }
 
     /**
      * Return the offer is_available filter.
-     *
-     * @return QueryInterface|null
      */
-    public function getFilterQuery()
+    public function getFilterQuery(): ?QueryInterface
     {
         return $this->queryFactory->create(
             QueryInterface::TYPE_TERM,

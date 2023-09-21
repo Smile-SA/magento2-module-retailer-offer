@@ -1,72 +1,39 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerOffer\Search\Request\Product\Attribute\Aggregation;
 
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Price as FilterDataProviderPrice;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price as BasePrice;
 use Smile\ElasticsuiteCore\Search\Request\BucketInterface;
+use Smile\RetailerOffer\Helper\Settings;
+use Smile\StoreLocator\CustomerData\CurrentStore;
 
 /**
- * Price aggregation
+ * Price aggregation.
  *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Fanny DECLERCK <fadec@smile.fr>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\Aggregation\Price
+class Price extends BasePrice
 {
-    /**
-     * @var \Smile\RetailerOffer\Helper\Settings
-     */
-    private $settingsHelper;
-
-    /**
-     * @var \Smile\StoreLocator\CustomerData\CurrentStore
-     */
-    private $currentStore;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $customerSession;
-
-    /**
-     * Price constructor.
-     *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig Scope Config
-     * @param \Magento\Customer\Model\Session $customerSession Customer session, if any
-     */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Customer\Model\Session $customerSession,
-        \Smile\RetailerOffer\Helper\Settings $settingsHelper,
-        \Smile\StoreLocator\CustomerData\CurrentStore $currentStore
+        private ScopeConfigInterface $scopeConfig,
+        Session $customerSession,
+        private Settings $settingsHelper,
+        private CurrentStore $currentStore
     ) {
         parent::__construct($scopeConfig, $customerSession);
-
-        $this->settingsHelper = $settingsHelper;
-        $this->currentStore   = $currentStore;
-        $this->scopeConfig     = $scopeConfig;
-        $this->customerSession = $customerSession;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getAggregationData(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
+    public function getAggregationData(Attribute $attribute)
     {
         $retailerId = $this->getRetailerId();
         if (!$retailerId || !$this->settingsHelper->useStoreOffers()) {
@@ -80,9 +47,10 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
         ];
 
         $calculation = $this->getRangeCalculationValue();
-        if ($calculation === \Magento\Catalog\Model\Layer\Filter\DataProvider\Price::RANGE_CALCULATION_MANUAL) {
-            if ((int)$this->getRangeStepValue() > 0) {
-                $bucketConfig['interval'] = (int)$this->getRangeStepValue();
+        if ($calculation === FilterDataProviderPrice::RANGE_CALCULATION_MANUAL) {
+            $interval = $this->getRangeStepValue();
+            if ($interval > 0) {
+                $bucketConfig['interval'] = $interval;
             }
         }
 
@@ -91,10 +59,8 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
 
     /**
      * Retrieve current retailer Id.
-     *
-     * @return int|null
      */
-    private function getRetailerId()
+    private function getRetailerId(): ?int
     {
         $retailerId = null;
         if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
@@ -105,24 +71,18 @@ class Price extends \Smile\ElasticsuiteCatalog\Search\Request\Product\Attribute\
     }
 
     /**
-     * @return mixed
+     * Get range calculation value.
      */
-    private function getRangeCalculationValue()
+    private function getRangeCalculationValue(): string
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_RANGE_CALCULATION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return (string) $this->scopeConfig->getValue(self::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE);
     }
 
     /**
-     * @return mixed
+     * Get range step value.
      */
-    private function getRangeStepValue()
+    private function getRangeStepValue(): int
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_RANGE_STEP,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE);
     }
 }

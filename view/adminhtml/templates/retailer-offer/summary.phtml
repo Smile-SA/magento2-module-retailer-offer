@@ -1,26 +1,25 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- *
- * Summary panel for offer edition.
- */
+
+// Summary panel for offer edition
+
+use Magento\Framework\Escaper;
+use Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
+
+/** @var Summary $block */
+/** @var Escaper $escaper */
 ?>
 
-<?php
-/** @var \Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary $block */
-?>
-
-<div class="retailer-offer-summary">
-    <?php echo $block->getProductSummaryBlock()->toHtml(); ?>
-    <?php echo $block->getRetailerSummaryBlock()->toHtml(); ?>
-    <div class="clear abs-clearer"></div>
+<div class="fieldset-wrapper">
+    <div class="fieldset-wrapper-title">
+        <strong class="title"><span><?= $escaper->escapeHtml(__('Offer Summary')) ?></span></strong>
+    </div>
+    <div class="admin__fieldset-wrapper-content">
+        <div class="admin__fieldset">
+            <div class="retailer-offer-summary">
+                <?= $block->getProductSummaryBlock()->toHtml() ?>
+                <?= $block->getRetailerSummaryBlock()->toHtml() ?>
+                <div class="clear abs-clearer"></div>
+            </div>
+        </div>
+    </div>
 </div>

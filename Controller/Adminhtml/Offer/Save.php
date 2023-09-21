@@ -1,44 +1,38 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerOffer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerOffer\Controller\Adminhtml\Offer;
 
-use Smile\Offer\Api\Data\OfferInterface;
+use Exception;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Smile\Offer\Model\Offer;
 use Smile\RetailerOffer\Controller\Adminhtml\AbstractOffer;
 
 /**
  * Retailer Offer Adminhtml Save controller.
- *
- * @category Smile
- * @package  Smile\RetailerOffer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Save extends AbstractOffer
+class Save extends AbstractOffer implements HttpPostActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data         = $this->getRequest()->getPostValue();
-        $redirectBack = $this->getRequest()->getParam('back', false);
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $data = $request->getPostValue();
+        $redirectBack = $request->getParam('back', false);
 
         if ($data) {
-            $identifier = $this->getRequest()->getParam('offer_id');
+            $identifier = $request->getParam('offer_id');
+            /** @var Offer $model */
             $model = $this->offerFactory->create();
 
             if ($identifier) {
@@ -55,19 +49,20 @@ class Save extends AbstractOffer
                 $this->_getSession()->setPageData($data);
                 $this->offerRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the offer %1.', $model->getId()));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->_objectManager->get(Session::class)->setFormData(false);
 
-                if ($redirectBack
+                if (
+                    $redirectBack
                     || (!is_null($model->getOverlapOffers()) && count($model->getOverlapOffers()))
                 ) {
                     return $resultRedirect->setPath('*/*/edit', ['offer_id' => $model->getId()]);
                 }
 
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
-                $returnParams = ['offer_id' => $this->getRequest()->getParam('offer_id')];
+                $this->_objectManager->get(Session::class)->setFormData($data);
+                $returnParams = ['offer_id' => $request->getParam('offer_id')];
 
                 return $resultRedirect->setPath('*/*/edit', $returnParams);
             }

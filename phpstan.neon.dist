@@ -1,0 +1,17 @@
+parameters:
+    level: 6
+    phpVersion: 80100
+    checkMissingIterableValueType: false
+    paths:
+        - .
+    excludePaths:
+        - 'vendor/*'
+        # addFilter() @phpstan-ignore-next-line as adding return statement cause of backward compatibility issue
+        - 'Ui\Component\Offer\Listing\DataProvider.php'
+        # ignore expected type on $filterParams and $label inheritance
+        - 'Model/Layer/Filter/Price.php'
+        # ignore Call to an undefined method Magento\Catalog\Api\Data\ProductInterface::getIdentities()
+        - 'Block/Catalog/Product/Retailer/Availability.php'
+
+includes:
+    - %currentWorkingDirectory%/vendor/smile/magento2-smilelab-phpstan/extension.neon
