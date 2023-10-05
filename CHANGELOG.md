@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2023-09-20
+[2.0.1]: https://github.com/Smile-SA/magento2-module-retailer-offer/compare/2.0.0...2.0.1
+
+- Fix CategoryPlugin closure return type
+
 ## [2.0.0] - 2023-09-20
 [2.0.0]: https://github.com/Smile-SA/magento2-module-retailer-offer/compare/1.8.1...2.0.0
 
