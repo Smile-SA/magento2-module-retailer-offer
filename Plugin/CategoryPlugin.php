@@ -30,7 +30,7 @@ class CategoryPlugin
     public function aroundGetProductCount(Category $category, Closure $proceed): ?int
     {
         if (!$this->currentStore->getRetailer() || !$this->currentStore->getRetailer()->getId()) {
-            return $proceed();
+            return (int) $proceed();
         }
 
         /** @var Collection $collection */
