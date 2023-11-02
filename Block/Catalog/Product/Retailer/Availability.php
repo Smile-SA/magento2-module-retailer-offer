@@ -72,7 +72,9 @@ class Availability extends Template implements IdentityInterface
      */
     public function getIdentities(): array
     {
-        $identities = $this->getProduct()->getIdentities();
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
+        $identities = $product->getIdentities();
 
         foreach ($this->getStoreOffers() as $offer) {
             if (isset($offer[OfferInterface::OFFER_ID])) {
