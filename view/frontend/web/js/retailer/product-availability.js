@@ -26,24 +26,60 @@ define([
             });
             this.storeOffers = ko.observable(offers.getList());
             this.displayedOffers = ko.observable(offers.getList());
-            this.initGeocoderBinding();
+            this.observe(['fulltextSearch']);
         },
 
         /**
-         * Init the geocoding component binding
+         * Search Shop per words
          */
-        initGeocoderBinding: function() {
-            registry.get(this.name + '.geocoder', function (geocoder) {
-                this.geocoder = geocoder;
-                geocoder.currentResult.subscribe(function (result) {
-                    if (result && result.location) {
-                        var offers = geocoder.filterMarkersListByPositionRadius(this.storeOffers(), result.location);
-                        this.displayedOffers(offers);
-                    } else {
-                        this.displayedOffers(this.storeOffers);
-                    }
-                }.bind(this));
-            }.bind(this));
+        onSearchOffers: function() {
+            this.displayedOffers(
+                this.filterPerWords(this.storeOffers(), this.fulltextSearch())
+            );
+        },
+
+        /**
+         * Custom filter to allow approaching result per words
+         *
+         * @param markers
+         * @param terms
+         * @returns {[]|jQuery|*[]|*|null}
+         */
+        filterPerWords(markers, terms) {
+            let self = this;
+            let arrayOfTerms = terms.split(' ');
+            let term = $.map(arrayOfTerms, function (tm) {
+                if (tm.length <= 2) {
+                    // ignore smallest term for performance reason
+                    return null;
+                }
+                return $.ui.autocomplete.escapeRegex(self.normalizeAccent(tm));
+            }).join('|');
+            let matcher= new RegExp("\\b" + term, "i");
+
+            if (term.length <= 2) {
+                // ignore smallest term for performance reason
+                return null;
+            }
+
+            return $.grep(markers, function (marker) {
+                // try to match one of the 4 elements
+                return matcher.test(marker.name)
+                    || matcher.test(marker.postCode)
+                    || matcher.test(self.normalizeAccent(marker.city))
+                    || matcher.test(marker.region)
+                ;
+            });
+        },
+
+        /**
+         * Replace accent from string
+         *
+         * @param str
+         * @returns {*}
+         */
+        normalizeAccent: function(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         },
 
         /**

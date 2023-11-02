@@ -22,13 +22,13 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
              "modal":true
            }
          }'>
-        <div class="fulltext-search-wrapper" data-bind="scope: requestChild('geocoder')">
-            <div class="geocoder-wrapper" data-bind=" afterRender: initGeocoder">
+        <div class="fulltext-search-wrapper">
+            <div class="geocoder-wrapper">
                 <div class="block-title">
                     <strong role="heading" aria-level="1" data-bind="text: searchTitleText"></strong>
                 </div>
 
-                <form class="form" data-bind="submit: onSearch">
+                <form class="form" data-bind="submit: onSearchOffers">
                     <div class="field">
                         <input type="text" name="text"
                                data-bind="value: fulltextSearch, attr: {placeholder: searchPlaceholderText}"/>

@@ -8,6 +8,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Directory\Model\Region;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
@@ -38,6 +39,7 @@ class Availability extends Template implements IdentityInterface
         protected OfferManagement $offerManagement,
         protected RetailerCollectionFactory $retailerCollectionFactory,
         protected AddressFormatter $addressFormatter,
+        protected Region $region,
         MapProviderInterface $mapProvider,
         array $data = []
     ) {
@@ -59,12 +61,6 @@ class Availability extends Template implements IdentityInterface
 
         $jsLayout['components']['catalog-product-retailer-availability']['productId'] = $this->getProduct()->getId();
         $jsLayout['components']['catalog-product-retailer-availability']['storeOffers'] = $this->getStoreOffers();
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] =
-            $this->map->getIdentifier();
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
-            $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
-            $this->map->getConfig()
-        );
 
         return json_encode($jsLayout);
     }
@@ -123,10 +119,14 @@ class Availability extends Template implements IdentityInterface
                 /** @var RetailerExtensionInterface $retailerExtensionInterface */
                 $retailerExtensionInterface = $retailer->getExtensionAttributes();
                 $address = $retailerExtensionInterface->getAddress();
+                $regionName = $this->region->load($address->getRegionId())->getName() ?: null;
                 $offer = [
                     'sellerId' => (int) $retailer->getId(),
                     'name' => $retailer->getName(),
                     'address' => $this->addressFormatter->formatAddress($address, AddressFormatter::FORMAT_ONELINE),
+                    'postCode' => $address->getPostcode(),
+                    'region' => $regionName,
+                    'city' => $address->getCity(),
                     'latitude' => $address->getCoordinates()->getLatitude(),
                     'longitude' => $address->getCoordinates()->getLongitude(),
                     'setStoreData' => $this->getSetStorePostData($retailer),
