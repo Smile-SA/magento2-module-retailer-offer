@@ -21,6 +21,7 @@ use Smile\Offer\Model\OfferManagement;
 use Smile\Retailer\Api\Data\RetailerExtensionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
+use Smile\RetailerOffer\Helper\Config as HelperConfig;
 
 /**
  * Block rendering availability in store for a given product.
@@ -40,6 +41,7 @@ class Availability extends Template implements IdentityInterface
         protected RetailerCollectionFactory $retailerCollectionFactory,
         protected AddressFormatter $addressFormatter,
         protected Region $region,
+        protected HelperConfig $helperConfig,
         MapProviderInterface $mapProvider,
         array $data = []
     ) {
@@ -61,6 +63,8 @@ class Availability extends Template implements IdentityInterface
 
         $jsLayout['components']['catalog-product-retailer-availability']['productId'] = $this->getProduct()->getId();
         $jsLayout['components']['catalog-product-retailer-availability']['storeOffers'] = $this->getStoreOffers();
+        $jsLayout['components']['catalog-product-retailer-availability']['searchPlaceholderText'] = $this
+            ->helperConfig->getSearchPlaceholder();
 
         return json_encode($jsLayout);
     }

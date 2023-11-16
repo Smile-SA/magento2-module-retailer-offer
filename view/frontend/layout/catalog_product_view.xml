@@ -15,7 +15,6 @@
                                     <item name="component" xsi:type="string">Smile_RetailerOffer/js/retailer/product-availability</item>
                                     <item name="storeOffersListTemplate" xsi:type="string">Smile_RetailerOffer/retailer/product/store-list</item>
                                     <item name="searchTitleText" xsi:type="string" translate="true">Find a store :</item>
-                                    <item name="searchPlaceholderText" xsi:type="string" translate="true">City, Zipcode, Department, ...</item>
                                     <item name="searchButtonText" xsi:type="string" translate="true">Search</item>
                                     <item name="radius" xsi:type="string">25000</item>
                                 </item>
