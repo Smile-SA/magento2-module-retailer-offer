@@ -9,6 +9,7 @@
             <resource>Magento_Backend::config_smile_retailersuite_retailer_base_settings</resource>
 
             <group id="navigation_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Main Settings</label>
                 <field id="navigation_mode" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Navigation mode</label>
                     <comment>Drive mode : the customer will only see the catalog of the chosen retailer in Front Office. Retail mode : the customer will browse the Web catalog by default.</comment>
@@ -18,6 +19,14 @@
                     <label>Display offers on product page</label>
                     <comment>When enabled, offers of all stores will be displayed on product page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <!-- avoid nth dependency with Smile_StoreLocator -->
+            <group id="search" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Search Settings</label>
+                <field id="placeholder" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shown placeholder to help user</label>
+                    <comment>default: City, Zipcode, Address ...</comment>
                 </field>
             </group>
         </section>

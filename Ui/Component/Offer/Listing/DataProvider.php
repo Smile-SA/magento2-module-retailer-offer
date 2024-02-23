@@ -47,7 +47,7 @@ class DataProvider extends AbstractDataProvider
     /**
      * @inheritdoc
      */
-    public function addFilter(Filter $filter): mixed
+    public function addFilter(Filter $filter): void
     {
         if (isset($this->addFilterStrategies[$filter->getField()])) {
             $this->addFilterStrategies[$filter->getField()]
