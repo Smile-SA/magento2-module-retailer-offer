@@ -5,9 +5,11 @@ define([
     'ko',
     'uiRegistry',
     'Smile_Map/js/model/markers',
+    'leaflet',
     'smile-storelocator-store-collection',
-    'mage/translate'
-    ], function ($, Component, storage, ko, registry, Markers, StoreCollection) {
+    'mage/translate',
+    'jquery/ui'
+    ], function ($, Component, storage, ko, registry, Markers, L, StoreCollection) {
 
     "use strict";
 
@@ -135,6 +137,41 @@ define([
             }
 
             return result;
+        },
+
+        /**
+         * Geolocalize me button action
+         */
+        geolocalizeMe: function() {
+            registry.get(this.name + '.geocoder', function (geocoder) {
+                this.geocoder = geocoder;
+                this.geocoder.geolocalize(this.geolocationSuccess.bind(this))
+            }.bind(this));
+        },
+
+        /**
+         * Action on geolocation success
+         */
+        geolocationSuccess: function(position) {
+            if (position.coords && position.coords.latitude && position.coords.longitude) {
+                registry.get(this.name + '.map', function (map) {
+                    this.map = map;
+                    this.map.applyPosition(position);
+                }.bind(this));
+
+                this.updateDisplayedOffers();
+            }
+        },
+
+        /**
+         * Update list of displayed offers
+         */
+        updateDisplayedOffers: function () {
+            registry.get(this.name + '.map', function (map) {
+                this.map = map;
+                this.map.refreshDisplayedMarkers();
+                this.displayedOffers(this.map.displayedMarkers());
+            }.bind(this));
         }
     });
 });

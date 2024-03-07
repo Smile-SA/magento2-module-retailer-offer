@@ -1,103 +1,119 @@
 //
 //  Shop details on product page
 //  _____________________________________________
-
-.catalog-product-retailer-availability-content {
-    .current-store {
-        .inStock {
-            .lib-message-icon-inner(success);
-        }
-        .outOfStock {
-            .lib-message-icon-inner(error);
-        }
-    }
-
-    .store-name-value {
-        font-weight: bold;
-    }
-}
-
-.product-store-availability {
-    border-bottom: 1px solid @color-gray-light5;
-    padding-bottom: 15px;
-    color: @color-gray34;
-}
-
-.catalog-product-stores-availability-content {
-    .fulltext-search-wrapper {
-        .form {
-            display: flex;
-
-            .field {
-                min-width: 30%;
+& when (@media-common = true) {
+    .catalog-product-retailer-availability-content {
+        .current-store {
+            .inStock {
+                .lib-message-icon-inner(success);
             }
-
-            button {
-                margin-left: 10px;
+            .outOfStock {
+                .lib-message-icon-inner(error);
             }
         }
+
+        .store-name-value {
+            font-weight: bold;
+        }
     }
-}
 
-.store-offers-list {
-    ul {
-        list-style-type: none;
-        margin: 10px 0 0;
-        padding: 0;
-        max-height: 420px;
-        overflow-y: scroll;
+    .product-store-availability {
+        border-bottom: 1px solid @color-gray-light5;
+        padding-bottom: 15px;
+        color: @color-gray34;
+    }
 
-        li.result-item {
-            margin: 0;
-            padding: 5px;
-            border-top: 1px solid #d8d8d8;
-            display: flex;
-            align-items: center;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
+    .catalog-product-stores-availability-content {
+        .fulltext-search-wrapper {
+            .form {
+                display: flex;
 
-            ::after {
-                clear: both;
-                content: '';
-                display: table;
-            }
-
-            .store {
-                float:left;
-                min-width: 50%;
-            }
-
-            .availability {
-                float:left;
-                .available {
-                    .lib-message-icon-inner(success);
-                    margin-bottom: 0;
+                .field {
+                    min-width: 30%;
                 }
 
-                .unavailable {
-                    .lib-message-icon-inner(error);
-                    margin-bottom: 0;
+                .actions-toolbar {
+                    display: flex;
                 }
 
-                p {
-                    min-width: 80px;
+                button {
+                    margin-left: 10px;
                 }
             }
+        }
 
-            .actions {
-                margin-left:auto;
-            }
+        .store-view-map .map {
+            max-width: 986px;
+            height: 400px;
+            background: #666;
+            z-index: 1;
+            float: left;
+            display: inline-block;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+    }
 
-            .breaker {
-                clear:both;
+    .store-offers-list {
+        ul {
+            list-style-type: none;
+            margin: 10px 0 0;
+            padding: 0;
+            max-height: 420px;
+            overflow-y: scroll;
+
+            li.result-item {
+                margin: 0;
+                padding: 5px;
+                border-top: 1px solid #d8d8d8;
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                ::after {
+                    clear: both;
+                    content: '';
+                    display: table;
+                }
+
+                .store {
+                    float:left;
+                    min-width: 50%;
+                }
+
+                .availability {
+                    float:left;
+                    .available {
+                        .lib-message-icon-inner(success);
+                        margin-bottom: 0;
+                    }
+
+                    .unavailable {
+                        .lib-message-icon-inner(error);
+                        margin-bottom: 0;
+                    }
+
+                    p {
+                        min-width: 80px;
+                    }
+                }
+
+                .actions {
+                    margin-left:auto;
+                }
+
+                .breaker {
+                    clear:both;
+                }
             }
         }
     }
-}
 
-.catalog-product-retailer-availability .showavailability {
-    cursor: pointer;
+    .catalog-product-retailer-availability .showavailability {
+        cursor: pointer;
+    }
 }
 
 //
