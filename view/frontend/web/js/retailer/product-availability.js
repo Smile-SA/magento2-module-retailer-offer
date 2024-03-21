@@ -172,6 +172,20 @@ define([
                 this.map.refreshDisplayedMarkers();
                 this.displayedOffers(this.map.displayedMarkers());
             }.bind(this));
+        },
+
+        /**
+         * Load modal function to set moveend event on map
+         *
+         * @returns {string}
+         */
+        loadRetailerAvailabilityModal : function () {
+            let self = this;
+            registry.get(this.name + '.map', function (map) {
+                this.map = map;
+                this.map.map.off('moveend');
+                this.map.map.on('moveend', self.updateDisplayedOffers.bind(self));
+            }.bind(this));
         }
     });
 });
