@@ -77,7 +77,7 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
         </div>
     </div>
     <div class="action showavailability" data-bind="scope: 'catalog-product-retailer-availability'">
-        <a href="#" class="text" data-bind="text: getLinkLabel()"></a>
+        <a href="#" class="text" data-bind="text: getLinkLabel(), click: loadRetailerAvailabilityModal"></a>
     </div>
 </div>
 
