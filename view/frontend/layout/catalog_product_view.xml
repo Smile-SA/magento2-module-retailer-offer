@@ -16,7 +16,16 @@
                                     <item name="storeOffersListTemplate" xsi:type="string">Smile_RetailerOffer/retailer/product/store-list</item>
                                     <item name="searchTitleText" xsi:type="string" translate="true">Find a store :</item>
                                     <item name="searchButtonText" xsi:type="string" translate="true">Search</item>
+                                    <item name="geolocationButtonText" xsi:type="string" translate="true">Geolocalize me</item>
                                     <item name="radius" xsi:type="string">25000</item>
+                                    <item name="children" xsi:type="array">
+                                        <item name="geocoder" xsi:type="array">
+                                            <item name="component" xsi:type="string">smile-geocoder</item>
+                                        </item>
+                                        <item name="map" xsi:type="array">
+                                            <item name="component" xsi:type="string">smile-map</item>
+                                        </item>
+                                    </item>
                                 </item>
                             </item>
                         </argument>

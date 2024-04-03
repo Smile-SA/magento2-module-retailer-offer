@@ -66,6 +66,23 @@ class Availability extends Template implements IdentityInterface
         $jsLayout['components']['catalog-product-retailer-availability']['searchPlaceholderText'] = $this
             ->helperConfig->getSearchPlaceholder();
 
+        // smile-geocoder child
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] = $this->map
+            ->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
+            $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
+            $this->map->getConfig()
+        );
+
+        // smile-map child
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['provider'] = $this->map
+            ->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['markers'] = $this->getStoreOffers();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map'] = array_merge(
+            $jsLayout['components']['catalog-product-retailer-availability']['children']['map'],
+            $this->map->getConfig()
+        );
+
         return json_encode($jsLayout);
     }
 
