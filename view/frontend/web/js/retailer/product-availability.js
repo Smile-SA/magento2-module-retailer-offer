@@ -157,6 +157,7 @@ define([
                 registry.get(this.name + '.map', function (map) {
                     this.map = map;
                     this.map.applyPosition(position);
+                    this.map.addMarkerWithMyPosition(position)
                 }.bind(this));
 
                 this.updateDisplayedOffers();
