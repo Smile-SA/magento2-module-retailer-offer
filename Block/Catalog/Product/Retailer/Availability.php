@@ -22,6 +22,9 @@ use Smile\Retailer\Api\Data\RetailerExtensionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
 use Smile\RetailerOffer\Helper\Config as HelperConfig;
+use Smile\StoreLocator\Helper\Data;
+use Smile\StoreLocator\Helper\Schedule;
+use Smile\StoreLocator\Model\Retailer\ScheduleManagement;
 
 /**
  * Block rendering availability in store for a given product.
@@ -43,6 +46,9 @@ class Availability extends Template implements IdentityInterface
         protected Region $region,
         protected HelperConfig $helperConfig,
         MapProviderInterface $mapProvider,
+        protected ScheduleManagement $scheduleManagement,
+        protected Schedule $scheduleHelper,
+        protected Data $storeLocatorHelper,
         array $data = []
     ) {
         $this->map = $mapProvider->getMap();
@@ -154,7 +160,17 @@ class Availability extends Template implements IdentityInterface
                     'longitude' => $address->getCoordinates()->getLongitude(),
                     'setStoreData' => $this->getSetStorePostData($retailer),
                     'isAvailable'  => false,
+                    'url' => $this->storeLocatorHelper->getRetailerUrl($retailer),
                 ];
+
+                $offer['schedule'] = array_merge(
+                    $this->scheduleHelper->getConfig(),
+                    [
+                        'calendar' => $this->scheduleManagement->getCalendar($retailer),
+                        'openingHours' => $this->scheduleManagement->getWeekOpeningHours($retailer),
+                        'specialOpeningHours' => $retailerExtensionInterface->getSpecialOpeningHours(),
+                    ]
+                );
 
                 if (isset($offerByRetailer[(int) $retailer->getId()])) {
                     $offer['isAvailable'] = (bool) $offerByRetailer[(int) $retailer->getId()]->isAvailable();
