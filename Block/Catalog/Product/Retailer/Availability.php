@@ -37,6 +37,9 @@ class Availability extends Template implements IdentityInterface
     protected Registry $coreRegistry;
     protected ?array $storeOffers = null;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Context $context,
         protected ProductRepositoryInterface $productRepository,
@@ -73,8 +76,8 @@ class Availability extends Template implements IdentityInterface
             ->helperConfig->getSearchPlaceholder();
 
         // smile-geocoder child
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] = $this->map
-            ->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider']
+            = $this->map->getIdentifier();
         $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
             $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
             $this->map->getConfig()
@@ -83,7 +86,8 @@ class Availability extends Template implements IdentityInterface
         // smile-map child
         $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['provider'] = $this->map
             ->getIdentifier();
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['markers'] = $this->getStoreOffers();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['markers']
+            = $this->getStoreOffers();
         $jsLayout['components']['catalog-product-retailer-availability']['children']['map'] = array_merge(
             $jsLayout['components']['catalog-product-retailer-availability']['children']['map'],
             $this->map->getConfig()
@@ -163,6 +167,7 @@ class Availability extends Template implements IdentityInterface
                     'url' => $this->storeLocatorHelper->getRetailerUrl($retailer),
                 ];
 
+                // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $offer['schedule'] = array_merge(
                     $this->scheduleHelper->getConfig(),
                     [
@@ -171,6 +176,7 @@ class Availability extends Template implements IdentityInterface
                         'specialOpeningHours' => $retailerExtensionInterface->getSpecialOpeningHours(),
                     ]
                 );
+                // phpcs:enable
 
                 if (isset($offerByRetailer[(int) $retailer->getId()])) {
                     $offer['isAvailable'] = (bool) $offerByRetailer[(int) $retailer->getId()]->isAvailable();
