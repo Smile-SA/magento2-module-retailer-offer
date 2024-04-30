@@ -35,53 +35,19 @@ define([
          * Search Shop per words
          */
         onSearchOffers: function() {
-            this.displayedOffers(
-                this.filterPerWords(this.storeOffers(), this.fulltextSearch())
-            );
-        },
-
-        /**
-         * Custom filter to allow approaching result per words
-         *
-         * @param markers
-         * @param terms
-         * @returns {[]|jQuery|*[]|*|null}
-         */
-        filterPerWords(markers, terms) {
-            let self = this;
-            let arrayOfTerms = terms.split(' ');
-            let term = $.map(arrayOfTerms, function (tm) {
-                if (tm.length <= 2) {
-                    // ignore smallest term for performance reason
-                    return null;
-                }
-                return $.ui.autocomplete.escapeRegex(self.normalizeAccent(tm));
-            }).join('|');
-            let matcher= new RegExp("\\b" + term, "i");
-
-            if (term.length <= 2) {
-                // ignore smallest term for performance reason
-                return null;
-            }
-
-            return $.grep(markers, function (marker) {
-                // try to match one of the 4 elements
-                return matcher.test(marker.name)
-                    || matcher.test(marker.postCode)
-                    || matcher.test(self.normalizeAccent(marker.city))
-                    || matcher.test(marker.region)
-                ;
-            });
-        },
-
-        /**
-         * Replace accent from string
-         *
-         * @param str
-         * @returns {*}
-         */
-        normalizeAccent: function(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            registry.get(this.name + '.geocoder', function (geocoder) {
+                this.geocoder = geocoder;
+                this.geocoder.fulltextSearch(this.fulltextSearch());
+                this.geocoder.currentResult.subscribe(function (result) {
+                    if (result && result.location) {
+                        this.findPositionSuccess(
+                            {coords: {latitude: result.location.lat, longitude: result.location.lng}},
+                            this.fulltextSearch()
+                        );
+                    }
+                }.bind(this));
+                this.geocoder.onSearch();
+            }.bind(this));
         },
 
         /**
@@ -145,18 +111,19 @@ define([
         geolocalizeMe: function() {
             registry.get(this.name + '.geocoder', function (geocoder) {
                 this.geocoder = geocoder;
-                this.geocoder.geolocalize(this.geolocationSuccess.bind(this))
+                this.geocoder.geolocalize(this.findPositionSuccess.bind(this))
             }.bind(this));
         },
 
         /**
          * Action on geolocation success
          */
-        geolocationSuccess: function(position) {
+        findPositionSuccess: function(position) {
             if (position.coords && position.coords.latitude && position.coords.longitude) {
                 registry.get(this.name + '.map', function (map) {
                     this.map = map;
                     this.map.applyPosition(position);
+                    this.map.addMarkerWithMyPosition(position);
                 }.bind(this));
 
                 this.updateDisplayedOffers();
