@@ -6,6 +6,9 @@
                 <navigation_mode>0</navigation_mode>
                 <display_offers>1</display_offers>
             </navigation_settings>
+            <search>
+                <placeholder>City, Zipcode, Address ...</placeholder>
+            </search>
         </smile_retailersuite_retailer_base_settings>
     </default>
 </config>

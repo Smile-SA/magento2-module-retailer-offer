@@ -8,6 +8,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Directory\Model\Region;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
@@ -20,6 +21,10 @@ use Smile\Offer\Model\OfferManagement;
 use Smile\Retailer\Api\Data\RetailerExtensionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory as RetailerCollectionFactory;
+use Smile\RetailerOffer\Helper\Config as HelperConfig;
+use Smile\StoreLocator\Helper\Data;
+use Smile\StoreLocator\Helper\Schedule;
+use Smile\StoreLocator\Model\Retailer\ScheduleManagement;
 
 /**
  * Block rendering availability in store for a given product.
@@ -32,13 +37,21 @@ class Availability extends Template implements IdentityInterface
     protected Registry $coreRegistry;
     protected ?array $storeOffers = null;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Context $context,
         protected ProductRepositoryInterface $productRepository,
         protected OfferManagement $offerManagement,
         protected RetailerCollectionFactory $retailerCollectionFactory,
         protected AddressFormatter $addressFormatter,
+        protected Region $region,
+        protected HelperConfig $helperConfig,
         MapProviderInterface $mapProvider,
+        protected ScheduleManagement $scheduleManagement,
+        protected Schedule $scheduleHelper,
+        protected Data $storeLocatorHelper,
         array $data = []
     ) {
         $this->map = $mapProvider->getMap();
@@ -59,10 +72,24 @@ class Availability extends Template implements IdentityInterface
 
         $jsLayout['components']['catalog-product-retailer-availability']['productId'] = $this->getProduct()->getId();
         $jsLayout['components']['catalog-product-retailer-availability']['storeOffers'] = $this->getStoreOffers();
-        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider'] =
-            $this->map->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['searchPlaceholderText'] = $this
+            ->helperConfig->getSearchPlaceholder();
+
+        // smile-geocoder child
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder']['provider']
+            = $this->map->getIdentifier();
         $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'] = array_merge(
             $jsLayout['components']['catalog-product-retailer-availability']['children']['geocoder'],
+            $this->map->getConfig()
+        );
+
+        // smile-map child
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['provider'] = $this->map
+            ->getIdentifier();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map']['markers']
+            = $this->getStoreOffers();
+        $jsLayout['components']['catalog-product-retailer-availability']['children']['map'] = array_merge(
+            $jsLayout['components']['catalog-product-retailer-availability']['children']['map'],
             $this->map->getConfig()
         );
 
@@ -76,7 +103,9 @@ class Availability extends Template implements IdentityInterface
      */
     public function getIdentities(): array
     {
-        $identities = $this->getProduct()->getIdentities();
+        /** @var ProductModel $product */
+        $product = $this->getProduct();
+        $identities = $product->getIdentities();
 
         foreach ($this->getStoreOffers() as $offer) {
             if (isset($offer[OfferInterface::OFFER_ID])) {
@@ -123,15 +152,31 @@ class Availability extends Template implements IdentityInterface
                 /** @var RetailerExtensionInterface $retailerExtensionInterface */
                 $retailerExtensionInterface = $retailer->getExtensionAttributes();
                 $address = $retailerExtensionInterface->getAddress();
+                $regionName = $this->region->load($address->getRegionId())->getName() ?: null;
                 $offer = [
                     'sellerId' => (int) $retailer->getId(),
                     'name' => $retailer->getName(),
                     'address' => $this->addressFormatter->formatAddress($address, AddressFormatter::FORMAT_ONELINE),
+                    'postCode' => $address->getPostcode(),
+                    'region' => $regionName,
+                    'city' => $address->getCity(),
                     'latitude' => $address->getCoordinates()->getLatitude(),
                     'longitude' => $address->getCoordinates()->getLongitude(),
                     'setStoreData' => $this->getSetStorePostData($retailer),
                     'isAvailable'  => false,
+                    'url' => $this->storeLocatorHelper->getRetailerUrl($retailer),
                 ];
+
+                // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                $offer['schedule'] = array_merge(
+                    $this->scheduleHelper->getConfig(),
+                    [
+                        'calendar' => $this->scheduleManagement->getCalendar($retailer),
+                        'openingHours' => $this->scheduleManagement->getWeekOpeningHours($retailer),
+                        'specialOpeningHours' => $retailerExtensionInterface->getSpecialOpeningHours(),
+                    ]
+                );
+                // phpcs:enable
 
                 if (isset($offerByRetailer[(int) $retailer->getId()])) {
                     $offer['isAvailable'] = (bool) $offerByRetailer[(int) $retailer->getId()]->isAvailable();

@@ -92,6 +92,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
 
             if ($filter) {
                 $this->dataProvider->setInterval($filter);
+                // @phpstan-ignore-next-line
                 $priorFilters = $this->dataProvider->getPriorFilters($filterParams);
                 if ($priorFilters) {
                     $this->dataProvider->setPriorIntervals($priorFilters);
@@ -103,6 +104,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
                 $this->addQueryFilter($fromValue, $toValue);
 
                 $this->getLayer()->getState()->addFilter(
+                    // @phpstan-ignore-next-line
                     $this->_createItem($this->_renderRangeLabel(empty($fromValue) ? 0 : $fromValue, $toValue), $filter)
                 );
             }

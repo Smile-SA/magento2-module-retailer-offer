@@ -22,13 +22,13 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
              "modal":true
            }
          }'>
-        <div class="fulltext-search-wrapper" data-bind="scope: requestChild('geocoder')">
-            <div class="geocoder-wrapper" data-bind=" afterRender: initGeocoder">
+        <div class="fulltext-search-wrapper">
+            <div class="geocoder-wrapper">
                 <div class="block-title">
                     <strong role="heading" aria-level="1" data-bind="text: searchTitleText"></strong>
                 </div>
 
-                <form class="form" data-bind="submit: onSearch">
+                <form class="form" data-bind="submit: onSearchOffers">
                     <div class="field">
                         <input type="text" name="text"
                                data-bind="value: fulltextSearch, attr: {placeholder: searchPlaceholderText}"/>
@@ -39,6 +39,13 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
                                 <span data-bind="text: searchButtonText"></span>
                             </button>
                         </div>
+                        <div data-bind="{ scope: requestChild('geocoder')}">
+                            <div data-bind="afterRender: initGeocoder">
+                                <button data-bind="click: $parent.geolocalizeMe.bind($parent)" class="action primary">
+                                    <span data-bind="text: $parent.geolocationButtonText"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -47,6 +54,12 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
             <ul data-bind="foreach: displayedOffers()">
                 <li data-bind="template: $parent.storeOffersListTemplate" class="result-item"></li>
             </ul>
+        </div>
+
+        <div data-bind="{ scope: requestChild('map')}">
+            <div id="store-view-map" class="store-view-map clearfix">
+                <div id="map-popin-availability" class="map" data-bind="afterRender: initMap"></div>
+            </div>
         </div>
     </div>
     <div class="catalog-product-retailer-availability-content">
@@ -64,7 +77,7 @@ use Smile\RetailerOffer\Block\Catalog\Product\Retailer\Availability;
         </div>
     </div>
     <div class="action showavailability" data-bind="scope: 'catalog-product-retailer-availability'">
-        <a href="#" class="text" data-bind="text: getLinkLabel()"></a>
+        <a href="#" class="text" data-bind="text: getLinkLabel(), click: loadRetailerAvailabilityModal"></a>
     </div>
 </div>
 
