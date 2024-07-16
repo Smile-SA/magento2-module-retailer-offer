@@ -47,8 +47,7 @@ class ProductPlugin
     {
         $isAvailable = $proceed();
 
-        // show product availability if shop has been selected, even in Retail mode
-        if ($this->settingsHelper->useStoreOffers() || $this->getRetailer()) {
+        if ($this->settingsHelper->useStoreOffers()) {
             $isAvailable = false;
             $offer = $this->offerHelper->getCurrentOffer($product);
 
@@ -67,8 +66,7 @@ class ProductPlugin
     {
         $price = $proceed();
 
-        // show product offer price if shop has been selected, even in Retail mode
-        if ($this->settingsHelper->useStoreOffers() || $this->getRetailer()) {
+        if ($this->settingsHelper->useStoreOffers()) {
             $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer && $offer->getPrice()) {
@@ -88,8 +86,7 @@ class ProductPlugin
     {
         $price = $proceed();
 
-        // show product offer price if shop has been selected, even in Retail mode
-        if ($this->settingsHelper->useStoreOffers() || $this->getRetailer()) {
+        if ($this->settingsHelper->useStoreOffers()) {
             $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer && $offer->getSpecialPrice()) {
@@ -107,8 +104,7 @@ class ProductPlugin
     {
         $price = $proceed($qty);
 
-        // show product offer price if shop has been selected, even in Retail mode
-        if ($this->settingsHelper->useStoreOffers() || $this->getRetailer()) {
+        if ($this->settingsHelper->useStoreOffers()) {
             $offer = $this->offerHelper->getCurrentOffer($product);
 
             if ($offer) {
