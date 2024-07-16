@@ -6,7 +6,6 @@ namespace Smile\RetailerOffer\Plugin;
 
 use Closure;
 use Magento\Catalog\Model\Product;
-use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\RetailerOffer\Helper\Offer;
 use Smile\RetailerOffer\Helper\Settings;
 use Smile\StoreLocator\CustomerData\CurrentStore;
@@ -16,26 +15,11 @@ use Smile\StoreLocator\CustomerData\CurrentStore;
  */
 class ProductPlugin
 {
-
     public function __construct(
         private Offer $offerHelper,
         private Settings $settingsHelper,
         protected CurrentStore $currentStore
     ) {
-    }
-
-    /**
-     * Retrieve current retailer.
-     */
-    private function getRetailer(): ?RetailerInterface
-    {
-        $retailer = null;
-        if ($this->currentStore->getRetailer() && $this->currentStore->getRetailer()->getId()) {
-            /** @var RetailerInterface $retailer */
-            $retailer = $this->currentStore->getRetailer();
-        }
-
-        return $retailer;
     }
 
     /**

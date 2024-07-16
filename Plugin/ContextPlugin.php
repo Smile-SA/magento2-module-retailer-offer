@@ -38,8 +38,10 @@ class ContextPlugin
             // Set a default value to have common vary for all customers without any chosen retailer.
             $retailerId = 'default';
 
-            if ($this->currentStore->getRetailer()
-                && $this->currentStore->getRetailer()->getId()) {
+            if (
+                $this->currentStore->getRetailer()
+                && $this->currentStore->getRetailer()->getId()
+            ) {
                 $retailerId = $this->currentStore->getRetailer()->getId();
             }
 
