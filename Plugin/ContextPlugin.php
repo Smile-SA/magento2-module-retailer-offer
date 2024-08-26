@@ -34,13 +34,14 @@ class ContextPlugin
         RequestInterface $request
     ): mixed {
 
-        // show product offer price if shop has been selected, even in Retail mode
-        if ($this->settingsHelper->isDriveMode() || $this->currentStore->getRetailer()) {
+        if ($this->settingsHelper->isDriveMode()) {
             // Set a default value to have common vary for all customers without any chosen retailer.
             $retailerId = 'default';
 
-            if ($this->currentStore->getRetailer()
-                && $this->currentStore->getRetailer()->getId()) {
+            if (
+                $this->currentStore->getRetailer()
+                && $this->currentStore->getRetailer()->getId()
+            ) {
                 $retailerId = $this->currentStore->getRetailer()->getId();
             }
 

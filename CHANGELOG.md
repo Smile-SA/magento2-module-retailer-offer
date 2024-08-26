@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2024-05-03
+[2.0.3]: https://github.com/Smile-SA/magento2-module-retailer-offer/compare/2.0.2...2.0.3
+
+- Restore Retail mode - catalog web price. Only Drive mode can show speific retailer offer price, while Retail mode must show same catalog web price for each retailer regarding 1 product
+
 ## [2.0.2] - 2024-05-03
 [2.0.2]: https://github.com/Smile-SA/magento2-module-retailer-offer/compare/2.0.1...2.0.2
 
