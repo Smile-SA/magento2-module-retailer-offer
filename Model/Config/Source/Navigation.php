@@ -27,8 +27,6 @@ class Navigation implements ArrayInterface
 
     /**
      * Get options in "key-value" format
-     *
-     * @return array
      */
     public function toArray(): array
     {
