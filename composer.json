@@ -49,6 +49,7 @@
     "config": {
         "allow-plugins": {
             "magento/composer-dependency-version-audit-plugin": true,
+            "magento/magento-composer-installer": false,
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "sort-packages": true
