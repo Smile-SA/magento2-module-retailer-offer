@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## WIP
+## [2.0.4] - 2026-06-03
+[2.0.4]: https://github.com/Smile-SA/magento2-module-retailer-offer/compare/2.0.3...2.0.4
 
 - Remove dependency to unused jQuery UI components
 
