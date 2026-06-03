@@ -7,11 +7,9 @@ define([
     'Smile_Map/js/model/markers',
     'leaflet',
     'smile-storelocator-store-collection',
-    'mage/translate',
-    'jquery/ui'
-    ], function ($, Component, storage, ko, registry, Markers, L, StoreCollection) {
-
-    "use strict";
+    'mage/translate'
+], function ($, Component, storage, ko, registry, Markers, L, StoreCollection) {
+    'use strict';
 
     var retailer = storage.get('current-store');
 
