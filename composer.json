@@ -52,6 +52,9 @@
             "magento/magento-composer-installer": false,
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
+        "audit": {
+            "abandoned": "report"
+        },
         "sort-packages": true
     }
 }
