@@ -15,6 +15,7 @@ namespace Smile\RetailerOffer\Model\Rule\Condition\Product\SpecialAttribute;
 
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Customer\Model\Session as CustomerSession;
+use Smile\ElasticsuiteCatalogRule\Api\Rule\Condition\Product\ContextAwareInterface;
 use Smile\ElasticsuiteCatalogRule\Api\Rule\Condition\Product\SpecialAttributeInterface;
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product as ProductCondition;
 use Smile\ElasticsuiteCatalogRule\Model\Rule\Condition\Product\SpecialAttribute\IsDiscount as BaseIsDiscount;
@@ -22,6 +23,7 @@ use Smile\ElasticsuiteCore\Search\Request\Query\QueryFactory;
 use Smile\ElasticsuiteCore\Search\Request\QueryInterface;
 use Smile\StoreLocator\CustomerData\CurrentStore;
 use Smile\RetailerOffer\Helper\Settings;
+use Smile\RetailerOffer\Model\Rule\QueryContext\RetailerStoreProvider;
 
 /**
  * Is Discount rule condition.
@@ -30,7 +32,7 @@ use Smile\RetailerOffer\Helper\Settings;
  * @category Smile
  * @package  Smile\RetailerOffer
  */
-class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
+class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface, ContextAwareInterface
 {
     /**
      * @var CurrentStore
@@ -80,6 +82,18 @@ class IsDiscount extends BaseIsDiscount implements SpecialAttributeInterface
         }
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContextDependencies(): array
+    {
+        if ($this->settingsHelper->isDriveMode()) {
+            return [RetailerStoreProvider::CODE];
+        }
+
+        return parent::getContextDependencies();
     }
 
     /**
