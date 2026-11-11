@@ -22,7 +22,7 @@
         "php": "^8.1",
         "magento/framework": ">=103.0.4",
         "magento/module-catalog": ">=104.0.4",
-        "smile/elasticsuite": "^2.11",
+        "smile/elasticsuite": "~2.11.22 || ~2.12.3",
         "smile/module-offer": "^2.0",
         "smile/module-retailer": "^2.0",
         "smile/module-store-locator": "^2.2"
