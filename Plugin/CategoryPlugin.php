@@ -37,6 +37,7 @@ class CategoryPlugin
         $collection = $this->collectionProvider->getCollection($category);
         $collection->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
         $query = $this->filterProvider->getQueryFilter($category);
+        // @phpstan-ignore notIdentical.alwaysTrue (virtual category preference may return null despite the PHPDoc)
         if ($query !== null) {
             $collection->addQueryFilter($query);
         }
