@@ -9,7 +9,7 @@ This module add the ability to manage offers per Retailer Shop.
 The module requires:
 
 - PHP ^8.1
-- [ElasticSuite](https://github.com/Smile-SA/elasticsuite) > 2.11.*
+- [ElasticSuite](https://github.com/Smile-SA/elasticsuite) >= 2.10.* (2.10.* for Magento 2.4.4 and 2.4.5, 2.11.* or later for Magento 2.4.6 and later)
 - [Retailer](https://github.com/Smile-SA/magento2-module-retailer) >= 2.0.*
 - [Offer](https://github.com/Smile-SA/magento2-module-offer) >= 2.0.*
 - [Store Locator](https://github.com/Smile-SA/magento2-module-store-locator) >= 2.2.*
@@ -26,6 +26,7 @@ ElasticSuite **2.6.x** |Latest release : ```composer require smile/module-retail
 ElasticSuite **2.7.x** |Latest release : ```composer require smile/module-retailer-offer:"1.4.0"```
 ElasticSuite **2.8.x** |Latest release : ```composer require smile/module-retailer-offer:"^1.5"```
 ElasticSuite **2.9.x** |Latest release : ```composer require smile/module-retailer-offer:"^1.6"```
+ElasticSuite **2.10.x** |Latest release : ```composer require smile/module-retailer-offer:"^2.0"```
 ElasticSuite **2.11.x** |Latest release : ```composer require smile/module-retailer-offer:"^2.0"```
 
 
