@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
-use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\RetailerOffer\Block\Adminhtml\RetailerOffer\Summary;
-use Smile\Seller\Api\Data\SellerInterface;
 
 /**
  * Panel to display retailer's summary in the offer edit form.
@@ -32,7 +29,7 @@ class Retailer extends Summary
     /**
      * Get current retailer : retailer of the current offer.
      */
-    public function getRetailer(): RetailerInterface|SellerInterface|null
+    public function getRetailer()
     {
         $retailer = null;
         $offer = $this->getRetailerOffer();
@@ -47,7 +44,7 @@ class Retailer extends Summary
     /**
      * Retrieve Product Status Label.
      */
-    public function getRetailerStatusLabel(): Phrase|string
+    public function getRetailerStatusLabel()
     {
         $statusesLabels = [0 => __('Inactive'), 1 => __('Active')];
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Smile\RetailerOffer\Block\Catalog\Product\Retailer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product as ProductModel;
@@ -119,7 +118,7 @@ class Availability extends Template implements IdentityInterface
     /**
      * Retrieve current product model.
      */
-    protected function getProduct(): ProductInterface|ProductModel|null
+    protected function getProduct()
     {
         if (!$this->coreRegistry->registry('product') && $this->getProductId()) {
             return $this->productRepository->getById($this->getProductId());

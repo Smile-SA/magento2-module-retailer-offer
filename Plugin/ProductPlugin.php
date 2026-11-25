@@ -46,7 +46,7 @@ class ProductPlugin
     /**
      * Return offer price (if any) instead of the product one.
      */
-    public function aroundGetPrice(Product $product, Closure $proceed): mixed
+    public function aroundGetPrice(Product $product, Closure $proceed)
     {
         $price = $proceed();
 
@@ -66,7 +66,7 @@ class ProductPlugin
     /**
      * Return offer special price (if any) instead of the product one.
      */
-    public function aroundGetSpecialPrice(Product $product, Closure $proceed): mixed
+    public function aroundGetSpecialPrice(Product $product, Closure $proceed)
     {
         $price = $proceed();
 
@@ -84,7 +84,7 @@ class ProductPlugin
     /**
      * Return offer final price (if any) instead of the product one.
      */
-    public function aroundGetFinalPrice(Product $product, Closure $proceed, mixed $qty = null): mixed
+    public function aroundGetFinalPrice(Product $product, Closure $proceed, $qty = null)
     {
         $price = $proceed($qty);
 
@@ -108,7 +108,7 @@ class ProductPlugin
     /**
      * Return offer minimal price (if any) instead of the product one.
      */
-    public function aroundGetMinimalPrice(Product $product, Closure $proceed): mixed
+    public function aroundGetMinimalPrice(Product $product, Closure $proceed)
     {
         return $this->aroundGetFinalPrice($product, $proceed);
     }

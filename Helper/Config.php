@@ -14,7 +14,7 @@ class Config extends AbstractHelper
     /**
      * Get config by config path.
      */
-    public function getConfigByPath(string $path, string $scope = ScopeInterface::SCOPE_STORE): mixed
+    public function getConfigByPath(string $path, string $scope = ScopeInterface::SCOPE_STORE)
     {
         return $this->scopeConfig->getValue($path, $scope);
     }

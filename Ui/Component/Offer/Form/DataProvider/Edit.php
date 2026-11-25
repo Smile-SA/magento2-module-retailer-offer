@@ -22,7 +22,7 @@ class Edit extends AbstractDataProvider
         string $name,
         string $primaryFieldName,
         string $requestFieldName,
-        mixed $collectionFactory,
+        $collectionFactory,
         private Registry $registry,
         private RequestInterface $request,
         private OfferRepositoryInterface $offerRepository,
