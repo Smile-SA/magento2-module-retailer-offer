@@ -59,7 +59,7 @@ class Edit extends AbstractDataProvider
      *
      * @throws NoSuchEntityException
      */
-    private function getCurrentOffer(): ?OfferInterface
+    private function getCurrentOffer(): ?OfferInterface // @phpstan-ignore return.unusedType (nullable return kept)
     {
         $offer = $this->registry->registry('current_offer');
 
