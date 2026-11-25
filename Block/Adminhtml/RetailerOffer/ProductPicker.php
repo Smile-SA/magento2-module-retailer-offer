@@ -73,6 +73,7 @@ class ProductPicker extends AbstractBlock
             '',
             ['data' => $pickerConfig]
         );
+        // @phpstan-ignore instanceof.alwaysTrue (defensive check kept, createBlock() is only generically typed)
         if ($helperBlock instanceof DataObject) {
             $helperBlock->setConfig($pickerConfig);
             $helperBlock->setFieldsetId($productPickerFieldset->getId());
