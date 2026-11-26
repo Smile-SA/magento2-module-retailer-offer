@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - `composer.json` now states it: `php ^8.1` and `magento/framework >=103.0.4 <103.0.6` (previously `php ^8.1` and `magento/framework >=103.0.4`)
 - Magento 2.4.6 and later and Mage-OS are supported by the 2.1.x line
 - Fix `setup:di:compile` on Magento 2.4.4 and 2.4.5: native `mixed` and union types are removed from method signatures and kept in docblocks
-- Require Elasticsuite 2.10 (`smile/elasticsuite ^2.10`)
+- Require Elasticsuite 2.10.x only (`smile/elasticsuite ~2.10.0`); Elasticsuite 2.11 and later go with the 2.1.x line
 - Require the Smile modules of the same line: `smile/module-offer ~2.0.2`, `smile/module-retailer ~2.0.5`, `smile/module-store-locator ~2.2.5`
 - CI: static analysis on Magento 2.4.5, `setup:di:compile` on Magento 2.4.4 and 2.4.5
 
