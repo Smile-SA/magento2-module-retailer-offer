@@ -101,7 +101,10 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
                 [$fromValue, $toValue] = $filter;
                 $this->setCurrentValue(['from' => $fromValue, 'to' => $toValue]);
 
-                $this->addQueryFilter($fromValue, $toValue);
+                $this->addQueryFilter(
+                    $fromValue === '' ? null : (float) $fromValue,
+                    $toValue === '' ? null : (float) $toValue
+                );
 
                 $this->getLayer()->getState()->addFilter(
                     // @phpstan-ignore-next-line
@@ -129,7 +132,7 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
     /**
      * Compute proper price interval for current Retailer.
      */
-    private function addQueryFilter(int $fromValue, int $toValue): void
+    private function addQueryFilter(?float $fromValue, ?float $toValue): void
     {
         $sellerIdFilter = $this->queryFactory->create(
             QueryInterface::TYPE_TERM,
@@ -139,7 +142,10 @@ class Price extends \Smile\ElasticsuiteCatalog\Model\Layer\Filter\Price
 
         $rangeFilter = $this->queryFactory->create(
             QueryInterface::TYPE_RANGE,
-            ['field' => 'offer.price', 'bounds' => ['gte' => $fromValue, 'lte' => $toValue]]
+            [
+                'field' => 'offer.price',
+                'bounds' => array_filter(['gte' => $fromValue, 'lte' => $toValue], 'is_float'),
+            ]
         );
         $mustClause['must'][] = $rangeFilter;
 
