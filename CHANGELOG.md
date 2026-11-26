@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Supported platforms: Magento 2.4.6 and later, Mage-OS 1.0.0 and later (tested up to Magento 2.4.9 and Mage-OS 4.0), PHP 8.1 to 8.5
 - `composer.json` now states it: `php ^8.1` and `magento/framework >=103.0.6` (previously `php ^8.1` and `magento/framework >=103.0.4`)
 - Magento 2.4.4 and 2.4.5 are supported by the 2.0.x line, from 2.0.5
+- Elasticsuite 2.11 or later is required (`smile/elasticsuite ^2.11`); Elasticsuite 2.10.x goes with the 2.0.x line, from 2.0.5
 - CI: static analysis and `setup:di:compile` run on Mage-OS, without Magento credentials
 
 ## [2.0.4] - 2026-06-03
