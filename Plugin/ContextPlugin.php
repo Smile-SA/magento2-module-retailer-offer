@@ -32,7 +32,7 @@ class ContextPlugin
         ActionInterface $subject,
         Closure $proceed,
         RequestInterface $request
-    ): mixed {
+    ) {
 
         if ($this->settingsHelper->isDriveMode()) {
             // Set a default value to have common vary for all customers without any chosen retailer.

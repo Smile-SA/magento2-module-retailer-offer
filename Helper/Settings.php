@@ -81,7 +81,7 @@ class Settings extends AbstractHelper
     /**
      * Retrieve Retailer Configuration for a given field.
      */
-    protected function getNavigationSettings(string $path): mixed
+    protected function getNavigationSettings(string $path)
     {
         $configPath = implode('/', [self::BASE_CONFIG_XML_PREFIX, self::NAVIGATION_SETTINGS_CONFIG_XML_PREFIX, $path]);
 

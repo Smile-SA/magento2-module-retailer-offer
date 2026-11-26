@@ -15,7 +15,7 @@ class Create extends AbstractDataProvider
         string $name,
         string $primaryFieldName,
         string $requestFieldName,
-        mixed $collectionFactory,
+        $collectionFactory,
         array $meta = [],
         array $data = []
     ) {

@@ -117,7 +117,7 @@ class Product extends Summary
     /**
      * Retrieve Product Status Label.
      */
-    public function getProductStatusLabel(): Phrase|string
+    public function getProductStatusLabel()
     {
         return $this->statusSource->getOptionText((string) $this->getProduct()->getStatus());
     }
